@@ -2,14 +2,6 @@
 <users>
   <user>
     <username>user</username>
-    <password>password</password>
-  </user>
-  <user>
-    <username>user2</username>
-    <password>password2</password>
-  </user>
-  <user>
-    <username>user3</username>
-    <password>password3</password>
+    <password_hash>5f4dcc3b5aa765d61d8327deb882cf99</password_hash>
   </user>
 </users>

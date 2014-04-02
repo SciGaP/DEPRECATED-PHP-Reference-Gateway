@@ -43,11 +43,15 @@ function db_get_password($username)
 
     if (sizeof($user) == 1)
     {
-        return $user[0]->password;
+        return $user[0]->password_hash;
     }
-    else
+    elseif(sizeof($user) == 0)
     {
-        return "Duplicate users in database!";
+        return -1;
+    }
+    else // duplicate users in database
+    {
+        return -2;
     }
 }
 
@@ -65,7 +69,7 @@ function db_add_user($username,$password)
     $user = $users[0]->addChild("user");
 
     $user->addChild("username", $username);
-    $user->addChild("password", $password);
+    $user->addChild("password_hash", md5($password));
 
     //Format XML to save indented tree rather than one line
     $dom = new DOMDocument('1.0');

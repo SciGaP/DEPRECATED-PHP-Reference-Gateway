@@ -1,5 +1,7 @@
 <?php
+session_start();
 include "db_utilities.php";
+
 
 $db = connect_to_db();
 ?>
@@ -21,14 +23,18 @@ if (isset($_POST['Submit']))
 
     if (username_in_db($username))
     {
-        $db_password = db_get_password($username);
+        $db_password_hash = db_get_password($username);
 
-        if ($password == $db_password)
+        if (md5($password) == $db_password_hash)
         {
+            //set session variables
+            $_SESSION['username'] = $username;
+            $_SESSION['password_hash'] = md5($password);
+
             // redirect to home page
             echo "<meta http-equiv='Refresh' content='1; URL=home.php'>";
         }
-        elseif ($db_password == "Duplicate users in database!")
+        elseif ($db_password_hash == "Duplicate users in database!")
         {
             echo "Duplicate users in database!";
         }
