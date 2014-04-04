@@ -1,5 +1,4 @@
 <?php
-//include "db_utilities.php";
 require 'check_login.php';
 
 
@@ -25,7 +24,12 @@ else //user logged in
 
 <h1>Home</h1>
 
-<a href="logout.php">Log out</a>
+<div id="nav">
+    <a href="home.php">Home</a>
+    <a href="create_experiment.php">Create experiment</a>
+    <a href="manage_experiments.php">Manage experiments</a>
+    <a href="logout.php">Log out</a>
+</div>
 
 </body>
 </html>
