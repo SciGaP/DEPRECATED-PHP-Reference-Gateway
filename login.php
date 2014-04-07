@@ -14,6 +14,9 @@ $db = connect_to_db();
 
 <body>
 
+<div><h1>Login</h1></div>
+
+
 <?php
 
 if (isset($_POST['Submit']))
@@ -32,20 +35,21 @@ if (isset($_POST['Submit']))
             $_SESSION['password_hash'] = md5($password);
 
             // redirect to home page
+            echo "<div>Login successful!</div>";
             echo "<meta http-equiv='Refresh' content='1; URL=home.php'>";
         }
         elseif ($db_password_hash == "Duplicate users in database!")
         {
-            echo "Duplicate users in database!";
+            echo "<div>Duplicate users in database!</div>";
         }
         else
         {
-            echo "Invalid username or password. Please try again.";
+            echo "<div>Invalid username or password. Please try again.</div>";
         }
     }
     else
     {
-        echo "Invalid username or password. Please try again.";
+        echo "<div>Invalid username or password. Please try again.</div>";
     }
 }
 
@@ -56,12 +60,12 @@ if (isset($_POST['Submit']))
 
 
 <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
-    <label for="username">Username:</label><input type="text" name="username">
-    <label for="password">Password:</label><input type="password" name="password">
+    <div><label for="username">Username:</label><input type="text" name="username"></div>
+    <div><label for="password">Password:</label><input type="password" name="password"></div>
     <input name="Submit" type="submit" value="Submit">
 </form>
 
-<a href="create_account.php">Create an account</a>
+<div><a href="create_account.php">Create an account</a></div>
 
 </body>
 </html>

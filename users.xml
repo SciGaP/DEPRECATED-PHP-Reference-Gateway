@@ -4,4 +4,8 @@
     <username>user</username>
     <password_hash>5f4dcc3b5aa765d61d8327deb882cf99</password_hash>
   </user>
+  <user>
+    <username>admin</username>
+    <password_hash>5f4dcc3b5aa765d61d8327deb882cf99</password_hash>
+  </user>
 </users>
