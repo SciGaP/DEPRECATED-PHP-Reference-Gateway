@@ -1,7 +1,9 @@
 <?php
-include "db_utilities.php";
 
-$db = connect_to_db();
+include 'xml_id_utilities.php';
+
+$idStore = new XmlIdUtilities();
+$idStore->connect();
 ?>
 
 <html>
@@ -22,15 +24,15 @@ if (isset($_POST['Submit']))
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    if (username_in_db($username))
+    if ($idStore->username_exists($username))
     {
-        echo "<div>This username is already in use. Please select another.</div>";
+        echo '<div>This username is already in use. Please select another.</div>';
     }
     else
     {
-        db_add_user($username,$password);
-        echo "<div>New user created!</div>";
-        echo "<meta http-equiv='Refresh' content='1; URL=login.php'>";
+        $idStore->add_user($username,$password);
+        echo '<div>New user created!</div>';
+        echo '<meta http-equiv="Refresh" content="1; URL=login.php">';
     }
 }
 

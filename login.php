@@ -1,9 +1,9 @@
 <?php
 session_start();
-include "db_utilities.php";
+include 'xml_id_utilities.php';
 
-
-$db = connect_to_db();
+$idStore = new XmlIdUtilities();
+$idStore->connect();
 ?>
 
 <html>
@@ -24,32 +24,32 @@ if (isset($_POST['Submit']))
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    if (username_in_db($username))
+    if ($idStore->username_exists($username))
     {
-        $db_password_hash = db_get_password($username);
+        $passwordHash = $idStore->get_password($username);
 
-        if (md5($password) == $db_password_hash)
+        if (md5($password) == $passwordHash)
         {
             //set session variables
             $_SESSION['username'] = $username;
             $_SESSION['password_hash'] = md5($password);
 
             // redirect to home page
-            echo "<div>Login successful!</div>";
-            echo "<meta http-equiv='Refresh' content='1; URL=home.php'>";
+            echo '<div>Login successful!</div>';
+            echo '<meta http-equiv="Refresh" content="1; URL=home.php">';
         }
-        elseif ($db_password_hash == "Duplicate users in database!")
+        elseif ($passwordHash == 'Duplicate users in database!')
         {
-            echo "<div>Duplicate users in database!</div>";
+            echo '<div>Duplicate users in database!</div>';
         }
         else
         {
-            echo "<div>Invalid username or password. Please try again.</div>";
+            echo '<div>Invalid username or password. Please try again.</div>';
         }
     }
     else
     {
-        echo "<div>Invalid username or password. Please try again.</div>";
+        echo '<div>Invalid username or password. Please try again.</div>';
     }
 }
 

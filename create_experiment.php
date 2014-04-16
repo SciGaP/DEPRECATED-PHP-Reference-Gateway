@@ -38,8 +38,8 @@ use Airavata\Model\Workspace\Experiment\ExperimentState;
 //checking if the user is logged in
 if($logged_in == false)//user not logged in, redirect him to the login page
 {
-    echo "User not logged in!";
-    echo "<meta http-equiv='Refresh' content='0; URL=login.php'>";
+    echo 'User not logged in!';
+    echo '<meta http-equiv="Refresh" content="0; URL=login.php">';
 }
 
 
@@ -75,7 +75,7 @@ $transport->open();
 <?php
 if (isset($_POST['clear']))
 {
-    echo "<div>Values cleared!</div>";
+    echo '<div>Values cleared!</div>';
 }
 if (isset($_POST['save']) || isset($_POST['launch']))
 {
@@ -87,27 +87,27 @@ if (isset($_POST['save']) || isset($_POST['launch']))
     $experiment->applicationId = $_POST['application'];
 
     $experimentInputs = new DataObjectType();
-    $experimentInputs->key = "input";
-    $experimentInputs->value = "file:///home/airavata/input/hpcinput.tar";
+    $experimentInputs->key = 'input';
+    $experimentInputs->value = 'file:///home/airavata/input/hpcinput.tar';
     $experiment->experimentInputs = array($experimentInputs);
 
     $experimentOutput1 = new DataObjectType();
-    $experimentOutput1->key = "output";
-    $experimentOutput1->value = "";
+    $experimentOutput1->key = 'output';
+    $experimentOutput1->value = '';
 
     $experimentOutput2 = new DataObjectType();
-    $experimentOutput2->key = "stdout";
-    $experimentOutput2->value = "";
+    $experimentOutput2->key = 'stdout';
+    $experimentOutput2->value = '';
 
     $experimentOutput3 = new DataObjectType();
-    $experimentOutput3->key = "stderr";
-    $experimentOutput3->value = "";
+    $experimentOutput3->key = 'stderr';
+    $experimentOutput3->value = '';
 
     $experiment->experimentOutputs = array($experimentOutput1, $experimentOutput2, $experimentOutput3);
 
 
     $scheduling = new ComputationalResourceScheduling();
-    $scheduling->resourceHostId = "gsissh-trestles";
+    $scheduling->resourceHostId = 'gsissh-trestles';
 
     $userConfigData = new UserConfigurationData();
     $userConfigData->computationalResourceScheduling = $scheduling;
@@ -120,11 +120,11 @@ if (isset($_POST['save']) || isset($_POST['launch']))
         $expId = $airavataclient->createExperiment($experiment);
         if ($expId)
         {
-            echo "<div>Experiment " . $_POST['experiment-name'] . " created!</div>";
+            echo "<div>Experiment {$_POST['experiment-name']} created!</div>";
         }
         else
         {
-            echo "<div>Error creating experiment " . $_POST['experiment-name'] . "!</div>";
+            echo "<div>Error creating experiment {$_POST['experiment-name']}!</div>";
         }
     }
     catch (TException $texp)
@@ -142,7 +142,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
         try
         {
             $airavataclient->launchExperiment($expId, "airavataToken");
-            echo "<div>Launched experiment ". $_POST['experiment-name'] . "</div>";
+            echo "<div>Launched experiment {$_POST['experiment-name']}</div>";
         }
         catch (TException $texp)
         {

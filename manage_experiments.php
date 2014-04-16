@@ -38,8 +38,8 @@ use Airavata\Model\Workspace\Experiment\ExperimentState;
 //checking if the user is logged in
 if($logged_in == false)//user not logged in, redirect him to the login page
 {
-    echo "User not logged in!";
-    echo "<meta http-equiv='Refresh' content='0; URL=login.php'>";
+    echo 'User not logged in!';
+    echo '<meta http-equiv="Refresh" content="0; URL=login.php">';
 }
 
 
@@ -76,19 +76,19 @@ $transport->open();
         <label for="search-key">Search Key:</label>
         <select name="search-key" id="search-key">
             <?php
-            $values = array("experiment-name", "project", "resource", "submitted-user", "experiment-status");
-            $labels = array("Experiment Name", "Project", "Resource", "Submitted User", "Experiment Status");
+            $values = array('experiment-name', 'project', 'resource', 'submitted-user', 'experiment-status');
+            $labels = array('Experiment Name', 'Project', 'Resource', 'Submitted User', 'Experiment Status');
             $disabled = array("disabled", "", "disabled", "", "disabled");
 
             for ($i = 0; $i < sizeof($values); $i++)
             {
-                $selected = "";
+                $selected = '';
 
                 if (isset($_POST['search-key']))
                 {
                     if ($values[$i] == $_POST['search-key'])
                     {
-                        $selected = "selected";
+                        $selected = 'selected';
                     }
                 }
 
@@ -115,11 +115,11 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
     {
         switch ($_POST['search-key'])
         {
-            case "submitted-user":
-                $userExperiments = $airavataclient->getAllUserExperiments($_POST["search-value"]);
+            case 'submitted-user':
+                $userExperiments = $airavataclient->getAllUserExperiments($_POST['search-value']);
                 break;
-            case "project":
-                $userExperiments = $airavataclient->getAllExperimentsInProject($_POST["search-value"]);
+            case 'project':
+                $userExperiments = $airavataclient->getAllExperimentsInProject($_POST['search-value']);
                 break;
         }
     }
@@ -136,7 +136,7 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
 
 
 
-    echo "<h3>Results</h3>";
+    echo '<h3>Results</h3>';
 
     echo '<form action="' . $_SERVER['PHP_SELF'] . '" method="post">';
 
@@ -148,16 +148,16 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
         {
             if($_POST['experiment-id'] == $userExperiments[$i]->experimentID)
             {
-                $checked_array[] = "checked";
+                $checked_array[] = 'checked';
             }
             else
             {
-                $checked_array[] = "";
+                $checked_array[] = '';
             }
         }
         else
         {
-            $checked_array[] = "";
+            $checked_array[] = '';
         }
 
         echo '<div><label><input type="radio" name="experiment-id" value="' . $userExperiments[$i]->experimentID . '" ' . $checked_array[$i] . '>' . $userExperiments[$i]->name . '</label></div>';
@@ -186,18 +186,18 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
 
 
         echo '<div>';
-        echo '<p>Experiment ID: ' . $_POST['experiment-id'] . '</p>';
-        echo '<p>Experiment Status: ' . $experimentStatusString . '</p>';
+        echo "<p>Experiment ID: {$_POST['experiment-id']}</p>";
+        echo "<p>Experiment Status: {$experimentStatusString}</p>";
         echo '</div>';
 
     }
     if (isset($_POST['launch']) and isset($_POST['experiment-id']))
     {
-        echo "<div>Experiment " . $_POST['experiment-id'] . " launched!</div>";
+        echo "<div>Experiment {$_POST['experiment-id']} launched!</div>";
 
         try
         {
-            $airavataclient->launchExperiment($_POST['experiment-id'], "airavataToken");
+            $airavataclient->launchExperiment($_POST['experiment-id'], 'airavataToken');
         }
         catch (TException $texp)
         {
@@ -210,7 +210,7 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
     }
     if (isset($_POST['clone']) and isset($_POST['experiment-id']))
     {
-        echo "<div>Experiment " . $_POST['experiment-id'] . " cloned!</div>";
+        echo "<div>Experiment {$_POST['experiment-id']} cloned!</div>";
 
         try
         {
@@ -230,7 +230,7 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
     }
     if (isset($_POST['end']) and isset($_POST['experiment-id']))
     {
-        echo "<div>Experiment " . $_POST['experiment-id'] . " ended!</div>";
+        echo "<div>Experiment {$_POST['experiment-id']} ended!</div>";
 
         try
         {

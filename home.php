@@ -5,8 +5,8 @@ require 'check_login.php';
 //checking if the user is logged in
 if($logged_in == false)//user not logged in, redirect him to the login page
 {
-    echo "User not logged in!";
-    echo "<meta http-equiv='Refresh' content='0; URL=login.php'>";
+    echo 'User not logged in!';
+    echo '<meta http-equiv="Refresh" content="0; URL=login.php">';
 }
 ?>
 
