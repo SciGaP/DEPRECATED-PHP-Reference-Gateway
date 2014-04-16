@@ -75,11 +75,26 @@ $transport->open();
     <div>
         <label for="search-key">Search Key:</label>
         <select name="search-key" id="search-key">
-            <option value="experiment-name">Experiment Name</option>
-            <option value="project">Project</option>
-            <option value="resource">Resource</option>
-            <option value="submitted-user">Submitted User</option>
-            <option value="experiment-status">Experiment Status</option>
+            <?php
+            $values = array("experiment-name", "project", "resource", "submitted-user", "experiment-status");
+            $labels = array("Experiment Name", "Project", "Resource", "Submitted User", "Experiment Status");
+            $disabled = array("disabled", "", "disabled", "", "disabled");
+
+            for ($i = 0; $i < sizeof($values); $i++)
+            {
+                $selected = "";
+
+                if (isset($_POST['search-key']))
+                {
+                    if ($values[$i] == $_POST['search-key'])
+                    {
+                        $selected = "selected";
+                    }
+                }
+
+                echo '<option value="' . $values[$i] . '" ' . $disabled[$i] . ' ' . $selected . '>' . $labels[$i] . '</option>';
+            }
+            ?>
         </select>
     </div>
 
@@ -96,13 +111,42 @@ $transport->open();
 <?php
 if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch']) || isset($_POST['clone']) || isset($_POST['end']))
 {
+    try
+    {
+        switch ($_POST['search-key'])
+        {
+            case "submitted-user":
+                $userExperiments = $airavataclient->getAllUserExperiments($_POST["search-value"]);
+                break;
+            case "project":
+                $userExperiments = $airavataclient->getAllExperimentsInProject($_POST["search-value"]);
+                break;
+        }
+    }
+    catch (TException $texp)
+    {
+        print 'Exception: ' . $texp->getMessage()."\n";
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print 'Airavata System Exception: ' . $ase->getMessage()."\n";
+    }
+
+
+
+
+
+    echo "<h3>Results</h3>";
+
+    echo '<form action="' . $_SERVER['PHP_SELF'] . '" method="post">';
+
     $checked_array = [];
 
-    for ($i = 0; $i < 3; $i++)
+    for ($i = 0; $i < sizeof($userExperiments); $i++)
     {
-        if (isset($_POST['details']) && isset($_POST['experiment-id']))
+        if (isset($_POST['experiment-id']))
         {
-            if($_POST['experiment-id'] == $i+1)
+            if($_POST['experiment-id'] == $userExperiments[$i]->experimentID)
             {
                 $checked_array[] = "checked";
             }
@@ -115,27 +159,19 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
         {
             $checked_array[] = "";
         }
+
+        echo '<div><label><input type="radio" name="experiment-id" value="' . $userExperiments[$i]->experimentID . '" ' . $checked_array[$i] . '>' . $userExperiments[$i]->name . '</label></div>';
     }
 
 
-
-    echo "<h3>Results</h3>";
-
-    echo '<form action="' . $_SERVER['PHP_SELF'] . '" method="post">';
-
-    echo '<div><label><input type="radio" name="experiment-id" value="1" ' . $checked_array[0] . '>Experiment 1</label></div>
-        <div><label><input type="radio" name="experiment-id" value="2" ' . $checked_array[1] . '>Experiment 2</label></div>
-        <div><label><input type="radio" name="experiment-id" value="3" ' . $checked_array[2] . '>Experiment 3</label></div>
-        <input type="hidden" name="search-value" value="' . $_POST['search-value'] . '">';
-
-
-    $expId = "experiment1_892da2c7-ff57-41d9-9665-40d92c0eb1f1"; // hard-coded until get...Experiments...() functions work
+    echo '<input type="hidden" name="search-key" value="' . $_POST['search-key'] . '">';
+    echo '<input type="hidden" name="search-value" value="' . $_POST['search-value'] . '">';
 
     if (isset($_POST['details']) and isset($_POST['experiment-id']))
     {
         try
         {
-            $experimentStatus = $airavataclient->getExperimentStatus($expId);
+            $experimentStatus = $airavataclient->getExperimentStatus($_POST['experiment-id']);
 
             $experimentStatusString = ExperimentState::$__names[$experimentStatus->experimentState];
         }
@@ -150,18 +186,18 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
 
 
         echo '<div>';
-        echo '<p>Experiment ID: ' . $expId . '</p>';
+        echo '<p>Experiment ID: ' . $_POST['experiment-id'] . '</p>';
         echo '<p>Experiment Status: ' . $experimentStatusString . '</p>';
         echo '</div>';
 
     }
-    if (isset($_POST['launch']))
+    if (isset($_POST['launch']) and isset($_POST['experiment-id']))
     {
         echo "<div>Experiment " . $_POST['experiment-id'] . " launched!</div>";
 
         try
         {
-            $airavataclient->launchExperiment($expId, "airavataToken");
+            $airavataclient->launchExperiment($_POST['experiment-id'], "airavataToken");
         }
         catch (TException $texp)
         {
@@ -172,13 +208,16 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
             print 'Airavata System Exception: ' . $ase->getMessage()."\n";
         }
     }
-    if (isset($_POST['clone']))
+    if (isset($_POST['clone']) and isset($_POST['experiment-id']))
     {
         echo "<div>Experiment " . $_POST['experiment-id'] . " cloned!</div>";
 
         try
         {
-            //$airavataclient->cloneExperiment($expId, $updatedExperiment);
+            //create new experiment to receive the clone
+
+
+            //$airavataclient->cloneExperiment($_POST['experiment-id'], $updatedExperiment);
         }
         catch (TException $texp)
         {
@@ -189,13 +228,13 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
             print 'Airavata System Exception: ' . $ase->getMessage()."\n";
         }
     }
-    if (isset($_POST['end']))
+    if (isset($_POST['end']) and isset($_POST['experiment-id']))
     {
         echo "<div>Experiment " . $_POST['experiment-id'] . " ended!</div>";
 
         try
         {
-            $airavataclient->terminateExperiment($expId);
+            $airavataclient->terminateExperiment($_POST['experiment-id']);
         }
         catch (TException $texp)
         {

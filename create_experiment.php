@@ -118,7 +118,14 @@ if (isset($_POST['save']) || isset($_POST['launch']))
     try
     {
         $expId = $airavataclient->createExperiment($experiment);
-        echo "<div>Experiment " . $_POST['experiment-name'] . " created!</div>";
+        if ($expId)
+        {
+            echo "<div>Experiment " . $_POST['experiment-name'] . " created!</div>";
+        }
+        else
+        {
+            echo "<div>Error creating experiment " . $_POST['experiment-name'] . "!</div>";
+        }
     }
     catch (TException $texp)
     {
@@ -136,15 +143,6 @@ if (isset($_POST['save']) || isset($_POST['launch']))
         {
             $airavataclient->launchExperiment($expId, "airavataToken");
             echo "<div>Launched experiment ". $_POST['experiment-name'] . "</div>";
-
-            /*
-            echo "<br><br>\n\n"."Checking Experiment Status.... "."<br>\n";
-            $experimentStatus = $airavataclient->getExperimentStatus($expId);
-            echo "Experiment Status: "."<br>";
-
-            echo "State: ".ExperimentState::$__names[$experimentStatus->experimentState] ."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
-                "Time of last state change:". $experimentStatus->timeOfStateChange;
-            */
         }
         catch (TException $texp)
         {
@@ -165,10 +163,37 @@ $transport->close();
 
 <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
     <div><label for="experiment-name">Experiment Name:</label><input type="text" name="experiment-name" id="experiment-name"></div>
-    <div><label for="project">Project:</label><input type="text" name="project" id="project"></div>
-    <div><label for="experiment-input">Experiment input:</label><input type="text" name="experiment-input" id="experiment-input"></div>
-    <div><label for="application">Application:</label><input type="text" name="application" id="application"></div>
-    <div><label for="compute-resource">Compute Resource:</label><input type="text" name="compute-resource" id="compute-resource"></div>
+    <div>
+        <label for="project">Project:</label>
+        <select name="project" id="project">
+            <option value="project-1">Project 1</option>
+            <option value="project-2">Project 2</option>
+            <option value="project-3">Project 3</option>
+        </select>
+    </div>
+    <div><label for="experiment-input">Experiment input:</label><input type="file" name="experiment-input" id="experiment-input"></div>
+    <div>
+        <label for="application">Application:</label>
+        <select name="application" id="application">
+            <option value="application-1">Application 1</option>
+            <option value="application-2">Application 2</option>
+            <option value="application-3">Application 3</option>
+        </select>
+    </div>
+
+<!--<div><label for="compute-resource">Compute Resource:</label><input type="text" name="compute-resource" id="compute-resource"></div>-->
+    <div>
+        <label for="compute-resource">Compute Resource:</label>
+        <select name="compute-resource" id="compute-resource">
+            <option value="compute-resource-1">Compute Resource 1</option>
+            <option value="compute-resource-2">Compute Resource 2</option>
+            <option value="compute-resource-3">Compute Resource 3</option>
+        </select>
+    </div>
+
+
+
+
     <div><label for="cpu-count">CPU Count:</label><input type="text" name="cpu-count" id="cpu-count"></div>
     <div><label for="wall-time">Wall Time:</label><input type="text" name="wall-time" id="wall-time"></div>
     <div><label for="experiment-description">Experiment Description:</label><input type="text" name="experiment-description" id="experiment-description"></div>
