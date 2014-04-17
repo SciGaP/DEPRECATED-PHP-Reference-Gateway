@@ -1,9 +1,10 @@
 <?php
+/**
+ * Allow users to create a new user account
+ */
+include 'utilities.php';
 
-include 'xml_id_utilities.php';
-
-$idStore = new XmlIdUtilities();
-$idStore->connect();
+connect_to_id_store();
 ?>
 
 <html>
@@ -14,25 +15,30 @@ $idStore->connect();
 
 <body>
 
-<div><h1>Create Account</h1></div>
+<div>
+    <h1>Create Account</h1>
+</div>
+
+
+
 
 
 <?php
 
-if (isset($_POST['Submit']))
+if (form_submitted())
 {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
     if ($idStore->username_exists($username))
     {
-        echo '<div>This username is already in use. Please select another.</div>';
+        print_error_message('The username you entered is already in use. Please select another.');
     }
     else
     {
         $idStore->add_user($username,$password);
-        echo '<div>New user created!</div>';
-        echo '<meta http-equiv="Refresh" content="1; URL=login.php">';
+        print_success_message('New user created!');
+        redirect('login.php');
     }
 }
 
@@ -47,6 +53,8 @@ if (isset($_POST['Submit']))
     <div><label for="password">Password:</label><input type="password" name="password" id="password"></div>
     <input name="Submit" type="submit" value="Submit">
 </form>
+
+<div><a href="login.php">Go to login</a></div>
 
 
 </body>

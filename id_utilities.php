@@ -3,11 +3,11 @@
  * Interface for ID management
  */
 
-interface IdUtilities {
-
+interface IdUtilities
+{
     /**
      * Connect to the user database.
-     * @return mixed
+     * @return mixed|void
      */
     public function connect();
 
@@ -21,7 +21,7 @@ interface IdUtilities {
     /**
      * Get the password for the given username.
      * @param $username
-     * @return mixed
+     * @return int|mixed
      */
     public function get_password($username);
 
@@ -29,7 +29,7 @@ interface IdUtilities {
      * Add a new user to the database.
      * @param $username
      * @param $password
-     * @return mixed
+     * @return mixed|void
      */
     public function add_user($username, $password);
 } 

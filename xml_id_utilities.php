@@ -7,17 +7,42 @@ include 'id_utilities.php';
 
 class XmlIdUtilities implements IdUtilities
 {
+    const DB_PATH = 'users.xml';
+
     /**
-     * @return mixed
+     * Connect to the user database.
+     * @return mixed|void
      */
     public function connect()
     {
         global $db;
 
-        $db = simplexml_load_file('users.xml') or die('Error: Cannot open database');
+
+        try
+        {
+            if (file_exists(self::DB_PATH))
+            {
+                $db = simplexml_load_file(self::DB_PATH);
+            }
+            else
+            {
+                throw new Exception("Error: Cannot connect to database!");
+            }
+
+
+            if (!$db)
+            {
+                throw new Exception('Error: Cannot open database!');
+            }
+        }
+        catch (Exception $e)
+        {
+            echo '<div>' . $e->getMessage() . '</div>';
+        }
     }
 
     /**
+     * Return true if the given username exists in the database.
      * @param $username
      * @return bool
      */
@@ -37,8 +62,9 @@ class XmlIdUtilities implements IdUtilities
     }
 
     /**
+     * Get the password for the given username.
      * @param $username
-     * @return mixed
+     * @return int|mixed
      */
     public function get_password($username)
     {
@@ -61,9 +87,10 @@ class XmlIdUtilities implements IdUtilities
     }
 
     /**
+     * Add a new user to the database.
      * @param $username
      * @param $password
-     * @return mixed
+     * @return mixed|void
      */
     public function add_user($username, $password)
     {

@@ -1,13 +1,13 @@
 <?php
-require 'check_login.php';
+/**
+ * A user's homepage
+ */
+session_start();
+include 'utilities.php';
 
+connect_to_id_store();
+verify_login();
 
-//checking if the user is logged in
-if($logged_in == false)//user not logged in, redirect him to the login page
-{
-    echo 'User not logged in!';
-    echo '<meta http-equiv="Refresh" content="0; URL=login.php">';
-}
 ?>
 
 <html>
@@ -18,7 +18,9 @@ if($logged_in == false)//user not logged in, redirect him to the login page
 
 <body>
 
-<div><h1>Home</h1></div>
+<div>
+    <h1>Home</h1>
+</div>
 
 <ul id="nav">
     <li><a href="home.php">Home</a></li>
