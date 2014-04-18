@@ -41,7 +41,7 @@ use Thrift\Transport\TSocket;
  */
 function print_success_message($message)
 {
-    echo "<div>{$message}</div>";
+    echo '<div class="alert alert-success">' . $message . '</div>';
 }
 
 /**
@@ -50,7 +50,7 @@ function print_success_message($message)
  */
 function print_error_message($message)
 {
-    echo "<div>{$message}</div>";
+    echo '<div class="alert alert-danger">' . $message . '</div>';
 }
 
 /**

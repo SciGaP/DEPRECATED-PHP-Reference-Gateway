@@ -12,4 +12,8 @@
     <username>user2</username>
     <password_hash>6cb75f652a9b52798eb6cf2201057c73</password_hash>
   </user>
+  <user>
+    <username>user3</username>
+    <password_hash>819b0643d6b89dc9b579fdfc9094f28e</password_hash>
+  </user>
 </users>

@@ -24,21 +24,46 @@ $airavataclient = get_airavata_client();
 
 <html>
 <head>
-    <title>Create Experiment</title>
+    <title>PHP Reference Gateway</title>
+    
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 </head>
 
 
 <body>
+    
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">PHP Reference Gateway</a>
+    </div>
 
-<div><h1>Create Experiment</h1></div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="home.php">Home</a></li>
+        <li class="active"><a href="create_experiment.php">Create experiment</a></li>
+        <li><a href="manage_experiments.php">Manage experiments</a></li>    
+      </ul>
+      
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="logout.php">Log out</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 
 
-<ul id="nav">
-    <li><a href="home.php">Home</a></li>
-    <li><a href="create_experiment.php">Create experiment</a></li>
-    <li><a href="manage_experiments.php">Manage experiments</a></li>
-    <li><a href="logout.php">Log out</a></li>
-</ul>
+<div class="container">
+    
+<h3>Create a new experiment</h3>
 
 
 
@@ -111,61 +136,59 @@ elseif (isset($_POST['save']) || isset($_POST['launch']))
 
 
 
-<form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
-    <div>
-        <label for="experiment-name">Experiment Name:</label>
-        <input type="text" name="experiment-name" id="experiment-name">
+<form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" role="form">
+    <div class="form-group">
+        <label for="experiment-name">Experiment Name</label>
+        <input type="text" class="form-control" name="experiment-name" id="experiment-name" placeholder="Enter experiment name">
     </div>
     <!-- ultimately replace with results of getAllUserProjects() -->
-    <div>
-        <label for="project">Project:</label>
-        <select name="project" id="project">
+    <div class="form-group bg-warning">
+        <label for="project">Project</label>
+        <select class="form-control" name="project" id="project">
             <option value="project-1">Project 1</option>
             <option value="project-2">Project 2</option>
             <option value="project-3">Project 3</option>
         </select>
     </div>
-    <div><label for="experiment-input">Experiment input:</label><input type="file" name="experiment-input" id="experiment-input"></div>
-    <div>
-        <label for="application">Application:</label>
-        <select name="application" id="application">
+    <div class="form-group bg-danger">
+        <label for="experiment-input">Experiment input</label>
+        <input type="file" name="experiment-input" id="experiment-input">
+    </div>
+    <div class="form-group bg-warning">
+        <label for="application">Application</label>
+        <select class="form-control" name="application" id="application">
             <option value="application-1">Application 1</option>
             <option value="application-2">Application 2</option>
             <option value="application-3">Application 3</option>
         </select>
     </div>
-
-    <div>
-        <label for="compute-resource">Compute Resource:</label>
-        <select name="compute-resource" id="compute-resource">
+    <div class="form-group bg-danger">
+        <label for="compute-resource">Compute Resource</label>
+        <select class="form-control" name="compute-resource" id="compute-resource">
             <option value="compute-resource-1">Compute Resource 1</option>
             <option value="compute-resource-2">Compute Resource 2</option>
             <option value="compute-resource-3">Compute Resource 3</option>
         </select>
     </div>
-
-
-
-
-    <div>
-        <label for="cpu-count">CPU Count:</label>
-        <input type="text" name="cpu-count" id="cpu-count">
+    <div class="form-group bg-danger">
+        <label for="cpu-count">CPU Count</label>
+        <input type="text"class="form-control" name="cpu-count" id="cpu-count">
     </div>
-    <div>
-        <label for="wall-time">Wall Time:</label>
-        <input type="text" name="wall-time" id="wall-time">
+    <div class="form-group  bg-danger">
+        <label for="wall-time">Wall Time</label>
+        <input type="text" class="form-control" name="wall-time" id="wall-time">
     </div>
-    <div>
-        <label for="experiment-description">Experiment Description:</label>
-        <input type="text" name="experiment-description" id="experiment-description">
+    <div class="form-group">
+        <label for="experiment-description">Experiment Description</label>
+        <textarea class="form-control" name="experiment-description" id="experiment-description"></textarea>
     </div>
 
-    <input name="save" type="submit" value="Save">
-    <input name="launch" type="submit" value="Save and Launch">
-    <input name="clear" type="submit" value="Clear">
+    <input name="save" type="submit" class="btn btn-primary" value="Save">
+    <input name="launch" type="submit" class="btn btn-primary" value="Save and Launch">
+    <input name="clear" type="submit" class="btn btn-default" value="Clear">
 </form>
 
-
+</div>
 </body>
 </html>
 

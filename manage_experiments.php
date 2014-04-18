@@ -19,33 +19,52 @@ $airavataclient = get_airavata_client();
 
 <html>
 <head>
-    <title>Manage Experiments</title>
+    <title>PHP Reference Gateway</title>
+    
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    
 </head>
 
 
 <body>
 
-<div>
-    <h1>Manage Experiments</h1>
-</div>
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">PHP Reference Gateway</a>
+    </div>
 
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="home.php">Home</a></li>
+        <li><a href="create_experiment.php">Create experiment</a></li>
+        <li class="active"><a href="manage_experiments.php">Manage experiments</a></li>    
+      </ul>
+      
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="logout.php">Log out</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 
-<ul id="nav">
-    <li><a href="home.php">Home</a></li>
-    <li><a href="create_experiment.php">Create experiment</a></li>
-    <li><a href="manage_experiments.php">Manage experiments</a></li>
-    <li><a href="logout.php">Log out</a></li>
-</ul>
+    
+<div class="container">
+    
+<h3>Search for Experiments</h3>
 
-
-<div>
-    <h3>Search for Experiments</h3>
-</div>
-
-<form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
-    <div>
-        <label for="search-key">Search Key:</label>
-        <select name="search-key" id="search-key">
+<form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" role="form">
+    <div class="form-group">
+        <label for="search-key">Search Key</label>
+        <select class="form-control" name="search-key" id="search-key">
             <?php
 
             // set up options for select input
@@ -59,12 +78,13 @@ $airavataclient = get_airavata_client();
         </select>
     </div>
 
-    <div>
-        <label for="search-value">Value:</label>
-        <input type="search" name="search-value" id="search-value" value="<?php if (isset($_POST['search-value'])) echo $_POST['search-value'] ?>">
+    <div class="form-group">
+        <label for="search-value">Value</label>
+        <input type="search" class="form-control" name="search-value" id="search-value" 
+               value="<?php if (isset($_POST['search-value'])) echo $_POST['search-value'] ?>">
     </div>
 
-    <input name="search" type="submit" value="Search">
+    <input name="search" type="submit" class="btn btn-primary" value="Search">
 </form>
 
 
@@ -84,9 +104,14 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
     /**
      * display results
      */
-    echo '<div><h3>Results</h3></div>';
-
-    echo '<form action="' . $_SERVER['PHP_SELF'] . '" method="post">';
+    echo '<div class="panel panel-default">';
+                
+    echo '<div class="panel-heading">';
+    echo '<h3>Results</h3>';
+    echo '</div>';
+                
+    echo '<div class="panel-body">';
+    echo '<form action="' . $_SERVER['PHP_SELF'] . '" method="post" role="form">';
 
     create_results_radio_buttons($experiments);
 
@@ -101,9 +126,9 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
         $experimentStatusString = get_experiment_status($_POST['experiment-id']);
 
 
-        echo '<div>';
-        echo "<p>Experiment ID: {$experiment->name}</p>";
-        echo "<p>Experiment Status: {$experimentStatusString}</p>";
+        echo '<div class="well">';
+        echo "<p><strong>Experiment ID:</strong> {$experiment->name}</p>";
+        echo "<p><strong>Experiment Status:</strong> {$experimentStatusString}</p>";
         echo '</div>';
 
     }
@@ -134,13 +159,19 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
      * Display form submit buttons
      */
 
-    echo '<input name="details" type="submit" value="Details">
-        <input name="launch" type="submit" value="Launch">
-        <input name="clone" type="submit" value="Clone">
-        <input name="end" type="submit" value="End">
-        <input name="clear" type="submit" value="Clear">';
+    echo '<div class="btn-toolbar">
+        <div class="btn-group"> 
+        <input name="details" type="submit" class="btn btn-info" value="Details">
+        <input name="launch" type="submit" class="btn btn-primary" value="Launch">
+        <input name="clone" type="submit" class="btn btn-primary" value="Clone">
+        <input name="end" type="submit" class="btn btn-warning" value="End">
+        </div>
+        <input name="clear" type="submit" class="btn btn-default" value="Clear">
+        </div>';
 
     echo '</form>';
+    echo '</div>'; 
+    echo '</div>';
 }
 
 
@@ -149,7 +180,7 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
 ?>
 
 
-
+</div>
 
 </body>
 </html>
@@ -268,7 +299,7 @@ function create_results_radio_buttons($experiments)
             $checked_array[] = '';
         }
 
-        echo '<div><label><input type="radio" name="experiment-id" value="' . $experiments[$i]->experimentID . '" ' . $checked_array[$i] . '>' . $experiments[$i]->name . '</label></div>';
+        echo '<div class="radio"><label><input type="radio" name="experiment-id" value="' . $experiments[$i]->experimentID . '" ' . $checked_array[$i] . '>' . $experiments[$i]->name . '</label></div>';
     }
 
     // include hidden inputs to populate previously-filled-in inputs
