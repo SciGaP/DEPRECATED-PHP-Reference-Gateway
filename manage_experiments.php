@@ -7,6 +7,7 @@ use Airavata\API\Error\InvalidRequestException;
 use Airavata\API\Error\AiravataClientException;
 use Airavata\API\Error\AiravataSystemException;
 use Airavata\API\Error\ExperimentNotFoundException;
+use Airavata\Model\Workspace\Experiment\Experiment;
 
 
 
@@ -413,9 +414,11 @@ function clone_experiment($expId)
     try
     {
         //create new experiment to receive the clone
+        $experiment = $airavataclient->getExperiment($expId);
+        $experiment->name .= '-clone';
 
 
-        //$airavataclient->cloneExperiment($expId, $updatedExperiment);
+        $airavataclient->cloneExperiment($expId, $experiment);
     }
     catch (InvalidRequestException $ire)
     {

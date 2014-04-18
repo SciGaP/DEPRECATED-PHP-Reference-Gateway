@@ -47,33 +47,33 @@ connect_to_id_store();
 
 <div class="container">
     
-<h3>Create a new account</h3>
+    <h3>Create a new account</h3>
 
 
 
 
+    <?php
 
-
-<?php
-
-if (form_submitted())
-{
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    if ($idStore->username_exists($username))
+    if (form_submitted())
     {
-        print_error_message('The username you entered is already in use. Please select another.');
-    }
-    else
-    {
-        $idStore->add_user($username,$password);
-        print_success_message('New user created!');
-        redirect('login.php');
-    }
-}
+        $username = $_POST['username'];
+        $password = $_POST['password'];
 
-?>
+        if ($idStore->username_exists($username))
+        {
+            print_error_message('The username you entered is already in use. Please select another.');
+        }
+        else
+        {
+            $idStore->add_user($username,$password);
+            print_success_message('New user created!');
+            redirect('login.php');
+        }
+    }
+
+    ?>
+
+
 
  
 
