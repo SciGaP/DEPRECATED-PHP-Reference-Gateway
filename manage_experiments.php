@@ -7,7 +7,7 @@ use Airavata\API\Error\InvalidRequestException;
 use Airavata\API\Error\AiravataClientException;
 use Airavata\API\Error\AiravataSystemException;
 use Airavata\API\Error\ExperimentNotFoundException;
-use Airavata\Model\Workspace\Experiment\Experiment;
+use Thrift\Exception\TTransportException;
 
 
 
@@ -259,15 +259,19 @@ function get_search_results()
     }
     catch (InvalidRequestException $ire)
     {
-
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
     }
     catch (AiravataClientException $ace)
     {
-
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
     }
     catch (AiravataSystemException $ase)
     {
-
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+    }
+    catch (TTransportException $tte)
+    {
+        print_error_message('TTransportException!<br><br>' . $tte->getMessage());
     }
 
     return $experiments;
@@ -323,20 +327,29 @@ function get_experiment($expId)
     }
     catch (InvalidRequestException $ire)
     {
-
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
     }
     catch (ExperimentNotFoundException $enf)
     {
-
+        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
     }
     catch (AiravataClientException $ace)
     {
-
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
     }
     catch (AiravataSystemException $ase)
     {
-
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
     }
+    catch (TTransportException $tte)
+    {
+        print_error_message('TTransportException!<br><br>' . $tte->getMessage());
+    }
+    catch (Exception $e)
+    {
+        print_error_message('Exception!<br><br>' . $e->getMessage());
+    }
+
 }
 
 /**
@@ -351,23 +364,26 @@ function get_experiment_status($expId)
     try
     {
         $experimentStatus = $airavataclient->getExperimentStatus($expId);
-
     }
     catch (InvalidRequestException $ire)
     {
-
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
     }
     catch (ExperimentNotFoundException $enf)
     {
-
+        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
     }
     catch (AiravataClientException $ace)
     {
-
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
     }
     catch (AiravataSystemException $ase)
     {
-
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+    }
+    catch (Exception $e)
+    {
+        print_error_message('Exception!<br><br>' . $e->getMessage());
     }
 
     return ExperimentState::$__names[$experimentStatus->experimentState];
@@ -387,19 +403,19 @@ function launch_experiment($expId)
     }
     catch (InvalidRequestException $ire)
     {
-
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
     }
     catch (ExperimentNotFoundException $enf)
     {
-
+        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
     }
     catch (AiravataClientException $ace)
     {
-
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
     }
     catch (AiravataSystemException $ase)
     {
-
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
     }
 }
 
@@ -422,19 +438,23 @@ function clone_experiment($expId)
     }
     catch (InvalidRequestException $ire)
     {
-
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
     }
     catch (ExperimentNotFoundException $enf)
     {
-
+        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
     }
     catch (AiravataClientException $ace)
     {
-
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
     }
     catch (AiravataSystemException $ase)
     {
-
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+    }
+    catch (TTransportException $tte)
+    {
+        print_error_message('TTransportException!<br><br>' . $tte->getMessage());
     }
 }
 
@@ -452,18 +472,26 @@ function end_experiment($expId)
     }
     catch (InvalidRequestException $ire)
     {
-
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
     }
     catch (ExperimentNotFoundException $enf)
     {
-
+        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
     }
     catch (AiravataClientException $ace)
     {
-
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
     }
     catch (AiravataSystemException $ase)
     {
-
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+    }
+    catch (TTransportException $tte)
+    {
+        print_error_message('TTransportException!<br><br>' . $tte->getMessage());
+    }
+    catch (Exception $e)
+    {
+        print_error_message('Exception!<br><br>' . $e->getMessage());
     }
 }

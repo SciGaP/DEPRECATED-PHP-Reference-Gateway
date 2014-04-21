@@ -28,6 +28,8 @@ require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/Airavata.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'Model/Workspace/Experiment/Types.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/Error/Types.php';
 
+require_once './lib/AiravataClientFactory.php';
+
 use Airavata\API\AiravataClient;
 use Thrift\Protocol\TBinaryProtocol;
 use Thrift\Transport\TSocket;
@@ -150,9 +152,16 @@ function connect_to_id_store()
  */
 function get_airavata_client()
 {
+    /*
+    $airavataClientFactory = new \Airavata\Client\AiravataClientFactory(array('airavataServerHost' => "gw111.iu.xsede.org", 'airavataServerPort' => "8930"));
+
+    return $airavataClientFactory->getAiravataClient();
+    */
+
     $transport = new TSocket('gw111.iu.xsede.org', 8930);
     $protocol = new TBinaryProtocol($transport);
     $transport->open();
 
     return new AiravataClient($protocol);
+
 }

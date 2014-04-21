@@ -93,15 +93,15 @@ elseif (isset($_POST['save']) || isset($_POST['launch']))
     }
     catch (InvalidRequestException $ire)
     {
-
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
     }
     catch (AiravataClientException $ace)
     {
-
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
     }
     catch (AiravataSystemException $ase)
     {
-
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
     }
 
     if (isset($_POST['launch']))
@@ -113,19 +113,19 @@ elseif (isset($_POST['save']) || isset($_POST['launch']))
         }
         catch (InvalidRequestException $ire)
         {
-
+            print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
         }
         catch (ExperimentNotFoundException $enf)
         {
-
+            print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
         }
         catch (AiravataClientException $ace)
         {
-
+            print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
         }
         catch (AiravataSystemException $ase)
         {
-
+            print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
         }
     }
 }
