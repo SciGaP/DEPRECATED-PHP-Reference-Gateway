@@ -159,6 +159,8 @@ function get_airavata_client()
     */
 
     $transport = new TSocket('gw111.iu.xsede.org', 8930);
+    $transport->setRecvTimeout(5000);
+
     $protocol = new TBinaryProtocol($transport);
     $transport->open();
 
