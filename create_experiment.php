@@ -139,48 +139,46 @@ elseif (isset($_POST['save']) || isset($_POST['launch']))
 <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" role="form">
     <div class="form-group">
         <label for="experiment-name">Experiment Name</label>
-        <input type="text" class="form-control" name="experiment-name" id="experiment-name" placeholder="Enter experiment name">
+        <input type="text" class="form-control" name="experiment-name" id="experiment-name" placeholder="Enter experiment name" autofocus required>
     </div>
     <!-- ultimately replace with results of getAllUserProjects() -->
-    <div class="form-group bg-warning">
+    <div class="form-group">
         <label for="project">Project</label>
-        <select class="form-control" name="project" id="project">
-            <option value="project-1">Project 1</option>
-            <option value="project-2">Project 2</option>
-            <option value="project-3">Project 3</option>
-        </select>
+        <?php create_project_select(); ?>
     </div>
     <div class="form-group bg-danger">
         <label for="experiment-input">Experiment input</label>
         <input type="file" name="experiment-input" id="experiment-input">
     </div>
-    <div class="form-group bg-warning">
+    <div class="form-group">
         <label for="application">Application</label>
         <select class="form-control" name="application" id="application">
-            <option value="application-1">Application 1</option>
-            <option value="application-2">Application 2</option>
-            <option value="application-3">Application 3</option>
+            <option value="SimpleEcho0">SimpleEcho0</option>
+            <option value="SimpleEcho2">SimpleEcho2</option>
+            <option value="SimpleEcho3">SimpleEcho3</option>
+            <option value="SimpleEcho4">SimpleEcho4</option>
         </select>
     </div>
-    <div class="form-group bg-danger">
+    <div class="form-group">
         <label for="compute-resource">Compute Resource</label>
         <select class="form-control" name="compute-resource" id="compute-resource">
-            <option value="compute-resource-1">Compute Resource 1</option>
-            <option value="compute-resource-2">Compute Resource 2</option>
-            <option value="compute-resource-3">Compute Resource 3</option>
+            <option value="localhost">localhost</option>
+            <option value="trestles.sdsc.edu">Trestles</option>
+            <option value="stampede.tacc.xsede.org">Stampede</option>
+            <option value="lonestar.tacc.utexas.edu">Lonestar</option>
         </select>
     </div>
-    <div class="form-group bg-danger">
+    <div class="form-group">
         <label for="cpu-count">CPU Count</label>
-        <input type="text"class="form-control" name="cpu-count" id="cpu-count">
+        <input type="text"class="form-control" name="cpu-count" id="cpu-count" value="1">
     </div>
-    <div class="form-group  bg-danger">
+    <div class="form-group">
         <label for="wall-time">Wall Time</label>
-        <input type="text" class="form-control" name="wall-time" id="wall-time">
+        <input type="text" class="form-control" name="wall-time" id="wall-time" value="15">
     </div>
     <div class="form-group">
         <label for="experiment-description">Experiment Description</label>
-        <textarea class="form-control" name="experiment-description" id="experiment-description"></textarea>
+        <textarea class="form-control" name="experiment-description" id="experiment-description" placeholder="Optional: Enter a short description of the experiment"></textarea>
     </div>
 
     <input name="save" type="submit" class="btn btn-primary" value="Save">
@@ -208,7 +206,9 @@ function assemble_experiment()
     $experiment->applicationId = $_POST['application'];
 
     $scheduling = new ComputationalResourceScheduling();
-    $scheduling->resourceHostId = 'gsissh-trestles';
+    $scheduling->resourceHostId = $_POST['compute-resource']; //'gsissh-trestles';
+    $scheduling->totalCPUCount = $_POST['cpu-count'];
+    $scheduling->wallTimeLimit = $_POST['wall-time'];
 
     $userConfigData = new UserConfigurationData();
     $userConfigData->computationalResourceScheduling = $scheduling;
@@ -237,4 +237,37 @@ function assemble_experiment()
 
 
     return $experiment;
+}
+
+
+function create_project_select()
+{
+    global $airavataclient;
+
+
+    echo '<select class="form-control" name="project" id="project" required>';
+
+    try
+    {
+        $userProjects = $airavataclient->getAllUserProjects($_SESSION['username']);
+
+        foreach ($userProjects as $project)
+        {
+            echo '<option value="' . $project->projectID . '">' . $project->name . '</option>';
+        }
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException: ' . $ire->getMessage(). '\n');
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('Airavata System Exception: ' . $ace->getMessage().'\n');
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('Airavata System Exception: ' . $ase->getMessage().'\n');
+    }
+
+    echo '</select>';
 }
