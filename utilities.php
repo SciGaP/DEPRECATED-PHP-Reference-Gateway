@@ -32,6 +32,10 @@ require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/Error/Types.php';
 require_once './lib/AiravataClientFactory.php';
 
 use Airavata\API\AiravataClient;
+use Airavata\API\Error\InvalidRequestException;
+use Airavata\API\Error\AiravataClientException;
+use Airavata\API\Error\AiravataSystemException;
+use Airavata\API\Error\ExperimentNotFoundException;
 use Thrift\Protocol\TBinaryProtocol;
 use Thrift\Transport\TSocket;
 
@@ -167,4 +171,37 @@ function get_airavata_client()
 
     return new AiravataClient($protocol);
 
+}
+
+
+/**
+ * Launch the experiment with the given ID
+ * @param $expId
+ */
+function launch_experiment($expId)
+{
+    global $airavataclient;
+
+    try
+    {
+        $airavataclient->launchExperiment($expId, 'airavataToken');
+
+        print_success_message("Experiment launched!");
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
+    }
+    catch (ExperimentNotFoundException $enf)
+    {
+        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+    }
 }

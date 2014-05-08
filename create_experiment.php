@@ -6,6 +6,7 @@ include 'utilities.php';
 
 use Airavata\Model\Workspace\Experiment\ComputationalResourceScheduling;
 use Airavata\Model\Workspace\Experiment\DataObjectType;
+use Airavata\Model\Workspace\Experiment\DataType;
 use Airavata\Model\Workspace\Experiment\UserConfigurationData;
 use Airavata\Model\Workspace\Experiment\Experiment;
 use Airavata\API\Error\InvalidRequestException;
@@ -76,57 +77,11 @@ if (isset($_POST['clear']))
 }
 elseif (isset($_POST['save']) || isset($_POST['launch']))
 {
-    $experiment = assemble_experiment();
+    $expId = create_experiment();
 
-    try
+    if (isset($_POST['launch']) && $expId)
     {
-        $expId = $airavataclient->createExperiment($experiment);
-
-        if ($expId)
-        {
-            print_success_message("Experiment {$_POST['experiment-name']} created!");
-        }
-        else
-        {
-            print_error_message("Error creating experiment {$_POST['experiment-name']}!");
-        }
-    }
-    catch (InvalidRequestException $ire)
-    {
-        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
-    }
-    catch (AiravataClientException $ace)
-    {
-        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
-    }
-    catch (AiravataSystemException $ase)
-    {
-        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
-    }
-
-    if (isset($_POST['launch']))
-    {
-        try
-        {
-            $airavataclient->launchExperiment($expId, "airavataToken");
-            print_success_message("Launched experiment {$_POST['experiment-name']}!");
-        }
-        catch (InvalidRequestException $ire)
-        {
-            print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
-        }
-        catch (ExperimentNotFoundException $enf)
-        {
-            print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
-        }
-        catch (AiravataClientException $ace)
-        {
-            print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
-        }
-        catch (AiravataSystemException $ase)
-        {
-            print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
-        }
+        launch_experiment('fdfsdfsdf');
     }
 }
 
@@ -170,7 +125,7 @@ elseif (isset($_POST['save']) || isset($_POST['launch']))
     </div>
     <div class="form-group">
         <label for="cpu-count">CPU Count</label>
-        <input type="text"class="form-control" name="cpu-count" id="cpu-count" value="1">
+        <input type="text" class="form-control" name="cpu-count" id="cpu-count" value="1">
     </div>
     <div class="form-group">
         <label for="wall-time">Wall Time</label>
@@ -192,8 +147,102 @@ elseif (isset($_POST['save']) || isset($_POST['launch']))
 
 <?php
 
+function create_experiment()
+{
+    global $airavataclient;
+
+    $experiment = assemble_experiment();
+    $expId = null;
+
+    try
+    {
+        $expId = $airavataclient->createExperiment($experiment);
+
+        if ($expId)
+        {
+            print_success_message("Experiment {$_POST['experiment-name']} created!");
+        }
+        else
+        {
+            print_error_message("Error creating experiment {$_POST['experiment-name']}!");
+        }
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+    }
+
+    return $expId;
+}
+
+/**
+ * Create and configure a new Experiment
+ * @return Experiment
+ */
 function assemble_experiment()
 {
+    $scheduling = new ComputationalResourceScheduling();
+    $scheduling->totalCPUCount = $_POST['cpu-count'];
+    $scheduling->nodeCount = 1;
+    $scheduling->numberOfThreads = 0;
+    $scheduling->queueName = 'normal';
+    $scheduling->wallTimeLimit = $_POST['wall-time'];
+    $scheduling->jobStartTime = 0;
+    $scheduling->totalPhysicalMemory = 0;
+    $scheduling->resourceHostId = $_POST['compute-resource'];
+
+    switch ($_POST['compute-resource'])
+    {
+        case 'trestles.sdsc.edu':
+            $scheduling->ComputationalProjectAccount = 'sds128';
+            break;
+        case 'stampede.tacc.xsede.org':
+            $scheduling->ComputationalProjectAccount = 'TG-STA110014S';
+            break;
+        default:
+            $scheduling->ComputationalProjectAccount = 'admin';
+    }
+
+
+    $userConfigData = new UserConfigurationData();
+    $userConfigData->computationalResourceScheduling = $scheduling;
+    $userConfigData->overrideManualScheduledParams = 0;
+    $userConfigData->airavataAutoSchedule = 0;
+
+
+    $experimentInput = new DataObjectType();
+    $experimentInput->key = 'echo_input';
+    $experimentInput->value = 'echo_output=Hello World';
+    $experimentInput->type = DataType::STRING;
+    $experimentInputs = array($experimentInput);
+
+
+    $experimentOutput1 = new DataObjectType();
+    $experimentOutput1->key = 'echo_output';
+    $experimentOutput1->value = '';
+    $experimentOutput1->type = DataType::STRING;
+
+    $experimentOutput2 = new DataObjectType();
+    $experimentOutput2->key = 'stdout';
+    $experimentOutput2->value = '';
+    $experimentOutput2->type = DataType::STRING;
+
+    $experimentOutput3 = new DataObjectType();
+    $experimentOutput3->key = 'stderr';
+    $experimentOutput3->value = '';
+    $experimentOutput3->type = DataType::STRING;
+
+    $experimentOutputs = array($experimentOutput1, $experimentOutput2, $experimentOutput3);
+
+
     $experiment = new Experiment();
 
     // required
@@ -204,42 +253,17 @@ function assemble_experiment()
     // optional
     $experiment->description = $_POST['experiment-description'];
     $experiment->applicationId = $_POST['application'];
-
-    $scheduling = new ComputationalResourceScheduling();
-    $scheduling->resourceHostId = $_POST['compute-resource']; //'gsissh-trestles';
-    $scheduling->totalCPUCount = $_POST['cpu-count'];
-    $scheduling->wallTimeLimit = $_POST['wall-time'];
-
-    $userConfigData = new UserConfigurationData();
-    $userConfigData->computationalResourceScheduling = $scheduling;
-    $userConfigData->overrideManualScheduledParams = False;
-    $userConfigData->airavataAutoSchedule = False;
     $experiment->userConfigurationData = $userConfigData;
-
-    $experimentInputs = new DataObjectType();
-    $experimentInputs->key = 'input';
-    $experimentInputs->value = 'file:///home/airavata/input/hpcinput.tar';
-    $experiment->experimentInputs = array($experimentInputs);
-
-    $experimentOutput1 = new DataObjectType();
-    $experimentOutput1->key = 'output';
-    $experimentOutput1->value = '';
-
-    $experimentOutput2 = new DataObjectType();
-    $experimentOutput2->key = 'stdout';
-    $experimentOutput2->value = '';
-
-    $experimentOutput3 = new DataObjectType();
-    $experimentOutput3->key = 'stderr';
-    $experimentOutput3->value = '';
-
-    $experiment->experimentOutputs = array($experimentOutput1, $experimentOutput2, $experimentOutput3);
+    $experiment->experimentInputs = $experimentInputs;
+    $experiment->experimentOutputs = $experimentOutputs;
 
 
     return $experiment;
 }
 
-
+/**
+ * Create a select input and populate it with project options from the database
+ */
 function create_project_select()
 {
     global $airavataclient;

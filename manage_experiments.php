@@ -94,7 +94,7 @@ $airavataclient = get_airavata_client();
 
 <?php
 
-if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch']) || isset($_POST['clone']) || isset($_POST['end']))
+if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch']) || isset($_POST['clone']) || isset($_POST['cancel']))
 {
     /**
      * get results
@@ -128,7 +128,7 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
 
 
         echo '<div class="well">';
-        echo "<p><strong>Experiment ID:</strong> {$experiment->name}</p>";
+        echo "<p><strong>Experiment Name:</strong> {$experiment->name}</p>";
         echo "<p><strong>Experiment Status:</strong> {$experimentStatusString}</p>";
         echo '</div>';
 
@@ -137,22 +137,16 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
     if (isset($_POST['launch']) and isset($_POST['experiment-id']))
     {
         launch_experiment($_POST['experiment-id']);
-
-        print_success_message("Experiment {$_POST['experiment-id']} launched!");
     }
 
     if (isset($_POST['clone']) and isset($_POST['experiment-id']))
     {
         clone_experiment($_POST['experiment-id']);
-
-        print_success_message("Experiment {$_POST['experiment-id']} cloned!");
     }
 
-    if (isset($_POST['end']) and isset($_POST['experiment-id']))
+    if (isset($_POST['cancel']) and isset($_POST['experiment-id']))
     {
-        end_experiment($_POST['experiment-id']);
-
-        print_success_message("Experiment {$_POST['experiment-id']} ended!");
+        cancel_experiment($_POST['experiment-id']);
     }
 
 
@@ -165,7 +159,7 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
         <input name="details" type="submit" class="btn btn-info" value="Details">
         <input name="launch" type="submit" class="btn btn-primary" value="Launch">
         <input name="clone" type="submit" class="btn btn-primary" value="Clone">
-        <input name="end" type="submit" class="btn btn-warning" value="End">
+        <input name="cancel" type="submit" class="btn btn-warning" value="Cancel">
         </div>
         <input name="clear" type="submit" class="btn btn-default" value="Clear">
         </div>';
@@ -389,35 +383,7 @@ function get_experiment_status($expId)
     return ExperimentState::$__names[$experimentStatus->experimentState];
 }
 
-/**
- * Launch the experiment with the given ID
- * @param $expId
- */
-function launch_experiment($expId)
-{
-    global $airavataclient;
 
-    try
-    {
-        $airavataclient->launchExperiment($expId, 'airavataToken');
-    }
-    catch (InvalidRequestException $ire)
-    {
-        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
-    }
-    catch (ExperimentNotFoundException $enf)
-    {
-        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
-    }
-    catch (AiravataClientException $ace)
-    {
-        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
-    }
-    catch (AiravataSystemException $ase)
-    {
-        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
-    }
-}
 
 /**
  * Clone the experiment with the given ID
@@ -431,10 +397,11 @@ function clone_experiment($expId)
     {
         //create new experiment to receive the clone
         $experiment = $airavataclient->getExperiment($expId);
-        $experiment->name .= '-clone';
-
+        $experiment->name .= time();
 
         $airavataclient->cloneExperiment($expId, $experiment);
+
+        print_success_message("Experiment cloned!");
     }
     catch (InvalidRequestException $ire)
     {
@@ -459,16 +426,18 @@ function clone_experiment($expId)
 }
 
 /**
- * End the experiment with the given ID
+ * Cancel the experiment with the given ID
  * @param $expId
  */
-function end_experiment($expId)
+function cancel_experiment($expId)
 {
     global $airavataclient;
 
     try
     {
         $airavataclient->terminateExperiment($expId);
+
+        print_success_message("Experiment canceled!");
     }
     catch (InvalidRequestException $ire)
     {
