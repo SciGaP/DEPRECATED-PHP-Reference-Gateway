@@ -39,13 +39,13 @@ $airavataclient = get_airavata_client();
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">PHP Reference Gateway</a>
+      <a class="navbar-brand" href="home.php">PHP Reference Gateway</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="home.php">Home</a></li>
+        <li><a href="create_project.php">Create project</a></li>
         <li><a href="create_experiment.php">Create experiment</a></li>
         <li class="active"><a href="manage_experiments.php">Manage experiments</a></li>    
       </ul>
@@ -129,6 +129,7 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
 
         echo '<div class="well">';
         echo "<p><strong>Experiment Name:</strong> {$experiment->name}</p>";
+        echo "<p><strong>Experiment ID:</strong> {$experiment->experimentID}</p>";
         echo "<p><strong>Experiment Status:</strong> {$experimentStatusString}</p>";
         echo '</div>';
 
