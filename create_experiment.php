@@ -55,7 +55,8 @@ $airavataclient = get_airavata_client();
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="logout.php">Log out</a></li>
+          <li><a href="home.php"><?php echo $_SESSION['username']?></a></li>
+          <li><a href="logout.php">Log out</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -71,11 +72,7 @@ $airavataclient = get_airavata_client();
 
 <?php
 
-if (isset($_POST['clear']))
-{
-    print_success_message('Values cleared!');
-}
-elseif (isset($_POST['save']) || isset($_POST['launch']))
+if (isset($_POST['save']) || isset($_POST['launch']))
 {
     $expId = create_experiment();
 
@@ -101,10 +98,6 @@ elseif (isset($_POST['save']) || isset($_POST['launch']))
         <label for="project">Project</label>
         <?php create_project_select(); ?>
     </div>
-    <div class="form-group bg-danger">
-        <label for="experiment-input">Experiment input</label>
-        <input type="file" name="experiment-input" id="experiment-input">
-    </div>
     <div class="form-group">
         <label for="application">Application</label>
         <select class="form-control" name="application" id="application">
@@ -114,6 +107,11 @@ elseif (isset($_POST['save']) || isset($_POST['launch']))
             <option value="SimpleEcho4">SimpleEcho4</option>
         </select>
     </div>
+    <div class="form-group bg-danger">
+        <label for="experiment-input">Experiment input</label>
+        <input type="file" name="experiment-input" id="experiment-input">
+    </div>
+
     <div class="form-group">
         <label for="compute-resource">Compute Resource</label>
         <select class="form-control" name="compute-resource" id="compute-resource">
@@ -124,12 +122,24 @@ elseif (isset($_POST['save']) || isset($_POST['launch']))
         </select>
     </div>
     <div class="form-group">
-        <label for="cpu-count">CPU Count</label>
+        <label for="node-count">Node Count</label>
+        <input type="text" class="form-control" name="node-count" id="node-count" value="1">
+    </div>
+    <div class="form-group">
+        <label for="cpu-count">Total CPU Count</label>
         <input type="text" class="form-control" name="cpu-count" id="cpu-count" value="1">
     </div>
     <div class="form-group">
-        <label for="wall-time">Wall Time</label>
+        <label for="threads">Number of Threads</label>
+        <input type="text" class="form-control" name="threads" id="threads" value="0">
+    </div>
+    <div class="form-group">
+        <label for="wall-time">Wall Time Limit</label>
         <input type="text" class="form-control" name="wall-time" id="wall-time" value="15">
+    </div>
+    <div class="form-group">
+        <label for="memory">Total Physical Memory</label>
+        <input type="text" class="form-control" name="memory" id="memory" value="0">
     </div>
     <div class="form-group">
         <label for="experiment-description">Experiment Description</label>
@@ -138,7 +148,7 @@ elseif (isset($_POST['save']) || isset($_POST['launch']))
 
     <input name="save" type="submit" class="btn btn-primary" value="Save">
     <input name="launch" type="submit" class="btn btn-primary" value="Save and Launch">
-    <input name="clear" type="submit" class="btn btn-default" value="Clear">
+    <input name="clear" type="reset" class="btn btn-default" value="Clear">
 </form>
 
 </div>
@@ -191,12 +201,12 @@ function assemble_experiment()
 {
     $scheduling = new ComputationalResourceScheduling();
     $scheduling->totalCPUCount = $_POST['cpu-count'];
-    $scheduling->nodeCount = 1;
-    $scheduling->numberOfThreads = 0;
+    $scheduling->nodeCount = $_POST['node-count'];
+    $scheduling->numberOfThreads = $_POST['threads'];
     $scheduling->queueName = 'normal';
     $scheduling->wallTimeLimit = $_POST['wall-time'];
-    $scheduling->jobStartTime = 0;
-    $scheduling->totalPhysicalMemory = 0;
+    $scheduling->jobStartTime = time();
+    $scheduling->totalPhysicalMemory = $_POST['memory'];
     $scheduling->resourceHostId = $_POST['compute-resource'];
 
     switch ($_POST['compute-resource'])

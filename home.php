@@ -44,7 +44,8 @@ verify_login();
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="logout.php">Log out</a></li>
+          <li><a href="#"><?php echo $_SESSION['username']?></a></li>
+          <li><a href="logout.php">Log out</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

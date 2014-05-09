@@ -79,7 +79,7 @@ if (form_submitted())
     <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" role="form">
         <div class="form-group">
             <label class="sr-only" for="username">Username</label>
-            <input type="text" class="form-control" name="username" placeholder="Username">
+            <input type="text" class="form-control" name="username" placeholder="Username" autofocus>
         </div>
         <div class="form-group">
             <label class="sr-only" for="password">Password</label>
