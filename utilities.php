@@ -38,6 +38,12 @@ use Airavata\API\Error\AiravataSystemException;
 use Airavata\API\Error\ExperimentNotFoundException;
 use Thrift\Protocol\TBinaryProtocol;
 use Thrift\Transport\TSocket;
+use Thrift\Exception\TTransportException;
+use Airavata\Model\Workspace\Experiment\ComputationalResourceScheduling;
+use Airavata\Model\Workspace\Experiment\DataObjectType;
+use Airavata\Model\Workspace\Experiment\DataType;
+use Airavata\Model\Workspace\Experiment\UserConfigurationData;
+use Airavata\Model\Workspace\Experiment\Experiment;
 
 
 
@@ -203,5 +209,304 @@ function launch_experiment($expId)
     catch (AiravataSystemException $ase)
     {
         print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+    }
+}
+
+/**
+ * Get all projects owned by the given user
+ * @param $username
+ * @return null
+ */
+function get_all_user_projects($username)
+{
+    global $airavataclient;
+    $userProjects = null;
+
+    try
+    {
+        $userProjects = $airavataclient->getAllUserProjects($username);
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException: ' . $ire->getMessage(). '\n');
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('Airavata System Exception: ' . $ace->getMessage().'\n');
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('Airavata System Exception: ' . $ase->getMessage().'\n');
+    }
+
+    return $userProjects;
+}
+
+/**
+ * Get the experiment with the given ID
+ * @param $expId
+ * @return null
+ */
+function get_experiment($expId)
+{
+    global $airavataclient;
+
+    try
+    {
+        return $airavataclient->getExperiment($expId);
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
+    }
+    catch (ExperimentNotFoundException $enf)
+    {
+        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+    }
+    catch (TTransportException $tte)
+    {
+        print_error_message('TTransportException!<br><br>' . $tte->getMessage());
+    }
+    catch (Exception $e)
+    {
+        print_error_message('Exception!<br><br>' . $e->getMessage());
+    }
+
+}
+
+/**
+ * Get the project with the given ID
+ * @param $projectId
+ * @return null
+ */
+function get_project($projectId)
+{
+    global $airavataclient;
+
+    try
+    {
+        return $airavataclient->getProject($projectId);
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+    }
+
+}
+
+
+/**
+ * Create and configure a new Experiment
+ * @param overwriteOutputs
+ * @return Experiment
+ */
+function assemble_experiment($overwriteOutputs)
+{
+    $scheduling = new ComputationalResourceScheduling();
+    $scheduling->totalCPUCount = $_POST['cpu-count'];
+    $scheduling->nodeCount = $_POST['node-count'];
+    $scheduling->numberOfThreads = $_POST['threads'];
+    $scheduling->queueName = 'normal';
+    $scheduling->wallTimeLimit = $_POST['wall-time'];
+    $scheduling->jobStartTime = time();
+    $scheduling->totalPhysicalMemory = $_POST['memory'];
+    $scheduling->resourceHostId = $_POST['compute-resource'];
+
+    switch ($_POST['compute-resource'])
+    {
+        case 'trestles.sdsc.edu':
+            $scheduling->ComputationalProjectAccount = 'sds128';
+            break;
+        case 'stampede.tacc.xsede.org':
+            $scheduling->ComputationalProjectAccount = 'TG-STA110014S';
+            break;
+        default:
+            $scheduling->ComputationalProjectAccount = 'admin';
+    }
+
+
+    $userConfigData = new UserConfigurationData();
+    $userConfigData->computationalResourceScheduling = $scheduling;
+    $userConfigData->overrideManualScheduledParams = 0;
+    $userConfigData->airavataAutoSchedule = 0;
+
+
+    $experimentInput = new DataObjectType();
+    $experimentInput->key = 'echo_input';
+    $experimentInput->value = 'echo_output=Hello World';
+    $experimentInput->type = DataType::STRING;
+    $experimentInputs = array($experimentInput);
+
+
+    $experimentOutput1 = new DataObjectType();
+    $experimentOutput1->key = 'echo_output';
+    $experimentOutput1->value = '';
+    $experimentOutput1->type = DataType::STRING;
+
+    $experimentOutput2 = new DataObjectType();
+    $experimentOutput2->key = 'stdout';
+    $experimentOutput2->value = '';
+    $experimentOutput2->type = DataType::STRING;
+
+    $experimentOutput3 = new DataObjectType();
+    $experimentOutput3->key = 'stderr';
+    $experimentOutput3->value = '';
+    $experimentOutput3->type = DataType::STRING;
+
+    $experimentOutputs = array($experimentOutput1, $experimentOutput2, $experimentOutput3);
+
+
+    $experiment = new Experiment();
+
+    // required
+    $experiment->projectID = $_POST['project'];
+    $experiment->userName = $_SESSION['username'];
+    $experiment->name = $_POST['experiment-name'];
+
+    // optional
+    $experiment->description = $_POST['experiment-description'];
+    $experiment->applicationId = $_POST['application'];
+    $experiment->userConfigurationData = $userConfigData;
+    $experiment->experimentInputs = $experimentInputs;
+
+    if ($overwriteOutputs)
+    {
+        $experiment->experimentOutputs = $experimentOutputs;
+    }
+
+
+
+    return $experiment;
+}
+
+
+/**
+ * Update the experiment with the given ID
+ * @param $expId
+ * @param $updatedExperiment
+ */
+function update_experiment($expId, $updatedExperiment)
+{
+    global $airavataclient;
+
+    try
+    {
+        $airavataclient->updateExperiment($expId, $updatedExperiment);
+
+        print_success_message('Experiment updated!');
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
+    }
+    catch (ExperimentNotFoundException $enf)
+    {
+        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+    }
+
+}
+
+
+/**
+ * Clone the experiment with the given ID
+ * @param $expId
+ */
+function clone_experiment($expId)
+{
+    global $airavataclient;
+
+    try
+    {
+        //create new experiment to receive the clone
+        $experiment = $airavataclient->getExperiment($expId);
+        $experiment->name .= time();
+
+        $airavataclient->cloneExperiment($expId, $experiment);
+
+        print_success_message("Experiment cloned!");
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
+    }
+    catch (ExperimentNotFoundException $enf)
+    {
+        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+    }
+    catch (TTransportException $tte)
+    {
+        print_error_message('TTransportException!<br><br>' . $tte->getMessage());
+    }
+}
+
+/**
+ * Cancel the experiment with the given ID
+ * @param $expId
+ */
+function cancel_experiment($expId)
+{
+    global $airavataclient;
+
+    try
+    {
+        $airavataclient->terminateExperiment($expId);
+
+        print_success_message("Experiment canceled!");
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
+    }
+    catch (ExperimentNotFoundException $enf)
+    {
+        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+    }
+    catch (TTransportException $tte)
+    {
+        print_error_message('TTransportException!<br><br>' . $tte->getMessage());
+    }
+    catch (Exception $e)
+    {
+        print_error_message('Exception!<br><br>' . $e->getMessage());
     }
 }

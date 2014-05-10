@@ -45,9 +45,10 @@ $airavataclient = get_airavata_client();
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="create_project.php">Create project</a></li>
-        <li><a href="create_experiment.php">Create experiment</a></li>
-        <li class="active"><a href="manage_experiments.php">Manage experiments</a></li>    
+          <li><a href="create_project.php">Create project</a></li>
+          <li><a href="create_experiment.php">Create experiment</a></li>
+          <li><a href="browse_experiments.php">Browse experiments</a></li>
+          <li class="active"><a href="manage_experiments.php">Search experiments</a></li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -308,45 +309,6 @@ function create_results_radio_buttons($experiments)
     echo '<input type="hidden" name="search-value" value="' . $_POST['search-value'] . '">';
 }
 
-/**
- * Get the experiment with the given ID
- * @param $expId
- * @return null
- */
-function get_experiment($expId)
-{
-    global $airavataclient;
-
-    try
-    {
-        return $airavataclient->getExperiment($expId);
-    }
-    catch (InvalidRequestException $ire)
-    {
-        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
-    }
-    catch (ExperimentNotFoundException $enf)
-    {
-        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
-    }
-    catch (AiravataClientException $ace)
-    {
-        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
-    }
-    catch (AiravataSystemException $ase)
-    {
-        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
-    }
-    catch (TTransportException $tte)
-    {
-        print_error_message('TTransportException!<br><br>' . $tte->getMessage());
-    }
-    catch (Exception $e)
-    {
-        print_error_message('Exception!<br><br>' . $e->getMessage());
-    }
-
-}
 
 /**
  * Get a string containing the given experiment's status
@@ -387,82 +349,4 @@ function get_experiment_status($expId)
 
 
 
-/**
- * Clone the experiment with the given ID
- * @param $expId
- */
-function clone_experiment($expId)
-{
-    global $airavataclient;
 
-    try
-    {
-        //create new experiment to receive the clone
-        $experiment = $airavataclient->getExperiment($expId);
-        $experiment->name .= time();
-
-        $airavataclient->cloneExperiment($expId, $experiment);
-
-        print_success_message("Experiment cloned!");
-    }
-    catch (InvalidRequestException $ire)
-    {
-        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
-    }
-    catch (ExperimentNotFoundException $enf)
-    {
-        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
-    }
-    catch (AiravataClientException $ace)
-    {
-        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
-    }
-    catch (AiravataSystemException $ase)
-    {
-        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
-    }
-    catch (TTransportException $tte)
-    {
-        print_error_message('TTransportException!<br><br>' . $tte->getMessage());
-    }
-}
-
-/**
- * Cancel the experiment with the given ID
- * @param $expId
- */
-function cancel_experiment($expId)
-{
-    global $airavataclient;
-
-    try
-    {
-        $airavataclient->terminateExperiment($expId);
-
-        print_success_message("Experiment canceled!");
-    }
-    catch (InvalidRequestException $ire)
-    {
-        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
-    }
-    catch (ExperimentNotFoundException $enf)
-    {
-        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
-    }
-    catch (AiravataClientException $ace)
-    {
-        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
-    }
-    catch (AiravataSystemException $ase)
-    {
-        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
-    }
-    catch (TTransportException $tte)
-    {
-        print_error_message('TTransportException!<br><br>' . $tte->getMessage());
-    }
-    catch (Exception $e)
-    {
-        print_error_message('Exception!<br><br>' . $e->getMessage());
-    }
-}

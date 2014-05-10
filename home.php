@@ -38,9 +38,10 @@ verify_login();
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="create_project.php">Create project</a></li>
-        <li><a href="create_experiment.php">Create experiment</a></li>
-        <li><a href="manage_experiments.php">Manage experiments</a></li>    
+          <li><a href="create_project.php">Create project</a></li>
+          <li><a href="create_experiment.php">Create experiment</a></li>
+          <li><a href="browse_experiments.php">Browse experiments</a></li>
+          <li><a href="search_experiments.php">Search experiments</a></li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
