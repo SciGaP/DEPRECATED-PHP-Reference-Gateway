@@ -5,9 +5,7 @@ include 'utilities.php';
 
 
 
-use Airavata\API\Error\InvalidRequestException;
-use Airavata\API\Error\AiravataClientException;
-use Airavata\API\Error\AiravataSystemException;
+use Airavata\Model\Workspace\Experiment\ExperimentState;
 
 
 
@@ -71,9 +69,17 @@ $airavataclient = get_airavata_client();
 $experiment = get_experiment($_GET['expId']);
 $project = get_project($experiment->projectID);
 
+
+$experimentStatus = $experiment->experimentStatus;
+$experimentState = $experimentStatus->experimentState;
+$experimentStatusString = ExperimentState::$__names[$experimentState];
+
+
+
 if (isset($_POST['save']))
 {
     $updatedExperiment = assemble_experiment(false);
+    $updatedExperiment->experimentID = $experiment->experimentID;
 
     update_experiment($experiment->experimentID, $updatedExperiment);
 }
@@ -151,6 +157,10 @@ elseif (isset($_POST['cancel']))
     <div class="form-group">
         <label for="experiment-description">Experiment Description</label>
         <textarea class="form-control" name="experiment-description" id="experiment-description"><?php echo $experiment->description ?></textarea>
+    </div>
+    <div class="form-group">
+        <label for="status">Status</label>
+        <input type="text" class="form-control" name="status" id="status" value="<?php echo $experimentStatusString ?>" disabled>
     </div>
 
     <div class="btn-toolbar">

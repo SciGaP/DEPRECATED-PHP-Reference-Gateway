@@ -77,7 +77,7 @@ foreach ($userProjects as $project)
     echo "<h3>$project->name</h3>";
     echo '</div>';
 
-    if ($project->name != 'default')
+    if ($project->name != 'default' && $project->name != 'Project1')
     {
         $experiments = get_experiments_in_project($project->projectID);
 
