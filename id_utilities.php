@@ -19,11 +19,12 @@ interface IdUtilities
     public function username_exists($username);
 
     /**
-     * Get the password for the given username.
+     * Authenticate user given username and password.
      * @param $username
+     * @param $password
      * @return int|mixed
      */
-    public function get_password($username);
+    public function authenticate($username, $password);
 
     /**
      * Add a new user to the database.

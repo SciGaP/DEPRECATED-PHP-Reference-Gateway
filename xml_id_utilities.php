@@ -62,19 +62,21 @@ class XmlIdUtilities implements IdUtilities
     }
 
     /**
-     * Get the password for the given username.
+     * Authenticate the user given username and password.
      * @param $username
      * @return int|mixed
      */
-    public function get_password($username)
+    public function authenticate($username, $password)
     {
         global $db;
 
+        $hashed_password = md5($password);
+        
         $user = $db->xpath('//user[username="' . $username . '"]');
 
         if (sizeof($user) == 1)
         {
-            return $user[0]->password_hash;
+            return $user[0]->password_hash == $hashed_password;
         }
         elseif(sizeof($user) == 0)
         {

@@ -59,11 +59,11 @@ connect_to_id_store();
 if (form_submitted())
 {
     $username = $_POST['username'];
-    $passwordHash = md5($_POST['password']);
+    $password = $_POST['password'];
 
-    if (id_matches_db($username, $passwordHash))
+    if (id_matches_db($username, $password))
     {
-        store_id_in_session($username, $passwordHash);
+        store_id_in_session($username);
         print_success_message('Login successful!');
         redirect('home.php');
     }

@@ -3,7 +3,7 @@
  * Basic utility functions
  */
 
-include 'xml_id_utilities.php';
+require_once 'wsis_utilities.php';
 
 /**
  * import Thrift and Airavata
@@ -87,57 +87,49 @@ function form_submitted()
 /**
  * Compare the submitted credentials with those stored in the database
  * @param $username
- * @param $passwordHash
+ * @param $password
  * @return bool
  */
-function id_matches_db($username, $passwordHash)
+function id_matches_db($username, $password)
 {
     global $idStore;
 
-    return $passwordHash == $idStore->get_password($username);
+    if($idStore->authenticate($username, $password))
+    {
+        return true;
+    }else{
+        return false;
+    }
 }
 
 
 /**
- * Store user details in session variables
+ * Store username in session variables
  * @param $username
- * @param $passwordHash
  */
-function store_id_in_session($username, $passwordHash)
+function store_id_in_session($username)
 {
     $_SESSION['username'] = $username;
-    $_SESSION['password_hash'] = $passwordHash;
+    $_SESSION['loggedin'] = true;
 }
 
 /**
- * Return true if the user details are stored in the session
+ * Return true if the username stored in the session
  * @return bool
  */
 function id_in_session()
 {
-    return isset($_SESSION['username']) && isset($_SESSION['password_hash']);
+    return isset($_SESSION['username']) && isset($_SESSION['loggedin']);
 }
 
 /**
- * Verify that the user details stored in the session
- * match those in the database. If not, redirect to login.
+ * Verify user is already logged in. If not, redirect to login.
  */
 function verify_login()
 {
     if (id_in_session())
     {
-        if (id_matches_db($_SESSION['username'], $_SESSION['password_hash']))
-        {
-            return; // login verified - do nothing
-        }
-        else
-        {
-            unset($_SESSION['username']);
-            unset($_SESSION['password_hash']);
-
-            print_error_message('User is not logged in!');
-            redirect('login.php');
-        }
+        return;
     }
     else
     {
@@ -153,7 +145,7 @@ function connect_to_id_store()
 {
     global $idStore;
 
-    $idStore = new XmlIdUtilities();
+    $idStore = new WSISUtilities();
     $idStore->connect();
 }
 
@@ -169,7 +161,7 @@ function get_airavata_client()
     return $airavataClientFactory->getAiravataClient();
     */
 
-    $transport = new TSocket('gw111.iu.xsede.org', 8930);
+    $transport = new TSocket('localhost', 8930);
     $transport->setRecvTimeout(5000);
 
     $protocol = new TBinaryProtocol($transport);

@@ -1,6 +1,6 @@
 <?php
 
-require_once './lib/WSIS/UserStoreManage/UserStoreManager.stub.php';
+require_once $GLOBALS['WSIS_ROOT'] . 'UserStoreManager/UserStoreManager.stub.php';
 
 /**
  * UsersStoreManager class

@@ -1,6 +1,6 @@
 <?php
 
-require_once './lib/WSIS/UserStoreManage/UserStoreManager.php';
+require_once  $GLOBALS['WSIS_ROOT'] . 'UserStoreManager/UserStoreManager.php';
 
 /**
  * WSISClient class
