@@ -1,0 +1,10 @@
+<Files wsis_config.ini>
+     Order allow,deny
+     Deny from all
+</Files>
+
+<Files users.xml>
+     Order allow,deny
+     Deny from all
+</Files>
+
