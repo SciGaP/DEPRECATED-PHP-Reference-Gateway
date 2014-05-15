@@ -6,8 +6,17 @@
 /**
  * Choose a user store
  */
-require_once 'wsis_utilities.php'; // WS02 Identity Server
-// require_once 'xml_id_utilities.php'; // XML user database
+//const USER_STORE = 'XML';
+const USER_STORE = 'WS02';
+
+if (USER_STORE == 'WS02')
+{
+    require_once 'wsis_utilities.php'; // WS02 Identity Server
+}
+else
+{
+    require_once 'xml_id_utilities.php'; // XML user database
+}
 
 /**
  * import Thrift and Airavata
@@ -48,6 +57,10 @@ use Airavata\Model\Workspace\Experiment\DataObjectType;
 use Airavata\Model\Workspace\Experiment\DataType;
 use Airavata\Model\Workspace\Experiment\UserConfigurationData;
 use Airavata\Model\Workspace\Experiment\Experiment;
+
+
+
+
 
 
 
@@ -149,8 +162,25 @@ function connect_to_id_store()
 {
     global $idStore;
 
-    $idStore = new WSISUtilities();
-    $idStore->connect();
+    if (USER_STORE == 'WS02')
+    {
+        $idStore = new WSISUtilities(); // WS02 Identity Server
+    }
+    else
+    {
+        $idStore = new XmlIdUtilities(); // XML user database
+    }
+
+
+    try
+    {
+        $idStore->connect();
+    }
+    catch (Exception $e)
+    {
+        print_error_message($e->getMessage());
+    }
+
 }
 
 /**

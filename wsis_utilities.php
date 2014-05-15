@@ -53,7 +53,7 @@ class WSISUtilities implements IdUtilities{
                     $wsis_config['allow-self-signed']
             );            
         } catch (Exception $e) {
-            throw new Exception("Unable to instantiate Identity Server client", 0, NULL);
+            throw new Exception('Unable to instantiate Identity Server client. Try editing the cafile-path within wsis_config.ini.', 0, NULL);
         }
     }
 

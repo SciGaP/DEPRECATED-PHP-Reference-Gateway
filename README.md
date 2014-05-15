@@ -8,4 +8,4 @@ To run your own instance of the PHP Reference Gateway, clone this repository to 
 
 User Store
 -----------------
-There are two available user stores that may be enabled: a simple XML database, and a WS02 Identity Server. You can configure which version to use at the top of utilities.php. Include either xml_id_utilities.php or wsis_utilities.php. Note that the WS02 Identity Server requires the PHP SOAP and OpenSSL extensions, so you may need to enable them on your webserver. Depending on your operating system, you may also need to edit the cafile-path within wsis_config.ini.
+There are two available user stores that may be enabled: a simple XML database, and a WS02 Identity Server. You can configure which version to use by setting the value of the constant USER_STORE near the top of utilities.php. Note that the WS02 Identity Server requires the PHP SOAP and OpenSSL extensions, so you may need to enable them on your webserver. Depending on your operating system, you may also need to edit the cafile-path within wsis_config.ini. You may add your own user store by implementing the id_utilities.php interface.
