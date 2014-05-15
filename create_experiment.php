@@ -89,7 +89,6 @@ if (isset($_POST['save']) || isset($_POST['launch']))
         <label for="experiment-name">Experiment Name</label>
         <input type="text" class="form-control" name="experiment-name" id="experiment-name" placeholder="Enter experiment name" autofocus required>
     </div>
-    <!-- ultimately replace with results of getAllUserProjects() -->
     <div class="form-group">
         <label for="project">Project</label>
         <?php create_project_select(); ?>
@@ -119,32 +118,40 @@ if (isset($_POST['save']) || isset($_POST['launch']))
     </div>
     <div class="form-group">
         <label for="node-count">Node Count</label>
-        <input type="text" class="form-control" name="node-count" id="node-count" value="1">
+        <input type="number" class="form-control" name="node-count" id="node-count" value="1">
     </div>
     <div class="form-group">
         <label for="cpu-count">Total CPU Count</label>
-        <input type="text" class="form-control" name="cpu-count" id="cpu-count" value="1">
+        <input type="number" class="form-control" name="cpu-count" id="cpu-count" value="1">
     </div>
     <div class="form-group">
         <label for="threads">Number of Threads</label>
-        <input type="text" class="form-control" name="threads" id="threads" value="0">
+        <input type="number" class="form-control" name="threads" id="threads" value="0">
     </div>
     <div class="form-group">
         <label for="wall-time">Wall Time Limit</label>
-        <input type="text" class="form-control" name="wall-time" id="wall-time" value="15">
+        <input type="number" class="form-control" name="wall-time" id="wall-time" value="15">
     </div>
     <div class="form-group">
         <label for="memory">Total Physical Memory</label>
-        <input type="text" class="form-control" name="memory" id="memory" value="0">
+        <input type="number" class="form-control" name="memory" id="memory" value="0">
     </div>
     <div class="form-group">
         <label for="experiment-description">Experiment Description</label>
         <textarea class="form-control" name="experiment-description" id="experiment-description" placeholder="Optional: Enter a short description of the experiment"></textarea>
     </div>
 
-    <input name="save" type="submit" class="btn btn-primary" value="Save">
-    <input name="launch" type="submit" class="btn btn-primary" value="Save and Launch">
-    <input name="clear" type="reset" class="btn btn-default" value="Clear">
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            <input name="save" type="submit" class="btn btn-primary" value="Save">
+            <input name="launch" type="submit" class="btn btn-primary" value="Save and launch">
+        </div>
+        <input name="clear" type="reset" class="btn btn-default" value="Reset values">
+    </div>
+
+
+
+
 </form>
 
 </div>
@@ -157,7 +164,7 @@ function create_experiment()
 {
     global $airavataclient;
 
-    $experiment = assemble_experiment(true);
+    $experiment = assemble_experiment();
     $expId = null;
 
     try
@@ -189,24 +196,3 @@ function create_experiment()
     return $expId;
 }
 
-
-/**
- * Create a select input and populate it with project options from the database
- */
-function create_project_select()
-{
-    global $airavataclient;
-
-
-    echo '<select class="form-control" name="project" id="project" required>';
-
-    $userProjects = get_all_user_projects($_SESSION['username']);
-
-    foreach ($userProjects as $project)
-    {
-        echo '<option value="' . $project->projectID . '">' . $project->name . '</option>';
-    }
-
-
-    echo '</select>';
-}

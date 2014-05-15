@@ -62,7 +62,7 @@ $airavataclient = get_airavata_client();
     
 <div class="container">
     
-<h3 class="bg-danger">Browse Experiments - under construction</h3>
+<h3>Browse Experiments</h3>
 
 
 <?php
@@ -77,7 +77,7 @@ foreach ($userProjects as $project)
     echo "<h3>$project->name</h3>";
     echo '</div>';
 
-    if ($project->name != 'default' && $project->name != 'Project1')
+    if ($project->name != 'default')
     {
         $experiments = get_experiments_in_project($project->projectID);
 
@@ -267,6 +267,7 @@ function create_options($values, $labels, $disabled)
 
 /**
  * Get experiments in project
+ * @param $projectId
  * @return array|null
  */
 function get_experiments_in_project($projectId)

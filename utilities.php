@@ -3,7 +3,11 @@
  * Basic utility functions
  */
 
-require_once 'wsis_utilities.php';
+/**
+ * Choose a user store
+ */
+require_once 'wsis_utilities.php'; // WS02 Identity Server
+// require_once 'xml_id_utilities.php'; // XML user database
 
 /**
  * import Thrift and Airavata
@@ -305,10 +309,9 @@ function get_project($projectId)
 
 /**
  * Create and configure a new Experiment
- * @param overwriteOutputs
  * @return Experiment
  */
-function assemble_experiment($overwriteOutputs)
+function assemble_experiment()
 {
     $scheduling = new ComputationalResourceScheduling();
     $scheduling->totalCPUCount = $_POST['cpu-count'];
@@ -316,7 +319,6 @@ function assemble_experiment($overwriteOutputs)
     $scheduling->numberOfThreads = $_POST['threads'];
     $scheduling->queueName = 'normal';
     $scheduling->wallTimeLimit = $_POST['wall-time'];
-    $scheduling->jobStartTime = time();
     $scheduling->totalPhysicalMemory = $_POST['memory'];
     $scheduling->resourceHostId = $_POST['compute-resource'];
 
@@ -377,10 +379,7 @@ function assemble_experiment($overwriteOutputs)
     $experiment->userConfigurationData = $userConfigData;
     $experiment->experimentInputs = $experimentInputs;
 
-    if ($overwriteOutputs)
-    {
-        $experiment->experimentOutputs = $experimentOutputs;
-    }
+    $experiment->experimentOutputs = $experimentOutputs;
 
 
 
@@ -501,4 +500,33 @@ function cancel_experiment($expId)
     {
         print_error_message('Exception!<br><br>' . $e->getMessage());
     }
+}
+
+
+/**
+ * Create a select input and populate it with project options from the database
+ */
+function create_project_select($projectId = null, $editable = true)
+{
+    echo '<select class="form-control" name="project" id="project" required>';
+
+    $userProjects = get_all_user_projects($_SESSION['username']);
+
+    foreach ($userProjects as $project)
+    {
+        if ($project->projectID == $projectId)
+        {
+            $selected = 'selected';
+        }
+        else
+        {
+            $selected = '';
+        }
+
+        $disabled = !$editable;
+
+        echo '<option value="' . $project->projectID . '" ' . $selected . ' ' . $disabled . '>' . $project->name . '</option>';
+    }
+
+    echo '</select>';
 }
