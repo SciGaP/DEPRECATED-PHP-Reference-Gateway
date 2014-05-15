@@ -43,6 +43,11 @@ class WSISUtilities implements IdUtilities{
                 $wsis_config['service-url'] = $wsis_config['service-url'] . "/";
             }
             
+            if(!substr($wsis_config['cafile-path'], 0) !== "/"){
+                $wsis_config['cafile-path'] = "/" . $wsis_config['cafile-path'];
+            }
+            $wsis_config['cafile-path'] = ROOT_DIR . $wsis_config['cafile-path'];            
+            
             $this->wsis_client = new WSISClient(
                     $wsis_config['admin-username'],
                     $wsis_config['admin-password'],

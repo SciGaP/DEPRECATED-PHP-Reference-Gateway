@@ -3,6 +3,8 @@
  * Basic utility functions
  */
 
+define('ROOT_DIR', __DIR__);
+
 /**
  * Choose a user store
  */
