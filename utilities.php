@@ -6,18 +6,26 @@
 define('ROOT_DIR', __DIR__);
 
 /**
- * Choose a user store
+ * Define configuration constants
  */
+const AIRAVATA_SERVER = 'gw111.iu.xsede.org';
+const AIRAVATA_PORT = 8930;
+const AIRAVATA_TIMEOUT = 5000;
 //const USER_STORE = 'XML';
-const USER_STORE = 'WS02';
+const USER_STORE = 'WSO2';
 
-if (USER_STORE == 'WS02')
+
+/**
+ * Import user store utilities
+ */
+switch (USER_STORE)
 {
-    require_once 'wsis_utilities.php'; // WS02 Identity Server
-}
-else
-{
-    require_once 'xml_id_utilities.php'; // XML user database
+    case 'WSO2':
+        require_once 'wsis_utilities.php'; // WS02 Identity Server
+        break;
+    case 'XML':
+        require_once 'xml_id_utilities.php'; // XML user database
+        break;
 }
 
 /**
@@ -164,15 +172,15 @@ function connect_to_id_store()
 {
     global $idStore;
 
-    if (USER_STORE == 'WS02')
+    switch (USER_STORE)
     {
-        $idStore = new WSISUtilities(); // WS02 Identity Server
+        case 'WSO2':
+            $idStore = new WSISUtilities(); // WS02 Identity Server
+            break;
+        case 'XML':
+            $idStore = new XmlIdUtilities(); // XML user database
+            break;
     }
-    else
-    {
-        $idStore = new XmlIdUtilities(); // XML user database
-    }
-
 
     try
     {
@@ -182,7 +190,6 @@ function connect_to_id_store()
     {
         print_error_message($e->getMessage());
     }
-
 }
 
 /**
@@ -197,8 +204,8 @@ function get_airavata_client()
     return $airavataClientFactory->getAiravataClient();
     */
 
-    $transport = new TSocket('gw111.iu.xsede.org', 8930);
-    $transport->setRecvTimeout(5000);
+    $transport = new TSocket(AIRAVATA_SERVER, AIRAVATA_PORT);
+    $transport->setRecvTimeout(AIRAVATA_TIMEOUT);
 
     $protocol = new TBinaryProtocol($transport);
     $transport->open();
