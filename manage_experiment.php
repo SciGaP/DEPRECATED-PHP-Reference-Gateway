@@ -87,6 +87,8 @@ $scheduling = $userConfigData->computationalResourceScheduling;
 switch ($experimentStatusString)
 {
     case 'CREATED':
+    case 'VALIDATED':
+    case 'SCHEDULED':
         $editable = true;
         break;
     default:

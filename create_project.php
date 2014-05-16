@@ -119,7 +119,7 @@ function create_project()
 
     try
     {
-        $projectId = $airavataclient->createProject($project, $project->owner);
+        $projectId = $airavataclient->createProject($project);
 
         if ($projectId)
         {

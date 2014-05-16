@@ -468,7 +468,7 @@ function clone_experiment($expId)
         $experiment = $airavataclient->getExperiment($expId);
         $experiment->name .= time();
 
-        $airavataclient->cloneExperiment($expId, $experiment);
+        $airavataclient->cloneExperiment($expId, $experiment->name .= time());
 
         print_success_message("Experiment cloned!");
     }

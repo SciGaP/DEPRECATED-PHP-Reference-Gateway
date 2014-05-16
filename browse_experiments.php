@@ -77,42 +77,38 @@ foreach ($userProjects as $project)
     echo "<h3>$project->name</h3>";
     echo '</div>';
 
-    if ($project->name != 'default')
+    $experiments = get_experiments_in_project($project->projectID);
+
+    echo '<table class="table">';
+
+    echo '<tr>';
+
+    echo '<th>Name</th>';
+    echo '<th>Application</th>';
+    echo '<th>Status</th>';
+    echo '<th>Details</th>';
+
+    echo '</tr>';
+
+    foreach ($experiments as $experiment)
     {
-        $experiments = get_experiments_in_project($project->projectID);
-
-        echo '<table class="table">';
-
         echo '<tr>';
 
-        echo '<th>Name</th>';
-        echo '<th>Application</th>';
-        echo '<th>Status</th>';
-        echo '<th>Details</th>';
+        echo "<td>$experiment->name</td>";
+        echo "<td>$experiment->applicationId</td>";
+
+        $experimentStatus = $experiment->experimentStatus;
+        $experimentState = $experimentStatus->experimentState;
+        $experimentStatusString = ExperimentState::$__names[$experimentState];
+
+        echo "<td>$experimentStatusString</td>";
+
+        echo '<td><a href="manage_experiment.php?expId=' . $experiment->experimentID . '">Details</a></td>';
 
         echo '</tr>';
-
-        foreach ($experiments as $experiment)
-        {
-            echo '<tr>';
-
-            echo "<td>$experiment->name</td>";
-            echo "<td>$experiment->applicationId</td>";
-
-            $experimentStatus = $experiment->experimentStatus;
-            $experimentState = $experimentStatus->experimentState;
-            $experimentStatusString = ExperimentState::$__names[$experimentState];
-
-            echo "<td>$experimentStatusString</td>";
-
-            echo '<td><a href="manage_experiment.php?expId=' . $experiment->experimentID . '">Details</a></td>';
-
-            echo '</tr>';
-        }
-
-        echo '</table>';
     }
 
+    echo '</table>';
     echo '</div>';
 }
 
