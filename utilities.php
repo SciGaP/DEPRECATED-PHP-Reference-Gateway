@@ -547,7 +547,9 @@ function cancel_experiment($expId)
  */
 function create_project_select($projectId = null, $editable = true)
 {
-    echo '<select class="form-control" name="project" id="project" required>';
+    $editable? $disabled = '' : $disabled = 'disabled';
+
+    echo '<select class="form-control" name="project" id="project" required ' . $disabled . '>';
 
     $userProjects = get_all_user_projects($_SESSION['username']);
 
@@ -562,9 +564,7 @@ function create_project_select($projectId = null, $editable = true)
             $selected = '';
         }
 
-        $disabled = !$editable;
-
-        echo '<option value="' . $project->projectID . '" ' . $selected . ' ' . $disabled . '>' . $project->name . '</option>';
+        echo '<option value="' . $project->projectID . '" ' . $selected . '>' . $project->name . '</option>';
     }
 
     echo '</select>';
