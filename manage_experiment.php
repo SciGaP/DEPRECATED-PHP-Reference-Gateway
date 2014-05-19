@@ -131,7 +131,7 @@ elseif (isset($_POST['cancel']))
 <form action="<?php echo $_SERVER['PHP_SELF'] . '?expId=' . $_GET['expId']?>" method="post" role="form">
     <div class="form-group">
         <label for="experiment-name">Experiment Name</label>
-        <input type="text" class="form-control" name="experiment-name" id="experiment-name" value="<?php echo $experiment->experimentID ?>" <?php if(!$editable) echo 'disabled' ?>>
+        <input type="text" class="form-control" name="experiment-name" id="experiment-name" value="<?php echo $experiment->name ?>" <?php if(!$editable) echo 'disabled' ?>>
     </div>
     <div class="form-group">
         <label for="project">Project</label>
