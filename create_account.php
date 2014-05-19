@@ -82,11 +82,11 @@ connect_to_id_store();
     <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" role="form">
         <div class="form-group">
             <label class="sr-only" for="username">Username</label>
-            <input type="text" class="form-control" name="username" id="username" placeholder="Username">
+            <input type="text" class="form-control" name="username" id="username" placeholder="Username" autofocus required>
         </div>
         <div class="form-group">
             <label class="sr-only" for="password">Password</label>
-            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
         </div>
         <input name="Submit" type="submit" class="btn btn-primary" value="Submit">
     </form>
