@@ -297,42 +297,6 @@ function get_experiments_in_project($projectId)
 }
 
 /**
- * Create radio buttons for the given set of experiments
- * @param $experiments
- */
-function create_results_radio_buttons($experiments)
-{
-    $checked_array = [];
-
-    for ($i = 0; $i < sizeof($experiments); $i++)
-    {
-        if (isset($_POST['experiment-id'])) // experiment previously selected
-        {
-            // filled in radio button for previously-selected experiment
-            if($_POST['experiment-id'] == $experiments[$i]->experimentID)
-            {
-                $checked_array[] = 'checked';
-            }
-            else
-            {
-                $checked_array[] = '';
-            }
-        }
-        else // no experiments selected
-        {
-            $checked_array[] = '';
-        }
-
-        echo '<div class="radio"><label><input type="radio" name="experiment-id" value="' . $experiments[$i]->experimentID . '" ' . $checked_array[$i] . '>' . $experiments[$i]->name . '</label></div>';
-    }
-
-    // include hidden inputs to populate previously-filled-in inputs
-    echo '<input type="hidden" name="search-key" value="' . $_POST['search-key'] . '">';
-    echo '<input type="hidden" name="search-value" value="' . $_POST['search-value'] . '">';
-}
-
-
-/**
  * Get a string containing the given experiment's status
  * @param $expId
  * @return mixed

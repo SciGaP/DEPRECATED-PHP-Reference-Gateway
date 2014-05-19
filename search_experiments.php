@@ -280,7 +280,7 @@ function get_search_results()
  */
 function create_results_radio_buttons($experiments)
 {
-    $checked_array = [];
+    $checked_array = array();
 
     for ($i = 0; $i < sizeof($experiments); $i++)
     {
