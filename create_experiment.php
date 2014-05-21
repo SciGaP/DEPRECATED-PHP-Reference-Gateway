@@ -84,7 +84,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
 
 
 
-<form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" role="form">
+<form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" role="form" enctype="multipart/form-data">
     <div class="form-group">
         <label for="experiment-name">Experiment Name</label>
         <input type="text" class="form-control" name="experiment-name" id="experiment-name" placeholder="Enter experiment name" autofocus required>
@@ -102,7 +102,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
             <option value="SimpleEcho4">SimpleEcho4</option>
         </select>
     </div>
-    <div class="form-group bg-danger">
+    <div class="form-group bg-warning">
         <label for="experiment-input">Experiment input</label>
         <input type="file" name="experiment-input" id="experiment-input">
     </div>
@@ -166,6 +166,7 @@ function create_experiment()
 
     $experiment = assemble_experiment();
     $expId = null;
+    $experimentPath = '../experimentData/' . $_POST['experiment-name'] . '/';
 
     try
     {
@@ -173,6 +174,9 @@ function create_experiment()
 
         if ($expId)
         {
+            // rename upload directory with experiment ID
+            rename($experimentPath, '../experimentData/' . $expId . '/');
+
             print_success_message("Experiment {$_POST['experiment-name']} created!");
         }
         else

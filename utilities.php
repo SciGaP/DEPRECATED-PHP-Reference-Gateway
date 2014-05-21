@@ -85,6 +85,15 @@ function print_success_message($message)
 }
 
 /**
+ * Print warning message
+ * @param $message
+ */
+function print_warning_message($message)
+{
+    echo '<div class="alert alert-warning">' . $message . '</div>';
+}
+
+/**
  * Print error message
  * @param $message
  */
@@ -378,6 +387,67 @@ function assemble_experiment()
     $userConfigData->computationalResourceScheduling = $scheduling;
     $userConfigData->overrideManualScheduledParams = 0;
     $userConfigData->airavataAutoSchedule = 0;
+
+
+
+
+    if ($_FILES['experiment-input']['error'] > 0)
+    {
+        print_error_message('Error uploading input file!');
+    }
+    elseif ($_FILES['experiment-input']['type'] != 'text/plain')
+    {
+        print_error_message('Uploaded file type not supported!');
+    }
+    elseif (($_FILES['experiment-input']['size'] / 1024) > 20)
+    {
+        print_error_message('Uploaded files must be smaller than 20 kB!');
+    }
+    else
+    {
+        $experimentPath = '../experimentData/' . $_POST['experiment-name'] . '/';
+        $dir = is_dir($experimentPath);
+
+        if (!$dir)
+        {
+            $dir = mkdir($experimentPath);
+        }
+
+        if ($dir)
+        {
+            if (is_file($experimentPath . $_FILES['experiment-input']['name']))
+            {
+                unlink($experimentPath . $_FILES['experiment-input']['name']);
+
+                print_warning_message('Uploaded file already exists! Overwriting...');
+            }
+
+            $moveFile = move_uploaded_file($_FILES['experiment-input']['tmp_name'],
+                $experimentPath . $_FILES['experiment-input']['name']);
+        }
+        else
+        {
+            print_error_message('Error creating upload directory!');
+        }
+
+        if ($moveFile)
+        {
+            //rename($experimentPath, '../experimentData/' . $_POST['experiment-name'] . 'New/');
+
+            print_success_message('Upload: ' . $_FILES['experiment-input']['name'] . '<br>' .
+                'Type: ' . $_FILES['experiment-input']['type'] . '<br>' .
+                'Size: ' . ($_FILES['experiment-input']['size']/1024) . ' kB<br>' .
+                'Stored in: ' . $experimentPath . $_FILES['experiment-input']['name']);
+        }
+        else
+        {
+            print_error_message('Error moving uploaded file!');
+        }
+
+
+    }
+
+
 
 
     $experimentInput = new DataObjectType();
