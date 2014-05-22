@@ -117,10 +117,24 @@ elseif (isset($_POST['cancel']))
             <option value="SimpleEcho4" <?php if ($experiment->applicationId == 'SimpleEcho4') echo 'selected' ?>>SimpleEcho4</option>
         </select>
     </div>
+
+
+
+
+
+
     <div class="form-group bg-danger">
         <label for="experiment-input">Experiment input</label>
         <input type="file" name="experiment-input" id="experiment-input" <?php if(!$editable) echo 'disabled' ?>>
+
+        <?php list_files($experiment); ?>
     </div>
+
+
+
+
+
+
 
     <div class="form-group">
         <label for="compute-resource">Compute Resource</label>
@@ -196,6 +210,17 @@ function apply_changes_to_experiment($experiment)
     $experiment->userConfigurationData = $userConfigDataUpdated;
 
     return $experiment;
+}
+
+
+function list_files($experiment)
+{
+    $dir = '../experimentData/' . $experiment->experimentID . '/';
+
+    foreach (glob($dir . '*') as $filepath)
+    {
+        echo '<a href="' . $filepath . '">' . $filepath . '</a><br>';
+    }
 }
 
 ?>
