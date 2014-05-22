@@ -405,25 +405,31 @@ function assemble_experiment()
     }
     else
     {
-        $experimentPath = '../experimentData/' . $_POST['experiment-name'] . '/';
-        $dir = is_dir($experimentPath);
+        $experimentPath = '';
+        $moveFile = '';
+        $filePath = '';
 
-        if (!$dir)
+        // construct unique path
+        do
         {
-            $dir = mkdir($experimentPath);
+            $experimentPath = '../experimentData/' . $_POST['experiment-name'] . md5(rand() * time()) . '/';
         }
+        while (is_dir($experimentPath));
 
-        if ($dir)
+        // create new directory
+        // move file to new directory, overwriting old versions if necessary
+        if (mkdir($experimentPath))
         {
-            if (is_file($experimentPath . $_FILES['experiment-input']['name']))
+            $filePath = $experimentPath . $_FILES['experiment-input']['name'];
+
+            if (is_file($filePath))
             {
-                unlink($experimentPath . $_FILES['experiment-input']['name']);
+                unlink($filePath);
 
                 print_warning_message('Uploaded file already exists! Overwriting...');
             }
 
-            $moveFile = move_uploaded_file($_FILES['experiment-input']['tmp_name'],
-                $experimentPath . $_FILES['experiment-input']['name']);
+            $moveFile = move_uploaded_file($_FILES['experiment-input']['tmp_name'], $filePath);
         }
         else
         {
@@ -432,8 +438,6 @@ function assemble_experiment()
 
         if ($moveFile)
         {
-            //rename($experimentPath, '../experimentData/' . $_POST['experiment-name'] . 'New/');
-
             print_success_message('Upload: ' . $_FILES['experiment-input']['name'] . '<br>' .
                 'Type: ' . $_FILES['experiment-input']['type'] . '<br>' .
                 'Size: ' . ($_FILES['experiment-input']['size']/1024) . ' kB<br>' .
@@ -443,18 +447,25 @@ function assemble_experiment()
         {
             print_error_message('Error moving uploaded file!');
         }
-
-
     }
 
 
 
-
+    /* echo */
     $experimentInput = new DataObjectType();
     $experimentInput->key = 'echo_input';
     $experimentInput->value = 'echo_output=Hello World';
     $experimentInput->type = DataType::STRING;
     $experimentInputs = array($experimentInput);
+
+
+    /* wrf
+    $experimentInput = new DataObjectType();
+    $experimentInput->key = 'input';
+    $experimentInput->value = $filePath;
+    $experimentInput->type = DataType::URI;
+    $experimentInputs = array($experimentInput);
+    */
 
 
     $experimentOutput1 = new DataObjectType();

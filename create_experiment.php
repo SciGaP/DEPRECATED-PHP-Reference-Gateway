@@ -137,7 +137,6 @@ function create_experiment()
 
     $experiment = assemble_experiment();
     $expId = null;
-    $experimentPath = '../experimentData/' . $_POST['experiment-name'] . '/';
 
     try
     {
@@ -145,9 +144,6 @@ function create_experiment()
 
         if ($expId)
         {
-            // rename upload directory with experiment ID
-            rename($experimentPath, '../experimentData/' . $expId . '/');
-
             print_success_message("Experiment {$_POST['experiment-name']} created!");
         }
         else
