@@ -639,3 +639,73 @@ function create_project_select($projectId = null, $editable = true)
 
     echo '</select>';
 }
+
+
+function create_nav_bar()
+{
+    $labels = array('Create project',
+        'Create experiment',
+        'Browse experiments',
+        'Search experiments',
+        'Search projects');
+    $urls = array('create_project.php',
+        'create_experiment.php',
+        'browse_experiments.php',
+        'search_experiments.php',
+        'search_projects.php');
+
+    echo '<nav class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                       <span class="sr-only">Toggle navigation</span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="home.php">PHP Reference Gateway</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">';
+
+    for ($i = 0; $i < sizeof($labels); $i++)
+    {
+        $urls[$i] == explode('/', $_SERVER['PHP_SELF'])[2]? $active = ' class="active"' : $active = '';
+        isset($_SESSION['loggedin']) && $_SESSION['loggedin']? $disabled = '' : $disabled = ' class="disabled"';
+
+        echo '<li' . $active . $disabled . '><a href="' . $urls[$i] . '">' . $labels[$i] . '</a></li>';
+    }
+
+
+
+    echo '</ul>
+
+        <ul class="nav navbar-nav navbar-right">';
+
+    if (isset($_SESSION['username']))
+    {
+        echo '<li><a href="home.php">' . $_SESSION['username'] . '</a></li>';
+    }
+
+    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'])
+    {
+        echo '<li><a href="logout.php">Log out</a></li>';
+    }
+    elseif (explode('/', $_SERVER['PHP_SELF'])[2] == 'login.php')
+    {
+        echo '<li><a href="create_account.php">Create account</a></li>';
+    }
+    elseif (explode('/', $_SERVER['PHP_SELF'])[2] == 'create_account.php')
+    {
+        echo '<li><a href="login.php">Log in</a></li>';
+    }
+
+
+    echo    '</ul>
+    </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+    </nav>';
+}

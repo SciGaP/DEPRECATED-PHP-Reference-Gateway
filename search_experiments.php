@@ -29,44 +29,15 @@ $airavataclient = get_airavata_client();
 
 <body>
 
-<nav class="navbar navbar-default navbar-static-top" role="navigation">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="home.php">PHP Reference Gateway</a>
-    </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-          <li><a href="create_project.php">Create project</a></li>
-          <li><a href="create_experiment.php">Create experiment</a></li>
-          <li><a href="browse_experiments.php">Browse experiments</a></li>
-          <li class="active"><a href="manage_experiments.php">Search experiments</a></li>
-      </ul>
-      
-      <ul class="nav navbar-nav navbar-right">
-          <li><a href="home.php"><?php echo $_SESSION['username']?></a></li>
-          <li><a href="logout.php">Log out</a></li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-
+<?php create_nav_bar(); ?>
     
 <div class="container">
     
-<h3>Search for Experiments</h3>
+<h1>Search for Experiments</h1>
 
-<form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" role="form">
+<form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" class="form-inline" role="form">
     <div class="form-group">
-        <label for="search-key">Search Key</label>
+        <label for="search-key">Search</label>
         <select class="form-control" name="search-key" id="search-key">
             <?php
 
@@ -82,8 +53,8 @@ $airavataclient = get_airavata_client();
     </div>
 
     <div class="form-group">
-        <label for="search-value">Value</label>
-        <input type="search" class="form-control" name="search-value" id="search-value" 
+        <label for="search-value">for</label>
+        <input type="search" class="form-control" name="search-value" id="search-value" placeholder="value"
                value="<?php if (isset($_POST['search-value'])) echo $_POST['search-value'] ?>">
     </div>
 
