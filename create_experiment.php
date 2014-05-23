@@ -32,7 +32,7 @@ $airavataclient = get_airavata_client();
 
 <div class="container">
     
-<h3>Create a new experiment</h3>
+<h1>Create a new experiment</h1>
 
 
 
@@ -75,7 +75,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
     </div>
     <div class="form-group bg-warning">
         <label for="experiment-input">Experiment input</label>
-        <input type="file" name="experiment-input" id="experiment-input">
+        <input type="file" name="experiment-input" id="experiment-input" required>
     </div>
 
     <div class="form-group">

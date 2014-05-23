@@ -13,6 +13,7 @@ const AIRAVATA_PORT = 8930;
 const AIRAVATA_TIMEOUT = 5000;
 //const USER_STORE = 'XML';
 const USER_STORE = 'WSO2';
+const EXPERIMENT_DATA_ROOT = '../experimentData/';
 
 
 /**
@@ -405,14 +406,12 @@ function assemble_experiment()
     }
     else
     {
-        $experimentPath = '';
         $moveFile = '';
-        $filePath = '';
 
         // construct unique path
         do
         {
-            $experimentPath = '../experimentData/' . $_POST['experiment-name'] . md5(rand() * time()) . '/';
+            $experimentPath = EXPERIMENT_DATA_ROOT . $_POST['experiment-name'] . md5(rand() * time()) . '/';
         }
         while (is_dir($experimentPath));
 
