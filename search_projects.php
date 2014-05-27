@@ -37,7 +37,7 @@ $airavataclient = get_airavata_client();
 
         <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" class="form-inline" role="form">
             <div class="form-group">
-                <label for="search-key">Search</label>
+                <label for="search-key">Search by</label>
                 <select class="form-control" name="search-key" id="search-key">
                     <option value="project-name">Project Name</option>
                     <option value="project-description">Project description</option>

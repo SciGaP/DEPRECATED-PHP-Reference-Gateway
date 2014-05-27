@@ -37,14 +37,14 @@ $airavataclient = get_airavata_client();
 
 <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" class="form-inline" role="form">
     <div class="form-group">
-        <label for="search-key">Search</label>
+        <label for="search-key">Search by</label>
         <select class="form-control" name="search-key" id="search-key">
             <?php
 
             // set up options for select input
-            $values = array('experiment-name', 'project', 'resource', 'submitted-user', 'experiment-status');
-            $labels = array('Experiment Name', 'Project', 'Resource', 'Submitted User', 'Experiment Status');
-            $disabled = array('disabled', '', 'disabled', '', 'disabled');
+            $values = array('experiment-name', 'experiment-description', 'resource', 'experiment-status');
+            $labels = array('Experiment Name', 'Experiment Description', 'Resource', 'Experiment Status');
+            $disabled = array('', '', 'disabled', 'disabled');
 
             create_options($values, $labels, $disabled);
 
@@ -75,72 +75,102 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
     $experiments = get_search_results();
 
 
-    /**
-     * display results
-     */
-    echo '<div class="panel panel-default">';
-                
-    echo '<div class="panel-heading">';
-    echo '<h3>Results</h3>';
-    echo '</div>';
-                
-    echo '<div class="panel-body">';
-    echo '<form action="' . $_SERVER['PHP_SELF'] . '" method="post" role="form">';
-
-    create_results_radio_buttons($experiments);
+echo '
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <!--<th>Application</th>-->
+            <th>Status</th>
+            <th>Details</th>
+        </tr>
+        ';
 
 
-    /**
-     * display results or a message, depending on which button was pressed
-     */
-    if (isset($_POST['details']) and isset($_POST['experiment-id']))
+    foreach ($experiments as $experiment)
     {
-        $experiment = get_experiment($_POST['experiment-id']);
+        $experimentStatus = $experiment->experimentStatus;
+        $experimentState = $experimentStatus->experimentState;
+        $experimentStatusString = ExperimentState::$__names[$experimentState];
+        $experimentTimeOfStateChange = $experimentStatus->timeOfStateChange;
 
-        $experimentStatusString = get_experiment_status($_POST['experiment-id']);
 
 
-        echo '<div class="well">';
-        echo "<p><strong>Experiment Name:</strong> {$experiment->name}</p>";
-        echo "<p><strong>Experiment ID:</strong> {$experiment->experimentID}</p>";
-        echo "<p><strong>Experiment Status:</strong> {$experimentStatusString}</p>";
-        echo '</div>';
+        echo '<tr>';
 
+        echo '<td>';
+
+
+        switch ($experimentStatusString)
+        {
+            case 'SCHEDULED':
+            case 'LAUNCHED':
+            case 'EXECUTING':
+            case 'CANCELING':
+            case 'COMPLETED':
+                echo $experiment->name;
+                break;
+            default:
+                echo $experiment->name .
+                    '<a href="edit_experiment.php?expId=' .
+                    $experiment->experimentID .
+                    '"><span class="glyphicon glyphicon-pencil"></span></a>';
+                break;
+        }
+
+
+
+        echo '</td>';
+
+        //echo "<td>$experiment->applicationId</td>";
+
+
+
+        //echo '<td>' . $experimentStatusString . ' at ' . date("Y-m-d H:i:s", $experimentTimeOfStateChange) . '</td>';
+        echo '<td>' . $experimentStatusString . '</td>';
+
+        echo '<td><a href="experiment_summary.php?expId=' . $experiment->experimentID . '">Details</a></td>';
+
+        echo '</tr>';
     }
 
-    if (isset($_POST['launch']) and isset($_POST['experiment-id']))
-    {
-        launch_experiment($_POST['experiment-id']);
-    }
-
-    if (isset($_POST['clone']) and isset($_POST['experiment-id']))
-    {
-        clone_experiment($_POST['experiment-id']);
-    }
-
-    if (isset($_POST['cancel']) and isset($_POST['experiment-id']))
-    {
-        cancel_experiment($_POST['experiment-id']);
-    }
 
 
-    /**
-     * Display form submit buttons
-     */
 
-    echo '<div class="btn-toolbar">
-        <div class="btn-group"> 
-        <input name="details" type="submit" class="btn btn-info" value="Details">
-        <input name="launch" type="submit" class="btn btn-primary" value="Launch">
-        <input name="clone" type="submit" class="btn btn-primary" value="Clone">
-        <input name="cancel" type="submit" class="btn btn-warning" value="Cancel">
-        </div>
-        <input name="clear" type="submit" class="btn btn-default" value="Clear">
-        </div>';
 
-    echo '</form>';
-    echo '</div>'; 
-    echo '</div>';
+
+
+echo '</table>';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 }
 
 
@@ -217,11 +247,11 @@ function get_search_results()
     {
         switch ($_POST['search-key'])
         {
-            case 'submitted-user':
-                $experiments = $airavataclient->getAllUserExperiments($_POST['search-value']);
+            case 'experiment-name':
+                $experiments = $airavataclient->searchExperimentsByName($_SESSION['username'], $_POST['search-value']);
                 break;
-            case 'project':
-                $experiments = $airavataclient->getAllExperimentsInProject($_POST['search-value']);
+            case 'experiment-description':
+                $experiments = $airavataclient->searchExperimentsByDesc($_SESSION['username'], $_POST['search-value']);
                 break;
         }
     }
@@ -248,7 +278,7 @@ function get_search_results()
 /**
  * Create radio buttons for the given set of experiments
  * @param $experiments
- */
+
 function create_results_radio_buttons($experiments)
 {
     $checked_array = array();
@@ -279,7 +309,7 @@ function create_results_radio_buttons($experiments)
     echo '<input type="hidden" name="search-key" value="' . $_POST['search-key'] . '">';
     echo '<input type="hidden" name="search-value" value="' . $_POST['search-value'] . '">';
 }
-
+*/
 
 /**
  * Get a string containing the given experiment's status
