@@ -380,6 +380,7 @@ function assemble_experiment()
             $scheduling->ComputationalProjectAccount = 'sds128';
             break;
         case 'stampede.tacc.xsede.org':
+        case 'lonestar.tacc.utexas.edu':
             $scheduling->ComputationalProjectAccount = 'TG-STA110014S';
             break;
         default:
