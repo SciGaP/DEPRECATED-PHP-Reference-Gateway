@@ -393,26 +393,8 @@ function list_input_files($experiment)
         }
         elseif ($input->type == DataType::STRING)
         {
-            echo '<p>' . explode('=', $input->value)[1] . '</p>';
-        }
-    }
-}
-
-
-function list_output_files($experiment)
-{
-    $experimentOutputs = $experiment->experimentOutputs;
-    var_dump($experimentOutputs);
-
-    foreach ($experimentOutputs as $output)
-    {
-        if ($output->type == DataType::URI)
-        {
-            echo '<a href="' . $output->value . '">' . $output->value . '</a><br>';
-        }
-        elseif ($output->type == DataType::STRING)
-        {
-            echo '<p>' . $output->value . '</p>';
+            $valueExplode = explode('=', $input->value);
+            echo '<p>' . $valueExplode[1] . '</p>';
         }
     }
 }

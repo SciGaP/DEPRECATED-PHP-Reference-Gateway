@@ -705,6 +705,8 @@ function create_nav_bar()
         'search_experiments.php',
         'search_projects.php');
 
+    $selfExplode = explode('/', $_SERVER['PHP_SELF']);
+
     echo '<nav class="navbar navbar-default navbar-static-top" role="navigation">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -724,7 +726,6 @@ function create_nav_bar()
 
     for ($i = 0; $i < sizeof($labels); $i++)
     {
-        $selfExplode = explode('/', $_SERVER['PHP_SELF']);
         $urls[$i] == $selfExplode[2]? $active = ' class="active"' : $active = '';
 
 
@@ -739,6 +740,9 @@ function create_nav_bar()
 
         <ul class="nav navbar-nav navbar-right">';
 
+
+
+
     if (isset($_SESSION['username']))
     {
         echo '<li><a href="home.php">' . $_SESSION['username'] . '</a></li>';
@@ -748,11 +752,11 @@ function create_nav_bar()
     {
         echo '<li><a href="logout.php">Log out</a></li>';
     }
-    elseif (explode('/', $_SERVER['PHP_SELF'])[2] == 'login.php')
+    elseif ($selfExplode[2] == 'login.php')
     {
         echo '<li><a href="create_account.php">Create account</a></li>';
     }
-    elseif (explode('/', $_SERVER['PHP_SELF'])[2] == 'create_account.php')
+    elseif ($selfExplode[2] == 'create_account.php')
     {
         echo '<li><a href="login.php">Log in</a></li>';
     }
