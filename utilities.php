@@ -10,7 +10,7 @@ define('ROOT_DIR', __DIR__);
  */
 const AIRAVATA_SERVER = 'gw111.iu.xsede.org';
 const AIRAVATA_PORT = 8930;
-const AIRAVATA_TIMEOUT = 5000;
+const AIRAVATA_TIMEOUT = 20000;
 //const USER_STORE = 'XML';
 const USER_STORE = 'WSO2';
 const EXPERIMENT_DATA_ROOT = '../experimentData/';
@@ -362,6 +362,9 @@ function get_project($projectId)
  */
 function assemble_experiment()
 {
+    $uploadSuccessful = true; // errors will set this to false
+    $experimentInputs = array();
+
     $scheduling = new ComputationalResourceScheduling();
     $scheduling->totalCPUCount = $_POST['cpu-count'];
     $scheduling->nodeCount = $_POST['node-count'];
@@ -392,79 +395,114 @@ function assemble_experiment()
 
 
 
-    if ($_FILES['experiment-input']['error'] > 0)
+
+
+
+
+
+
+    if ($_POST['application'] == 'WRF')
     {
-        print_error_message('Error uploading input file!');
-    }
-    elseif ($_FILES['experiment-input']['type'] != 'text/plain')
-    {
-        print_error_message('Uploaded file type not supported!');
-    }
-    elseif (($_FILES['experiment-input']['size'] / 1024) > 20)
-    {
-        print_error_message('Uploaded files must be smaller than 20 kB!');
+        foreach ($_FILES as $file)
+        {
+            if ($file['error'] > 0)
+            {
+                $uploadSuccessful = false;
+                print_error_message('Error uploading file ' . $file['name'] . ' !');
+            }
+            elseif ($file['type'] != 'text/plain')
+            {
+                $uploadSuccessful = false;
+                print_error_message('Uploaded file ' . $file['name'] . ' type not supported!');
+            }
+            elseif (($file['size'] / 1024) > 20)
+            {
+                $uploadSuccessful = false;
+                print_error_message('Uploaded file ' . $file['name'] . ' must be smaller than 20 kB!');
+            }
+        }
+
+
+
+
+
+
+
+
+        if ($uploadSuccessful)
+        {
+            // construct unique path
+            do
+            {
+                $experimentPath = EXPERIMENT_DATA_ROOT . $_POST['experiment-name'] . md5(rand() * time()) . '/';
+            }
+            while (is_dir($experimentPath)); // if dir already exists, try again
+
+            // create new directory
+            // move file to new directory, overwriting old versions if necessary
+            if (mkdir($experimentPath))
+            {
+                foreach ($_FILES as $file)
+                {
+                    $filePath = $experimentPath . $file['name'];
+
+                    if (is_file($filePath))
+                    {
+                        unlink($filePath);
+
+                        print_warning_message('Uploaded file already exists! Overwriting...');
+                    }
+
+                    $moveFile = move_uploaded_file($file['tmp_name'], $filePath);
+
+                    if ($moveFile)
+                    {
+                        print_success_message('Upload: ' . $file['name'] . '<br>' .
+                            'Type: ' . $file['type'] . '<br>' .
+                            'Size: ' . ($file['size']/1024) . ' kB<br>' .
+                            'Stored in: ' . $experimentPath . $file['name']);
+                    }
+                    else
+                    {
+                        print_error_message('Error moving uploaded file ' . $file['name'] . '!');
+                    }
+
+
+
+                    // wrf
+                    $experimentInput = new DataObjectType();
+                    $experimentInput->key = 'input';
+                    $experimentInput->value = $filePath;
+                    $experimentInput->type = DataType::URI;
+                    $experimentInputs[] = $experimentInput; // push into array
+                }
+            }
+            else
+            {
+                print_error_message('Error creating upload directory!');
+            }
+
+
+        }
     }
     else
     {
-        $moveFile = '';
-
-        // construct unique path
-        do
-        {
-            $experimentPath = EXPERIMENT_DATA_ROOT . $_POST['experiment-name'] . md5(rand() * time()) . '/';
-        }
-        while (is_dir($experimentPath));
-
-        // create new directory
-        // move file to new directory, overwriting old versions if necessary
-        if (mkdir($experimentPath))
-        {
-            $filePath = $experimentPath . $_FILES['experiment-input']['name'];
-
-            if (is_file($filePath))
-            {
-                unlink($filePath);
-
-                print_warning_message('Uploaded file already exists! Overwriting...');
-            }
-
-            $moveFile = move_uploaded_file($_FILES['experiment-input']['tmp_name'], $filePath);
-        }
-        else
-        {
-            print_error_message('Error creating upload directory!');
-        }
-
-        if ($moveFile)
-        {
-            print_success_message('Upload: ' . $_FILES['experiment-input']['name'] . '<br>' .
-                'Type: ' . $_FILES['experiment-input']['type'] . '<br>' .
-                'Size: ' . ($_FILES['experiment-input']['size']/1024) . ' kB<br>' .
-                'Stored in: ' . $experimentPath . $_FILES['experiment-input']['name']);
-        }
-        else
-        {
-            print_error_message('Error moving uploaded file!');
-        }
+        // echo
+        $experimentInput = new DataObjectType();
+        $experimentInput->key = 'echo_input';
+        $experimentInput->value = 'echo_output=Hello World';
+        $experimentInput->type = DataType::STRING;
+        $experimentInputs = array($experimentInput);
     }
 
 
 
-    /* echo */
-    $experimentInput = new DataObjectType();
-    $experimentInput->key = 'echo_input';
-    $experimentInput->value = 'echo_output=Hello World';
-    $experimentInput->type = DataType::STRING;
-    $experimentInputs = array($experimentInput);
 
 
-    /* wrf
-    $experimentInput = new DataObjectType();
-    $experimentInput->key = 'input';
-    $experimentInput->value = $filePath;
-    $experimentInput->type = DataType::URI;
-    $experimentInputs = array($experimentInput);
-    */
+
+
+
+
 
 
     $experimentOutput1 = new DataObjectType();
@@ -502,7 +540,10 @@ function assemble_experiment()
 
 
 
-    return $experiment;
+    if ($uploadSuccessful)
+    {
+        return $experiment;
+    }
 }
 
 

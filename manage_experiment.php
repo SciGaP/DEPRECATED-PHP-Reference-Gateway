@@ -30,7 +30,7 @@ $airavataclient = get_airavata_client();
 
 <div class="container">
     
-<h3>Manage experiment</h3>
+<h1>Manage experiment</h1>
 
 
 
