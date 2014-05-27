@@ -60,7 +60,7 @@ $scheduling = $userConfigData->computationalResourceScheduling;
 
 
 
-//var_dump($experiment);
+//var_dump($experiment->experimentInputs);
 
 
 
@@ -85,19 +85,9 @@ if (isset($_POST['save']))
 {
     $updatedExperiment = apply_changes_to_experiment($experiment);
 
-    update_experiment($experiment->experimentID, $updatedExperiment);
-}
-elseif (isset($_POST['launch']))
-{
-    launch_experiment($experiment->experimentID);
-}
-elseif (isset($_POST['clone']))
-{
-    clone_experiment($experiment->experimentID);
-}
-elseif (isset($_POST['cancel']))
-{
-    cancel_experiment($experiment->experimentID);
+    //update_experiment($experiment->experimentID, $updatedExperiment);
+
+    $experiment = get_experiment($_GET['expId']); // update local experiment variable
 }
 
 
@@ -113,7 +103,7 @@ elseif (isset($_POST['cancel']))
 <h1>Edit Experiment</h1>
 
 
-<form action="<?php echo $_SERVER['PHP_SELF'] . '?expId=' . $_GET['expId']?>" method="post" role="form">
+<form action="<?php echo $_SERVER['PHP_SELF'] . '?expId=' . $_GET['expId']?>" method="post" role="form" enctype="multipart/form-data">
     <div class="form-group">
         <label for="experiment-name">Experiment Name</label>
         <input type="text" class="form-control" name="experiment-name" id="experiment-name" value="<?php echo $experiment->name ?>" <?php if(!$editable) echo 'disabled' ?>>
@@ -140,7 +130,7 @@ elseif (isset($_POST['cancel']))
             <label>Application input</label>
             <div class="well">
                 <div class="form-group">
-                    <p><strong>Current inputs:</strong></p>
+                    <p><strong>Current inputs</strong></p>
                     <?php list_input_files($experiment); ?>
                 </div>
                 <?php
@@ -153,9 +143,7 @@ elseif (isset($_POST['cancel']))
                                 class="form-control"
                                 name="experiment-input"
                                 id="experiment-input"
-                                placeholder="Text to echo"
-                                required
-                                disabled>
+                                placeholder="Text to echo">
                             </div>';
                         break;
                     case 'WRF':
@@ -263,11 +251,62 @@ function apply_changes_to_experiment($experiment)
     $userConfigDataUpdated->computationalResourceScheduling = $schedulingUpdated;
     $experiment->userConfigurationData = $userConfigDataUpdated;
 
+    $experimentInputs = $experiment->experimentInputs;
 
 
 
 
 
+    if ($experiment->applicationId == 'WRF')
+    {
+        /*
+        if (sizeof($_FILES) > 0)
+        {
+            $uploadSuccessful = true; // changed to false if error
+
+            foreach ($_FILES as $file)
+            {
+                if ($file['error'] > 0)
+                {
+                    $uploadSuccessful = false;
+                    print_error_message('Error uploading file ' . $file['name'] . ' !');
+                }
+                elseif ($file['type'] != 'text/plain')
+                {
+                    $uploadSuccessful = false;
+                    print_error_message('Uploaded file ' . $file['name'] . ' type not supported!');
+                }
+                elseif (($file['size'] / 1024) > 20)
+                {
+                    $uploadSuccessful = false;
+                    print_error_message('Uploaded file ' . $file['name'] . ' must be smaller than 20 kB!');
+                }
+            }
+
+            if ($uploadSuccessful)
+            {
+                // get upload path
+                $path = $experimentInputs[0]->value;
+                echo $path;
+            }
+        }
+        */
+    }
+    else // echo
+    {
+        if ($_POST['experiment-input'])
+        {
+            foreach ($experimentInputs as $input)
+            {
+                if ($input->key = 'echo_input')
+                {
+                    $input->value = 'echo_output=' . $_POST['experiment-input'];
+                }
+            }
+
+            $experiment->experimentInputs = $experimentInputs;
+        }
+    }
 
 
 
@@ -389,12 +428,12 @@ function list_input_files($experiment)
     {
         if ($input->type == DataType::URI)
         {
-            echo '<a href="' . $input->value . '">' . $input->value . '</a><br>';
+            echo '<p>' . $input->key . ': <a href="' . $input->value . '">' . $input->value . '</a></p>';
         }
         elseif ($input->type == DataType::STRING)
         {
             $valueExplode = explode('=', $input->value);
-            echo '<p>' . $valueExplode[1] . '</p>';
+            echo '<p>' . $input->key . ': ' . $valueExplode[1] . '</p>';
         }
     }
 }
