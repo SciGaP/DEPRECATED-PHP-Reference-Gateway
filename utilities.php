@@ -471,7 +471,7 @@ function assemble_experiment()
 
                     // wrf
                     $experimentInput = new DataObjectType();
-                    $experimentInput->key = 'input';
+                    $experimentInput->key = $file['name'];
                     $experimentInput->value = $filePath;
                     $experimentInput->type = DataType::URI;
                     $experimentInputs[] = $experimentInput; // push into array
@@ -490,7 +490,7 @@ function assemble_experiment()
         // echo
         $experimentInput = new DataObjectType();
         $experimentInput->key = 'echo_input';
-        $experimentInput->value = 'echo_output=Hello World';
+        $experimentInput->value = $_POST['experiment-input'];
         $experimentInput->type = DataType::STRING;
         $experimentInputs = array($experimentInput);
     }

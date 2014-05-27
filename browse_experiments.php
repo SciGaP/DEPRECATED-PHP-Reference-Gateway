@@ -64,16 +64,42 @@ foreach ($userProjects as $project)
 
     foreach ($experiments as $experiment)
     {
-        echo '<tr>';
-
-        echo "<td>$experiment->name</td>";
-        echo "<td>$experiment->applicationId</td>";
-
         $experimentStatus = $experiment->experimentStatus;
         $experimentState = $experimentStatus->experimentState;
         $experimentStatusString = ExperimentState::$__names[$experimentState];
+        $experimentTimeOfStateChange = $experimentStatus->timeOfStateChange;
 
-        echo "<td>$experimentStatusString</td>";
+
+        echo '<tr>';
+
+        echo '<td>';
+
+
+        switch ($experimentStatusString)
+        {
+            case 'SCHEDULED':
+            case 'LAUNCHED':
+            case 'EXECUTING':
+            case 'CANCELING':
+            case 'COMPLETED':
+                echo $experiment->name;
+                break;
+            default:
+                echo '$experiment->name<a href="manage_experiment.php?expId=' . $experiment->experimentID . '">
+                <span class="glyphicon glyphicon-pencil"></span></a>';
+                break;
+        }
+
+
+
+        echo '</td>';
+
+        echo "<td>$experiment->applicationId</td>";
+
+
+
+        //echo '<td>' . $experimentStatusString . ' at ' . date("Y-m-d H:i:s", $experimentTimeOfStateChange) . '</td>';
+        echo '<td>' . $experimentStatusString . '</td>';
 
         echo '<td><a href="manage_experiment.php?expId=' . $experiment->experimentID . '">Details</a></td>';
 

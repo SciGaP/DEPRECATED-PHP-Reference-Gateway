@@ -4,8 +4,9 @@ include 'utilities.php';
 
 
 
-
+use Airavata\Model\Workspace\Experiment\DataType;
 use Airavata\Model\Workspace\Experiment\ExperimentState;
+
 
 
 
@@ -13,6 +14,17 @@ connect_to_id_store();
 verify_login();
 
 $airavataclient = get_airavata_client();
+
+
+
+$echoResources = array('localhost', 'trestles.sdsc.edu', 'stampede.tacc.xsede.org', 'lonestar.tacc.utexas.edu');
+$wrfResources = array('trestles.sdsc.edu', 'stampede.tacc.xsede.org');
+
+$appResources = array( 'SimpleEcho0' => $echoResources,
+    'SimpleEcho2' => $echoResources,
+    'SimpleEcho3' => $echoResources,
+    'SimpleEcho4' => $echoResources,
+    'WRF' => $wrfResources);
 
 ?>
 
@@ -30,7 +42,7 @@ $airavataclient = get_airavata_client();
 
 <div class="container">
     
-<h1>Manage experiment</h1>
+
 
 
 
@@ -44,6 +56,7 @@ $project = get_project($experiment->projectID);
 $experimentStatus = $experiment->experimentStatus;
 $experimentState = $experimentStatus->experimentState;
 $experimentStatusString = ExperimentState::$__names[$experimentState];
+$experimentTimeOfStateChange = $experimentStatus->timeOfStateChange;
 
 
 $userConfigData = $experiment->userConfigurationData;
@@ -60,6 +73,9 @@ switch ($experimentStatusString)
     case 'CREATED':
     case 'VALIDATED':
     case 'SCHEDULED':
+    case 'CANCELED':
+    case 'FAILED':
+    case 'UNKNOWN':
         $editable = true;
         break;
     default:
@@ -98,6 +114,76 @@ elseif (isset($_POST['cancel']))
 ?>
 
 
+<h1>Experiment Summary</h1>
+
+
+    <table class="table">
+        <tr>
+            <td><strong>Name</strong></td>
+            <td><?php echo $experiment->name; ?></td>
+        </tr>
+        <tr>
+            <td><strong>Description</strong></td>
+            <td><?php echo $experiment->description; ?></td>
+        </tr>
+        <tr>
+            <td><strong>Project</strong></td>
+            <td><?php echo $project->name; ?></td>
+        </tr>
+        <tr>
+            <td><strong>Application</strong></td>
+            <td><?php echo $experiment->applicationId; ?></td>
+        </tr>
+        <tr>
+            <td><strong>Compute resource</strong></td>
+            <td><?php echo $scheduling->resourceHostId; ?></td>
+        </tr>
+        <tr>
+            <td><strong>Status</strong></td>
+            <td><?php echo $experimentStatusString; ?></td>
+        </tr>
+        <tr>
+            <td><strong>Update time</strong></td>
+            <td><?php echo $experimentTimeOfStateChange; ?></td>
+        </tr>
+        <tr>
+            <td><strong>Outputs</strong></td>
+            <td><?php list_output_files($experiment); ?></td>
+        </tr>
+    </table>
+
+    <form>
+        <div class="btn-toolbar">
+            <input name="launch" type="submit" class="btn btn-primary" value="Launch" <?php if(!$editable) echo 'disabled'  ?>>
+            <input name="cancel" type="submit" class="btn btn-warning" value="Cancel" <?php if($editable) echo 'disabled'  ?>>
+            <input name="clone" type="submit" class="btn btn-primary" value="Clone">
+            <a href="<?php echo $_SERVER['PHP_SELF']; ?>" class="btn btn-default" role="button" <?php if(!$editable) echo 'disabled'  ?>>
+                Edit
+            </a>
+        </div>
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h1>Edit Experiment</h1>
+
 
 <form action="<?php echo $_SERVER['PHP_SELF'] . '?expId=' . $_GET['expId']?>" method="post" role="form">
     <div class="form-group">
@@ -105,12 +191,16 @@ elseif (isset($_POST['cancel']))
         <input type="text" class="form-control" name="experiment-name" id="experiment-name" value="<?php echo $experiment->name ?>" <?php if(!$editable) echo 'disabled' ?>>
     </div>
     <div class="form-group">
+        <label for="experiment-description">Experiment Description</label>
+        <textarea class="form-control" name="experiment-description" id="experiment-description" <?php if(!$editable) echo 'disabled' ?>><?php echo $experiment->description ?></textarea>
+    </div>
+    <div class="form-group">
         <label for="project">Project</label>
         <?php create_project_select($experiment->projectID, $editable); ?>
     </div>
     <div class="form-group">
         <label for="application">Application</label>
-        <select class="form-control" name="application" id="application" <?php if(!$editable) echo 'disabled' ?>>
+        <select class="form-control" name="application" id="application" disabled>
             <option value="SimpleEcho0" <?php if ($experiment->applicationId == 'SimpleEcho0') echo 'selected' ?>>SimpleEcho0</option>
             <option value="SimpleEcho2" <?php if ($experiment->applicationId == 'SimpleEcho2') echo 'selected' ?>>SimpleEcho2</option>
             <option value="SimpleEcho3" <?php if ($experiment->applicationId == 'SimpleEcho3') echo 'selected' ?>>SimpleEcho3</option>
@@ -118,33 +208,66 @@ elseif (isset($_POST['cancel']))
         </select>
     </div>
 
+    <div class="panel panel-default">
+        <div class="panel-heading">Application configuration</div>
+        <div class="panel-body">
+            <label>Application input</label>
+            <div class="well">
+                <div class="form-group">
+                    <p><strong>Current inputs:</strong></p>
+                    <?php list_input_files($experiment); ?>
+                </div>
+                <?php
+                switch ($experiment->applicationId)
+                {
+                    case 'SimpleEcho0':
+                    case 'SimpleEcho2':
+                    case 'SimpleEcho3':
+                    case 'SimpleEcho4':
+                        echo '<div class="form-group">
+                            <label class="sr-only" for="experiment-input">Text to echo</label>
+                            <input type="text"
+                                class="form-control"
+                                name="experiment-input"
+                                id="experiment-input"
+                                placeholder="Text to echo"
+                                required
+                                disabled>
+                            </div>';
+                        break;
+                    case 'WRF':
+                        echo '<div class="form-group">
+                                <label for="namelist">Namelist</label>
+                                <input type="file" name="namelist" id="namelist" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="model-init">Model initialization data</label>
+                                <input type="file" name="model-init" id="model-init" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="bounds">Forecast lateral boundary conditions</label>
+                                <input type="file" name="bounds" id="bounds" disabled>
+                            </div>
+                        ';
+                        break;
+                }
+                ?>
+            </div>
 
+        <div class="form-group">
+            <label for="compute-resource">Compute Resource</label>
+            <select class="form-control" name="compute-resource" id="compute-resource">';
+                <?php
 
+                foreach ($appResources[$experiment->applicationId] as $resource)
+                {
+                    echo '<option value="' . $resource . '">' . $resource . '</option>';
+                }
 
+                ?>
+            </select>
+        </div>
 
-
-    <div class="form-group bg-danger">
-        <label for="experiment-input">Experiment input</label>
-        <input type="file" name="experiment-input" id="experiment-input" <?php if(!$editable) echo 'disabled' ?>>
-
-        <?php list_files($experiment); ?>
-    </div>
-
-
-
-
-
-
-
-    <div class="form-group">
-        <label for="compute-resource">Compute Resource</label>
-        <select class="form-control" name="compute-resource" id="compute-resource" <?php if(!$editable) echo 'disabled' ?>>
-            <option value="localhost" <?php if ($scheduling->resourceHostId == 'localhost') echo 'selected' ?>>localhost</option>
-            <option value="trestles.sdsc.edu" <?php if ($scheduling->resourceHostId == 'trestles.sdsc.edu') echo 'selected' ?>>Trestles</option>
-            <option value="stampede.tacc.xsede.org" <?php if ($scheduling->resourceHostId == 'stampede.tacc.xsede.org') echo 'selected' ?>>Stampede</option>
-            <option value="lonestar.tacc.utexas.edu" <?php if ($scheduling->resourceHostId == 'lonestar.tacc.utexas.edu') echo 'selected' ?>>Lonestar</option>
-        </select>
-    </div>
     <div class="form-group">
         <label for="node-count">Node Count</label>
         <input type="number" class="form-control" name="node-count" id="node-count" value="<?php echo $scheduling->nodeCount ?>" <?php if(!$editable) echo 'disabled' ?>>
@@ -165,24 +288,18 @@ elseif (isset($_POST['cancel']))
         <label for="memory">Total Physical Memory</label>
         <input type="number" class="form-control" name="memory" id="memory" value="<?php echo $scheduling->totalPhysicalMemory ?>" <?php if(!$editable) echo 'disabled' ?>>
     </div>
-    <div class="form-group">
-        <label for="experiment-description">Experiment Description</label>
-        <textarea class="form-control" name="experiment-description" id="experiment-description" <?php if(!$editable) echo 'disabled' ?>><?php echo $experiment->description ?></textarea>
+
     </div>
-    <div class="form-group">
-        <p><strong>Status: </strong><?php echo $experimentStatusString ?></p>
     </div>
 
     <div class="btn-toolbar">
-        <div class="btn-group">
-            <input name="save" type="submit" class="btn btn-primary" value="Save" <?php if(!$editable) echo 'disabled'  ?>>
-            <input name="launch" type="submit" class="btn btn-primary" value="Launch" <?php if(!$editable) echo 'disabled'  ?>>
-        </div>
-        <input name="cancel" type="submit" class="btn btn-warning" value="Cancel" <?php if($editable) echo 'disabled'  ?>>
-        <input name="clone" type="submit" class="btn btn-primary" value="Clone">
+        <input name="save" type="submit" class="btn btn-primary" value="Save" <?php if(!$editable) echo 'disabled'  ?>>
         <input name="clear" type="reset" class="btn btn-default" value="Reset values">
     </div>
+
+
 </form>
+
 
 </div>
 </body>
@@ -194,7 +311,8 @@ elseif (isset($_POST['cancel']))
 function apply_changes_to_experiment($experiment)
 {
     $experiment->name = $_POST['experiment-name'];
-    $experiment->applicationId = $_POST['application'];
+    $experiment->description = $_POST['experiment-description'];
+    //$experiment->applicationId = $_POST['application'];
 
     $userConfigDataUpdated = $experiment->userConfigurationData;
     $schedulingUpdated = $userConfigDataUpdated->computationalResourceScheduling;
@@ -209,17 +327,152 @@ function apply_changes_to_experiment($experiment)
     $userConfigDataUpdated->computationalResourceScheduling = $schedulingUpdated;
     $experiment->userConfigurationData = $userConfigDataUpdated;
 
+
+
+
+
+
+
+    /*
+    if ($_POST['application'] == 'WRF')
+    {
+        foreach ($_FILES as $file)
+        {
+            if ($file['error'] > 0)
+            {
+                $uploadSuccessful = false;
+                print_error_message('Error uploading file ' . $file['name'] . ' !');
+            }
+            elseif ($file['type'] != 'text/plain')
+            {
+                $uploadSuccessful = false;
+                print_error_message('Uploaded file ' . $file['name'] . ' type not supported!');
+            }
+            elseif (($file['size'] / 1024) > 20)
+            {
+                $uploadSuccessful = false;
+                print_error_message('Uploaded file ' . $file['name'] . ' must be smaller than 20 kB!');
+            }
+        }
+
+
+        if ($uploadSuccessful)
+        {
+            // construct unique path
+            do
+            {
+                $experimentPath = EXPERIMENT_DATA_ROOT . $_POST['experiment-name'] . md5(rand() * time()) . '/';
+            }
+            while (is_dir($experimentPath)); // if dir already exists, try again
+
+            // create new directory
+            // move file to new directory, overwriting old versions if necessary
+            if (mkdir($experimentPath))
+            {
+                foreach ($_FILES as $file)
+                {
+                    $filePath = $experimentPath . $file['name'];
+
+                    if (is_file($filePath))
+                    {
+                        unlink($filePath);
+
+                        print_warning_message('Uploaded file already exists! Overwriting...');
+                    }
+
+                    $moveFile = move_uploaded_file($file['tmp_name'], $filePath);
+
+                    if ($moveFile)
+                    {
+                        print_success_message('Upload: ' . $file['name'] . '<br>' .
+                            'Type: ' . $file['type'] . '<br>' .
+                            'Size: ' . ($file['size']/1024) . ' kB<br>' .
+                            'Stored in: ' . $experimentPath . $file['name']);
+                    }
+                    else
+                    {
+                        print_error_message('Error moving uploaded file ' . $file['name'] . '!');
+                    }
+
+
+
+                    // wrf
+                    $experimentInput = new DataObjectType();
+                    $experimentInput->key = $file['name'];
+                    $experimentInput->value = $filePath;
+                    $experimentInput->type = DataType::URI;
+                    $experimentInputs[] = $experimentInput; // push into array
+                }
+            }
+            else
+            {
+                print_error_message('Error creating upload directory!');
+            }
+
+
+        }
+    }
+    else
+    {
+        // echo
+        $experimentInput = new DataObjectType();
+        $experimentInput->key = 'echo_input';
+        $experimentInput->value = $_POST['experiment-input'];
+        $experimentInput->type = DataType::STRING;
+        $experimentInputs = array($experimentInput);
+    }
+    */
+
+
+
+
+
+
+
+
+
+
+
+
+
     return $experiment;
 }
 
 
-function list_files($experiment)
+function list_input_files($experiment)
 {
-    $dir = '../experimentData/' . $experiment->experimentID . '/';
+    $experimentInputs = $experiment->experimentInputs;
+    //var_dump($experimentInputs);
 
-    foreach (glob($dir . '*') as $filepath)
+    foreach ($experimentInputs as $input)
     {
-        echo '<a href="' . $filepath . '">' . $filepath . '</a><br>';
+        if ($input->type == DataType::URI)
+        {
+            echo '<a href="' . $input->value . '">' . $input->value . '</a><br>';
+        }
+        elseif ($input->type == DataType::STRING)
+        {
+            echo '<p>' . $input->value . '</p>';
+        }
+    }
+}
+
+
+function list_output_files($experiment)
+{
+    $experimentOutputs = $experiment->experimentOutputs;
+    var_dump($experimentOutputs);
+
+    foreach ($experimentOutputs as $output)
+    {
+        if ($output->type == DataType::URI)
+        {
+            echo '<a href="' . $output->value . '">' . $output->value . '</a><br>';
+        }
+        elseif ($output->type == DataType::STRING)
+        {
+            echo '<p>' . $output->value . '</p>';
+        }
     }
 }
 

@@ -75,7 +75,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
     {
         $disabled = ' disabled';
         $experimentName = $_POST['experiment-name'];
-        $experimentDescription = $_POST['experiment-description'];
+        $experimentDescription = $_POST['experiment-description'] . ' ';
         $project = $_POST['project'];
         $application = $_POST['application'];
 
@@ -95,7 +95,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
     {
         $disabled = '';
         $experimentName = '';
-        $experimentDescription = ' ';
+        $experimentDescription = '';
         $project = '';
         $application = '';
 
@@ -266,6 +266,7 @@ function create_experiment()
     global $airavataclient;
 
     $experiment = assemble_experiment();
+    //var_dump($experiment);
     $expId = null;
 
     try
@@ -278,6 +279,7 @@ function create_experiment()
         if ($expId)
         {
             print_success_message("Experiment {$_POST['experiment-name']} created!");
+            //var_dump($airavataclient->getExperiment($expId));
         }
         else
         {
