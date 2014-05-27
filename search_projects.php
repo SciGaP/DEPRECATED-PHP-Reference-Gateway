@@ -124,8 +124,10 @@ $airavataclient = get_airavata_client();
                                 echo $experiment->name;
                                 break;
                             default:
-                                echo '$experiment->name<a href="edit_experiment.php?expId=' . $experiment->experimentID . '">
-                <span class="glyphicon glyphicon-pencil"></span></a>';
+                                echo $experiment->name .
+                                    '<a href="edit_experiment.php?expId=' .
+                                    $experiment->experimentID .
+                                    '"><span class="glyphicon glyphicon-pencil"></span></a>';
                                 break;
                         }
 

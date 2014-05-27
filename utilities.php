@@ -485,9 +485,8 @@ function assemble_experiment()
 
         }
     }
-    else
+    else // echo
     {
-        // echo
         $experimentInput = new DataObjectType();
         $experimentInput->key = 'echo_input';
         $experimentInput->value = 'echo_output=' . $_POST['experiment-input'];

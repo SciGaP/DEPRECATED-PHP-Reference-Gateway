@@ -20,11 +20,7 @@ $airavataclient = get_airavata_client();
 $echoResources = array('localhost', 'trestles.sdsc.edu', 'stampede.tacc.xsede.org', 'lonestar.tacc.utexas.edu');
 $wrfResources = array('trestles.sdsc.edu', 'stampede.tacc.xsede.org');
 
-$appResources = array( 'SimpleEcho0' => $echoResources,
-    'SimpleEcho2' => $echoResources,
-    'SimpleEcho3' => $echoResources,
-    'SimpleEcho4' => $echoResources,
-    'WRF' => $wrfResources);
+$appResources = array( 'Echo' => $echoResources, 'WRF' => $wrfResources);
 
 ?>
 
@@ -133,10 +129,8 @@ elseif (isset($_POST['cancel']))
     <div class="form-group">
         <label for="application">Application</label>
         <select class="form-control" name="application" id="application" disabled>
-            <option value="SimpleEcho0" <?php if ($experiment->applicationId == 'SimpleEcho0') echo 'selected' ?>>SimpleEcho0</option>
-            <option value="SimpleEcho2" <?php if ($experiment->applicationId == 'SimpleEcho2') echo 'selected' ?>>SimpleEcho2</option>
-            <option value="SimpleEcho3" <?php if ($experiment->applicationId == 'SimpleEcho3') echo 'selected' ?>>SimpleEcho3</option>
-            <option value="SimpleEcho4" <?php if ($experiment->applicationId == 'SimpleEcho4') echo 'selected' ?>>SimpleEcho4</option>
+            <option value="Echo" <?php if ($experiment->applicationId == 'Echo') echo 'selected' ?>>Echo</option>
+            <option value="WRF" <?php if ($experiment->applicationId == 'WRF') echo 'selected' ?>>WRF</option>
         </select>
     </div>
 
@@ -152,10 +146,7 @@ elseif (isset($_POST['cancel']))
                 <?php
                 switch ($experiment->applicationId)
                 {
-                    case 'SimpleEcho0':
-                    case 'SimpleEcho2':
-                    case 'SimpleEcho3':
-                    case 'SimpleEcho4':
+                    case 'Echo':
                         echo '<div class="form-group">
                             <label class="sr-only" for="experiment-input">Text to echo</label>
                             <input type="text"
@@ -384,7 +375,7 @@ function list_input_files($experiment)
         }
         elseif ($input->type == DataType::STRING)
         {
-            echo '<p>' . $input->value . '</p>';
+            echo '<p>' . explode('=', $input->value)[1] . '</p>';
         }
     }
 }

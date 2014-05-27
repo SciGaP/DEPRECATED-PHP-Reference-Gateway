@@ -20,11 +20,7 @@ $airavataclient = get_airavata_client();
 $echoResources = array('localhost', 'trestles.sdsc.edu', 'stampede.tacc.xsede.org', 'lonestar.tacc.utexas.edu');
 $wrfResources = array('trestles.sdsc.edu', 'stampede.tacc.xsede.org');
 
-$appResources = array( 'SimpleEcho0' => $echoResources,
-                        'SimpleEcho2' => $echoResources,
-                        'SimpleEcho3' => $echoResources,
-                        'SimpleEcho4' => $echoResources,
-                        'WRF' => $wrfResources);
+$appResources = array('Echo' => $echoResources, 'WRF' => $wrfResources);
 
 
 
@@ -80,10 +76,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
         $application = $_POST['application'];
 
         // ugly hack until app catalog is in place
-        $simpleEcho0 = ($application == 'SimpleEcho0')? ' selected' : '';
-        $simpleEcho2 = ($application == 'SimpleEcho2')? ' selected' : '';
-        $simpleEcho3 = ($application == 'SimpleEcho3')? ' selected' : '';
-        $simpleEcho4 = ($application == 'SimpleEcho4')? ' selected' : '';
+        $echo = ($application == 'Echo')? ' selected' : '';
         $wrf = ($application == 'WRF')? ' selected' : '';
 
         echo '<input type="hidden" name="experiment-name" value="' . $experimentName . '">';
@@ -99,10 +92,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
         $project = '';
         $application = '';
 
-        $simpleEcho0 = '';
-        $simpleEcho2 = '';
-        $simpleEcho3 = '';
-        $simpleEcho4 = '';
+        $echo = '';
         $wrf = '';
     }
 
@@ -126,10 +116,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
     <div class="form-group">
         <label for="application">Application</label>
         <select class="form-control" name="application" id="application"' . $disabled . '>
-            <option value="SimpleEcho0"' . $simpleEcho0 . '>SimpleEcho0</option>
-            <option value="SimpleEcho2"' . $simpleEcho2 . '>SimpleEcho2</option>
-            <option value="SimpleEcho3"' . $simpleEcho3 . '>SimpleEcho3</option>
-            <option value="SimpleEcho4"' . $simpleEcho4 . '>SimpleEcho4</option>
+            <option value="Echo"' . $echo . '>Echo</option>
             <option value="WRF"' . $wrf . '>WRF</option>
         </select>
     </div>
@@ -160,10 +147,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
 
         switch ($_POST['application'])
         {
-            case 'SimpleEcho0':
-            case 'SimpleEcho2':
-            case 'SimpleEcho3':
-            case 'SimpleEcho4':
+            case 'Echo':
                 echo '<div class="form-group">
                     <label class="sr-only" for="experiment-input">Text to echo</label>
                     <input type="text" class="form-control" name="experiment-input" id="experiment-input" placeholder="Text to echo" required>

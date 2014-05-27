@@ -152,7 +152,7 @@ elseif (isset($_POST['cancel']))
         </tr>
     </table>
 
-    <form>
+    <form action="<?php echo $_SERVER['PHP_SELF'] . '?expId=' . $_GET['expId']?>" method="post" role="form">
         <div class="btn-toolbar">
             <input name="launch" type="submit" class="btn btn-primary" value="Launch" <?php if(!$editable) echo 'disabled'  ?>>
             <input name="cancel" type="submit" class="btn btn-warning" value="Cancel" <?php if($editable) echo 'disabled'  ?>>
