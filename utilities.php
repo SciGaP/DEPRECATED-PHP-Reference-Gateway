@@ -724,7 +724,10 @@ function create_nav_bar()
 
     for ($i = 0; $i < sizeof($labels); $i++)
     {
-        $urls[$i] == explode('/', $_SERVER['PHP_SELF'])[2]? $active = ' class="active"' : $active = '';
+        $selfExplode = explode('/', $_SERVER['PHP_SELF']);
+        $urls[$i] == $selfExplode[2]? $active = ' class="active"' : $active = '';
+
+
         isset($_SESSION['loggedin']) && $_SESSION['loggedin']? $disabled = '' : $disabled = ' class="disabled"';
 
         echo '<li' . $active . $disabled . '><a href="' . $urls[$i] . '">' . $labels[$i] . '</a></li>';
