@@ -21,9 +21,7 @@ $airavataclient = get_airavata_client();
 <html>
 <head>
     <title>PHP Reference Gateway</title>
-    
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    
 </head>
 
 
@@ -67,7 +65,7 @@ $airavataclient = get_airavata_client();
 
 <?php
 
-if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch']) || isset($_POST['clone']) || isset($_POST['cancel']))
+if (isset($_POST['search']))
 {
     /**
      * get results
@@ -75,7 +73,7 @@ if (isset($_POST['search']) || isset($_POST['details']) || isset($_POST['launch'
     $experiments = get_search_results();
 
 
-echo '
+    echo '
     <table class="table">
         <tr>
             <th>Name</th>
@@ -83,7 +81,7 @@ echo '
             <th>Status</th>
             <th>Details</th>
         </tr>
-        ';
+    ';
 
 
     foreach ($experiments as $experiment)
@@ -111,7 +109,7 @@ echo '
                 break;
             default:
                 echo $experiment->name .
-                    '<a href="edit_experiment.php?expId=' .
+                    ' <a href="edit_experiment.php?expId=' .
                     $experiment->experimentID .
                     '"><span class="glyphicon glyphicon-pencil"></span></a>';
                 break;
@@ -133,44 +131,7 @@ echo '
         echo '</tr>';
     }
 
-
-
-
-
-
-
-echo '</table>';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+    echo '</table>';
 }
 
 
@@ -274,80 +235,3 @@ function get_search_results()
 
     return $experiments;
 }
-
-/**
- * Create radio buttons for the given set of experiments
- * @param $experiments
-
-function create_results_radio_buttons($experiments)
-{
-    $checked_array = array();
-
-    for ($i = 0; $i < sizeof($experiments); $i++)
-    {
-        if (isset($_POST['experiment-id'])) // experiment previously selected
-        {
-            // filled in radio button for previously-selected experiment
-            if($_POST['experiment-id'] == $experiments[$i]->experimentID)
-            {
-                $checked_array[] = 'checked';
-            }
-            else
-            {
-                $checked_array[] = '';
-            }
-        }
-        else // no experiments selected
-        {
-            $checked_array[] = '';
-        }
-
-        echo '<div class="radio"><label><input type="radio" name="experiment-id" value="' . $experiments[$i]->experimentID . '" ' . $checked_array[$i] . '>' . $experiments[$i]->name . '</label></div>';
-    }
-
-    // include hidden inputs to populate previously-filled-in inputs
-    echo '<input type="hidden" name="search-key" value="' . $_POST['search-key'] . '">';
-    echo '<input type="hidden" name="search-value" value="' . $_POST['search-value'] . '">';
-}
-*/
-
-/**
- * Get a string containing the given experiment's status
- * @param $expId
- * @return mixed
- */
-function get_experiment_status($expId)
-{
-    global $airavataclient;
-
-    try
-    {
-        $experimentStatus = $airavataclient->getExperimentStatus($expId);
-    }
-    catch (InvalidRequestException $ire)
-    {
-        print_error_message('InvalidRequestException!<br><br>' . $ire->getMessage());
-    }
-    catch (ExperimentNotFoundException $enf)
-    {
-        print_error_message('ExperimentNotFoundException!<br><br>' . $enf->getMessage());
-    }
-    catch (AiravataClientException $ace)
-    {
-        print_error_message('AiravataClientException!<br><br>' . $ace->getMessage());
-    }
-    catch (AiravataSystemException $ase)
-    {
-        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
-    }
-    catch (Exception $e)
-    {
-        print_error_message('Exception!<br><br>' . $e->getMessage());
-    }
-
-    return ExperimentState::$__names[$experimentStatus->experimentState];
-}
-
-
-
-

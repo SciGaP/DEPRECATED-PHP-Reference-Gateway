@@ -86,7 +86,7 @@ foreach ($userProjects as $project)
                 break;
             default:
                 echo $experiment->name .
-                    '<a href="edit_experiment.php?expId=' .
+                    ' <a href="edit_experiment.php?expId=' .
                     $experiment->experimentID .
                     '"><span class="glyphicon glyphicon-pencil"></span></a>';
                 break;

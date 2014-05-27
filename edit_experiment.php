@@ -247,8 +247,26 @@ function apply_changes_to_experiment($experiment)
     $schedulingUpdated->wallTimeLimit = $_POST['wall-time'];
     $schedulingUpdated->totalPhysicalMemory = $_POST['memory'];
 
+    switch ($_POST['compute-resource'])
+    {
+        case 'trestles.sdsc.edu':
+            $schedulingUpdated->ComputationalProjectAccount = 'sds128';
+            break;
+        case 'stampede.tacc.xsede.org':
+        case 'lonestar.tacc.utexas.edu':
+            $schedulingUpdated->ComputationalProjectAccount = 'TG-STA110014S';
+            break;
+        default:
+            $schedulingUpdated->ComputationalProjectAccount = 'admin';
+    }
+
     $userConfigDataUpdated->computationalResourceScheduling = $schedulingUpdated;
     $experiment->userConfigurationData = $userConfigDataUpdated;
+
+
+
+
+
 
 
 
