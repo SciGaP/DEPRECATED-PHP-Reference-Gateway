@@ -490,7 +490,7 @@ function assemble_experiment()
         // echo
         $experimentInput = new DataObjectType();
         $experimentInput->key = 'echo_input';
-        $experimentInput->value = $_POST['experiment-input'];
+        $experimentInput->value = 'echo_output=' . $_POST['experiment-input'];
         $experimentInput->type = DataType::STRING;
         $experimentInputs = array($experimentInput);
     }
@@ -696,7 +696,7 @@ function create_nav_bar()
 {
     $labels = array('Create project',
         'Create experiment',
-        'Browse experiments',
+        'Browse',
         'Search experiments',
         'Search projects');
     $urls = array('create_project.php',

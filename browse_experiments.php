@@ -85,7 +85,7 @@ foreach ($userProjects as $project)
                 echo $experiment->name;
                 break;
             default:
-                echo '$experiment->name<a href="manage_experiment.php?expId=' . $experiment->experimentID . '">
+                echo '$experiment->name<a href="edit_experiment.php?expId=' . $experiment->experimentID . '">
                 <span class="glyphicon glyphicon-pencil"></span></a>';
                 break;
         }
@@ -101,7 +101,7 @@ foreach ($userProjects as $project)
         //echo '<td>' . $experimentStatusString . ' at ' . date("Y-m-d H:i:s", $experimentTimeOfStateChange) . '</td>';
         echo '<td>' . $experimentStatusString . '</td>';
 
-        echo '<td><a href="manage_experiment.php?expId=' . $experiment->experimentID . '">Details</a></td>';
+        echo '<td><a href="experiment_summary.php?expId=' . $experiment->experimentID . '">Details</a></td>';
 
         echo '</tr>';
     }

@@ -54,7 +54,7 @@ $airavataclient = get_airavata_client();
 
     <div class="form-group">
         <label for="search-value">for</label>
-        <input type="search" class="form-control" name="search-value" id="search-value" placeholder="value"
+        <input type="search" class="form-control" name="search-value" id="search-value" placeholder="value" required
                value="<?php if (isset($_POST['search-value'])) echo $_POST['search-value'] ?>">
     </div>
 
