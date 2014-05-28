@@ -68,7 +68,7 @@ if (isset($_POST['search']))
      * get results
      */
     $experiments = get_search_results();
-    var_dump($experiments[0]);
+    //var_dump($experiments[0]);
 
     if (sizeof($experiments) == 0)
     {
