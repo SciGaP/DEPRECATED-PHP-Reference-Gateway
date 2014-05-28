@@ -479,14 +479,17 @@ function assemble_experiment()
                     if ($file == $_FILES['namelist'])
                     {
                         $experimentInput->key = 'WRF_Namelist';
+                        //$experimentInput->value = '/home/airavata/wrf/namelist.input';
                     }
                     elseif ($file == $_FILES['model-init'])
                     {
                         $experimentInput->key = 'WRF_Input_File';
+                        //$experimentInput->value = '/home/airavata/wrf/wrfinput_d01';
                     }
                     elseif ($file == $_FILES['bounds'])
                     {
                         $experimentInput->key = 'WRF_Boundary_File';
+                        //$experimentInput->value = '/home/airavata/wrf/wrfbdy_d01';
                     }
 
                     $experimentInput->value = $filePath;

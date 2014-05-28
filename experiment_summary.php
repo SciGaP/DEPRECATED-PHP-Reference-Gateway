@@ -175,7 +175,7 @@ function list_output_files($experiment)
     {
         if ($output->type == DataType::URI)
         {
-            echo '<a href="' . $output->value . '">' . $output->value . '</a><br>';
+            echo '<p>' . $output->key .  ': <a href="' . $output->value . '">' . $output->value . '</a></p>';
         }
         elseif ($output->type == DataType::STRING)
         {
