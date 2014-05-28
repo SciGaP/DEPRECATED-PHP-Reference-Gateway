@@ -56,7 +56,7 @@ $scheduling = $userConfigData->computationalResourceScheduling;
 
 
 
-var_dump($experiment);
+//var_dump($experiment);
 
 
 
@@ -81,9 +81,11 @@ if (isset($_POST['save']))
 {
     $updatedExperiment = apply_changes_to_experiment($experiment);
 
-    //update_experiment($experiment->experimentID, $updatedExperiment);
+    update_experiment($experiment->experimentID, $updatedExperiment);
 
     $experiment = get_experiment($_GET['expId']); // update local experiment variable
+
+    //var_dump($experiment);
 }
 
 
@@ -174,12 +176,25 @@ if (isset($_POST['save']))
 
         <div class="form-group">
             <label for="compute-resource">Compute Resource</label>
-            <select class="form-control" name="compute-resource" id="compute-resource">';
+            <select class="form-control" name="compute-resource" id="compute-resource">
                 <?php
 
                 foreach ($appResources[$experiment->applicationId] as $resource)
                 {
-                    echo '<option value="' . $resource . '">' . $resource . '</option>';
+                    $userConfigData = $experiment->userConfigurationData;
+                    $scheduling = $userConfigData->computationalResourceScheduling;
+                    $experimentResource = $scheduling->resourceHostId;
+
+                    if ($resource == $experimentResource)
+                    {
+                        $selected = 'selected';
+                    }
+                    else
+                    {
+                        $selected = '';
+                    }
+
+                    echo '<option value="' . $resource . '" ' . $selected . '>' . $resource . '</option>';
                 }
 
                 ?>
