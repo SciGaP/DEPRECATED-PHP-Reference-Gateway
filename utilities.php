@@ -364,6 +364,7 @@ function assemble_experiment()
 {
     $uploadSuccessful = true; // errors will set this to false
     $experimentInputs = array();
+    $experimentOutputs = array();
 
     $scheduling = new ComputationalResourceScheduling();
     $scheduling->totalCPUCount = $_POST['cpu-count'];
@@ -472,10 +473,30 @@ function assemble_experiment()
 
                     // wrf
                     $experimentInput = new DataObjectType();
-                    $experimentInput->key = $file['name'];
+                    if ($file['name'] == 'namelist') {
+                        $experimentInput->key = 'WRF_Namelist';
+                    } else if ($file['name'] == 'model-init') {
+                        $experimentInput->key = 'WRF_Input_File';
+                    } else if ($file['name'] == 'bounds') {
+                        $experimentInput->key = 'WRF_Boundary_File';
+                    }
+
                     $experimentInput->value = $filePath;
                     $experimentInput->type = DataType::URI;
                     $experimentInputs[] = $experimentInput; // push into array
+
+                    //Configuring WRF Outputs
+                    $experimentOutput1 = new DataObjectType();
+                    $experimentOutput1->key = 'WRF_Output';
+                    $experimentOutput1->value = '';
+                    $experimentOutput1->type = DataType::URI;
+
+                    $experimentOutput2 = new DataObjectType();
+                    $experimentOutput2->key = 'WRF_Execution_Log';
+                    $experimentOutput2->value = '';
+                    $experimentOutput2->type = DataType::URI;
+
+                    $experimentOutputs = array($experimentOutput1, $experimentOutput2);
                 }
             }
             else
@@ -488,39 +509,32 @@ function assemble_experiment()
     }
     else // echo
     {
+        //Echo Inputs
         $experimentInput = new DataObjectType();
         $experimentInput->key = 'echo_input';
         $experimentInput->value = 'echo_output=' . $_POST['experiment-input'];
         $experimentInput->type = DataType::STRING;
         $experimentInputs = array($experimentInput);
+
+        //Echo Outputs
+        $experimentOutput1 = new DataObjectType();
+        $experimentOutput1->key = 'echo_output';
+        $experimentOutput1->value = '';
+        $experimentOutput1->type = DataType::STRING;
+
+        $experimentOutput2 = new DataObjectType();
+        $experimentOutput2->key = 'stdout';
+        $experimentOutput2->value = '';
+        $experimentOutput2->type = DataType::STRING;
+
+        $experimentOutput3 = new DataObjectType();
+        $experimentOutput3->key = 'stderr';
+        $experimentOutput3->value = '';
+        $experimentOutput3->type = DataType::STRING;
+        $experimentOutputs = array($experimentOutput1, $experimentOutput2, $experimentOutput3);
     }
 
 
-
-
-
-
-
-
-
-
-
-    $experimentOutput1 = new DataObjectType();
-    $experimentOutput1->key = 'echo_output';
-    $experimentOutput1->value = '';
-    $experimentOutput1->type = DataType::STRING;
-
-    $experimentOutput2 = new DataObjectType();
-    $experimentOutput2->key = 'stdout';
-    $experimentOutput2->value = '';
-    $experimentOutput2->type = DataType::STRING;
-
-    $experimentOutput3 = new DataObjectType();
-    $experimentOutput3->key = 'stderr';
-    $experimentOutput3->value = '';
-    $experimentOutput3->type = DataType::STRING;
-
-    $experimentOutputs = array($experimentOutput1, $experimentOutput2, $experimentOutput3);
 
 
     $experiment = new Experiment();
@@ -537,7 +551,6 @@ function assemble_experiment()
     $experiment->experimentInputs = $experimentInputs;
 
     $experiment->experimentOutputs = $experimentOutputs;
-
 
 
     if ($uploadSuccessful)
