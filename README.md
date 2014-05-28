@@ -1,10 +1,17 @@
 PHP-Reference-Gateway
 =====================
 
-A gateway developed in PHP as a reference implementation for the Airavata API. The concepts in the gateway are inspired by the Ultrascan gateway. 
+A gateway developed in PHP as a reference implementation for the Airavata API. The concepts in the gateway are inspired by the Ultrascan gateway.
+
 Installation
 -----------------
-To run your own instance of the PHP Reference Gateway, clone this repository to a directory on your webserver. Load login.php in a browser and either log in or create an account.
+To run your own instance of the PHP Reference Gateway, clone this repository to a directory on your webserver.
+
+You will find some configuration constants at the top of utilities.php. You must set these constants to appropriate values. Note also that you will need to create the directory you specify in EXPERIMENT_DATA_ROOT.
+
+Be aware that you may also need to update the upload_max_filesize and post_max_size values in your webserver's php.ini file in order to upload large input files.
+
+If everything is set up correctly, you should be able to load login.php in a browser and either log in or create an account.
 
 User Store
 -----------------

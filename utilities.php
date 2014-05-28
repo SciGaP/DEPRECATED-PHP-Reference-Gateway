@@ -11,9 +11,11 @@ define('ROOT_DIR', __DIR__);
 const AIRAVATA_SERVER = 'gw111.iu.xsede.org';
 const AIRAVATA_PORT = 8930;
 const AIRAVATA_TIMEOUT = 20000;
+const EXPERIMENT_DATA_ROOT = '../experimentData/';
+
 //const USER_STORE = 'XML';
 const USER_STORE = 'WSO2';
-const EXPERIMENT_DATA_ROOT = '../experimentData/';
+
 
 
 /**
@@ -411,7 +413,7 @@ function assemble_experiment()
             {
                 $uploadSuccessful = false;
                 print_error_message('Error uploading file ' . $file['name'] . ' !');
-            }
+            }/*
             elseif ($file['type'] != 'text/plain')
             {
                 $uploadSuccessful = false;
@@ -420,8 +422,8 @@ function assemble_experiment()
             elseif (($file['size'] / 1024) > 20)
             {
                 $uploadSuccessful = false;
-                print_error_message('Uploaded file ' . $file['name'] . ' must be smaller than 20 kB!');
-            }
+                print_error_message('Uploaded file ' . $file['name'] . ' must be smaller than 10 MB!');
+            }*/
         }
 
 
@@ -473,11 +475,17 @@ function assemble_experiment()
 
                     // wrf
                     $experimentInput = new DataObjectType();
-                    if ($file['name'] == 'namelist') {
+
+                    if ($file == $_FILES['namelist'])
+                    {
                         $experimentInput->key = 'WRF_Namelist';
-                    } else if ($file['name'] == 'model-init') {
+                    }
+                    elseif ($file == $_FILES['model-init'])
+                    {
                         $experimentInput->key = 'WRF_Input_File';
-                    } else if ($file['name'] == 'bounds') {
+                    }
+                    elseif ($file == $_FILES['bounds'])
+                    {
                         $experimentInput->key = 'WRF_Boundary_File';
                     }
 

@@ -424,7 +424,7 @@ function list_input_files($experiment)
     {
         if ($input->type == DataType::URI)
         {
-            echo '<p>' . $input->key . ': <a href="' . $input->value . '">' . $input->value . '</a></p>';
+            echo '<p><a href="' . $input->value . '">' . $input->key . '</a></p>';
         }
         elseif ($input->type == DataType::STRING)
         {

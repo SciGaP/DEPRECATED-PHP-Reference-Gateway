@@ -246,7 +246,6 @@ function create_experiment()
     global $airavataclient;
 
     $experiment = assemble_experiment();
-    //var_dump($experiment);
     $expId = null;
 
     try
