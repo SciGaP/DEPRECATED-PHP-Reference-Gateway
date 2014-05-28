@@ -201,11 +201,17 @@ if (isset($_POST['save']) || isset($_POST['launch']))
     </div>
     <div class="form-group">
         <label for="wall-time">Wall Time Limit</label>
-        <input type="number" class="form-control" name="wall-time" id="wall-time" value="15">
+        <div class="input-group">
+            <input type="number" class="form-control" name="wall-time" id="wall-time" value="15">
+            <span class="input-group-addon">minutes</span>
+        </div>
     </div>
     <div class="form-group">
         <label for="memory">Total Physical Memory</label>
-        <input type="number" class="form-control" name="memory" id="memory" value="0">
+        <div class="input-group">
+            <input type="number" class="form-control" name="memory" id="memory" value="0">
+            <span class="input-group-addon">kB</span>
+        </div>
     </div>
 
 

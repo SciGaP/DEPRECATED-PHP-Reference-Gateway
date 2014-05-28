@@ -102,11 +102,21 @@ if (isset($_POST['save']))
 <form action="<?php echo $_SERVER['PHP_SELF'] . '?expId=' . $_GET['expId']?>" method="post" role="form" enctype="multipart/form-data">
     <div class="form-group">
         <label for="experiment-name">Experiment Name</label>
-        <input type="text" class="form-control" name="experiment-name" id="experiment-name" value="<?php echo $experiment->name ?>" <?php if(!$editable) echo 'disabled' ?>>
+        <input type="text"
+               class="form-control"
+               name="experiment-name"
+               id="experiment-name"
+               value="<?php echo $experiment->name ?>"
+            <?php if(!$editable) echo 'disabled' ?>>
     </div>
     <div class="form-group">
         <label for="experiment-description">Experiment Description</label>
-        <textarea class="form-control" name="experiment-description" id="experiment-description" <?php if(!$editable) echo 'disabled' ?>><?php echo $experiment->description ?></textarea>
+        <textarea class="form-control"
+                  name="experiment-description"
+                  id="experiment-description"
+                <?php if(!$editable) echo 'disabled' ?>>
+            <?php echo $experiment->description ?>
+        </textarea>
     </div>
     <div class="form-group">
         <label for="project">Project</label>
@@ -177,23 +187,54 @@ if (isset($_POST['save']))
 
     <div class="form-group">
         <label for="node-count">Node Count</label>
-        <input type="number" class="form-control" name="node-count" id="node-count" value="<?php echo $scheduling->nodeCount ?>" <?php if(!$editable) echo 'disabled' ?>>
+        <input type="number"
+               class="form-control"
+               name="node-count"
+               id="node-count"
+               value="<?php echo $scheduling->nodeCount ?>"
+            <?php if(!$editable) echo 'disabled' ?>>
     </div>
     <div class="form-group">
         <label for="cpu-count">Total CPU Count</label>
-        <input type="number" class="form-control" name="cpu-count" id="cpu-count" value="<?php echo $scheduling->totalCPUCount ?>" <?php if(!$editable) echo 'disabled' ?>>
+        <input type="number"
+               class="form-control"
+               name="cpu-count"
+               id="cpu-count"
+               value="<?php echo $scheduling->totalCPUCount ?>"
+            <?php if(!$editable) echo 'disabled' ?>>
     </div>
     <div class="form-group">
         <label for="threads">Number of Threads</label>
-        <input type="number" class="form-control" name="threads" id="threads" value="<?php echo $scheduling->numberOfThreads ?>" <?php if(!$editable) echo 'disabled' ?>>
+        <input type="number"
+               class="form-control"
+               name="threads"
+               id="threads"
+               value="<?php echo $scheduling->numberOfThreads ?>"
+            <?php if(!$editable) echo 'disabled' ?>>
     </div>
     <div class="form-group">
         <label for="wall-time">Wall Time Limit</label>
-        <input type="number" class="form-control" name="wall-time" id="wall-time" value="<?php echo $scheduling->wallTimeLimit ?>" <?php if(!$editable) echo 'disabled' ?>>
+        <div class="input-group">
+            <input type="number"
+                   class="form-control"
+                   name="wall-time"
+                   id="wall-time"
+                   value="<?php echo $scheduling->wallTimeLimit ?>"
+                <?php if(!$editable) echo 'disabled' ?>>
+            <span class="input-group-addon">minutes</span>
+        </div>
     </div>
     <div class="form-group">
         <label for="memory">Total Physical Memory</label>
-        <input type="number" class="form-control" name="memory" id="memory" value="<?php echo $scheduling->totalPhysicalMemory ?>" <?php if(!$editable) echo 'disabled' ?>>
+        <div class="input-group">
+            <input type="number"
+                   class="form-control"
+                   name="memory"
+                   id="memory"
+                   value="<?php echo $scheduling->totalPhysicalMemory ?>"
+                <?php if(!$editable) echo 'disabled' ?>>
+            <span class="input-group-addon">kB</span>
+        </div>
     </div>
 
     </div>
