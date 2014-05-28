@@ -17,8 +17,8 @@ $airavataclient = get_airavata_client();
 
 
 
-$echoResources = array('localhost', 'trestles.sdsc.edu', 'stampede.tacc.xsede.org', 'lonestar.tacc.utexas.edu');
-$wrfResources = array('trestles.sdsc.edu', 'stampede.tacc.xsede.org');
+$echoResources = array('localhost', 'trestles.sdsc.edu', 'lonestar.tacc.utexas.edu');
+$wrfResources = array('trestles.sdsc.edu');
 
 $appResources = array( 'Echo' => $echoResources, 'WRF' => $wrfResources);
 
