@@ -25,18 +25,14 @@ $appResources = array( 'Echo' => $echoResources, 'WRF' => $wrfResources);
 ?>
 
 <html>
-<head>
-    <title>PHP Reference Gateway</title>
-    
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-</head>
 
+<?php create_head(); ?>
 
 <body>
 
 <?php create_nav_bar(); ?>
 
-<div class="container">
+<div class="container" style="max-width: 750px;">
     
 
 

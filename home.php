@@ -11,12 +11,8 @@ verify_login();
 ?>
 
 <html>
-<head>
-    <title>PHP Reference Gateway</title>
-    
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-</head>
 
+<?php create_head(); ?>
 
 <body>
 

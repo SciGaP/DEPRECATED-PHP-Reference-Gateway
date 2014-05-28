@@ -691,7 +691,10 @@ function create_project_select($projectId = null, $editable = true)
     echo '</select>';
 }
 
-
+/**
+ * Create navigation bar
+ * Used for all pages
+ */
 function create_nav_bar()
 {
     $labels = array('Create project',
@@ -766,4 +769,22 @@ function create_nav_bar()
     </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
     </nav>';
+}
+
+/**
+ * Create head tag
+ * Used for all pages
+ */
+function create_head()
+{
+    echo'
+        <head>
+            <title>PHP Reference Gateway</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+            <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        </head>
+    ';
 }

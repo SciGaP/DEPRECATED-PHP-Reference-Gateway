@@ -9,18 +9,14 @@ connect_to_id_store();
 ?>
 
 <html>
-<head>
-    <title>PHP Reference Gateway</title>
-  
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-</head>
 
+<?php create_head(); ?>
 
 <body>
 
 <?php create_nav_bar(); ?>
     
-<div class="container">
+<div class="container" style="max-width: 330px;">
 
     <h3>Login</h3>
 
@@ -59,7 +55,7 @@ if (form_submitted())
             <label class="sr-only" for="password">Password</label>
             <input type="password" class="form-control"  name="password" placeholder="Password" required>
         </div>
-        <input name="Submit" type="submit" class="btn btn-primary" value="Submit">
+        <input name="Submit" type="submit" class="btn btn-primary btn-block" value="Sign in">
     </form>
 
 

@@ -19,21 +19,16 @@ $airavataclient = get_airavata_client();
 ?>
 
 <html>
-<head>
-    <title>PHP Reference Gateway</title>
-    
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-</head>
 
+<?php create_head(); ?>
 
 <body>
 
 <?php create_nav_bar(); ?>
 
-<div class="container">
+<div class="container" style="max-width: 750px">
     
-<h3>Create a new project</h3>
-
+<h1>Create a new project</h1>
 
 
 
@@ -67,6 +62,7 @@ elseif (isset($_POST['save']))
 
     <input name="save" type="submit" class="btn btn-primary" value="Save">
     <input name="clear" type="submit" class="btn btn-default" value="Clear">
+
 </form>
 
 </div>

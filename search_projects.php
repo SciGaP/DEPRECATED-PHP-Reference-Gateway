@@ -18,18 +18,15 @@ $airavataclient = get_airavata_client();
 
 ?>
 
-    <html>
-    <head>
-        <title>PHP Reference Gateway</title>
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    </head>
+<html>
 
+<?php create_head(); ?>
 
-    <body>
+<body>
 
-    <?php create_nav_bar(); ?>
+<?php create_nav_bar(); ?>
 
-    <div class="container">
+    <div class="container" style="max-width: 750px;">
 
         <h1>Search for Projects</h1>
 
@@ -156,8 +153,8 @@ $airavataclient = get_airavata_client();
 
     </div>
 
-    </body>
-    </html>
+</body>
+</html>
 
 
 
