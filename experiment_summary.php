@@ -169,7 +169,7 @@ elseif (isset($_POST['cancel']))
 function list_output_files($experiment)
 {
     $experimentOutputs = $experiment->experimentOutputs;
-    var_dump($experimentOutputs);
+    //var_dump($experimentOutputs);
 
     foreach ($experimentOutputs as $output)
     {
