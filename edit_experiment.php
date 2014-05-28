@@ -56,7 +56,7 @@ $scheduling = $userConfigData->computationalResourceScheduling;
 
 
 
-//var_dump($experiment->experimentInputs);
+var_dump($experiment);
 
 
 
@@ -99,6 +99,8 @@ if (isset($_POST['save']))
 <h1>Edit Experiment</h1>
 
 
+
+
 <form action="<?php echo $_SERVER['PHP_SELF'] . '?expId=' . $_GET['expId']?>" method="post" role="form" enctype="multipart/form-data">
     <div class="form-group">
         <label for="experiment-name">Experiment Name</label>
@@ -114,8 +116,7 @@ if (isset($_POST['save']))
         <textarea class="form-control"
                   name="experiment-description"
                   id="experiment-description"
-                <?php if(!$editable) echo 'disabled' ?>>
-            <?php echo $experiment->description ?>
+                <?php if(!$editable) echo 'disabled' ?>><?php echo $experiment->description ?>
         </textarea>
     </div>
     <div class="form-group">
