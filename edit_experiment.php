@@ -56,7 +56,7 @@ $scheduling = $userConfigData->computationalResourceScheduling;
 
 
 
-var_dump($experiment);
+//var_dump($experiment);
 
 
 
@@ -85,7 +85,7 @@ if (isset($_POST['save']))
 
     $experiment = get_experiment($_GET['expId']); // update local experiment variable
 
-    var_dump($experiment);
+    //var_dump($experiment);
 }
 
 
