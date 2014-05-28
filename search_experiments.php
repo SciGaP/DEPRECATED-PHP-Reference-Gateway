@@ -37,9 +37,9 @@ $airavataclient = get_airavata_client();
             <?php
 
             // set up options for select input
-            $values = array('experiment-name', 'experiment-description', 'resource', 'experiment-status');
-            $labels = array('Experiment Name', 'Experiment Description', 'Resource', 'Experiment Status');
-            $disabled = array('', '', 'disabled', 'disabled');
+            $values = array('experiment-name', 'experiment-description', 'application');
+            $labels = array('Experiment Name', 'Experiment Description', 'Application');
+            $disabled = array('', '', '');
 
             create_options($values, $labels, $disabled);
 
@@ -218,6 +218,9 @@ function get_search_results()
                 break;
             case 'experiment-description':
                 $experiments = $airavataclient->searchExperimentsByDesc($_SESSION['username'], $_POST['search-value']);
+                break;
+            case 'application':
+                $experiments = $airavataclient->searchExperimentsByApplication($_SESSION['username'], $_POST['search-value']);
                 break;
         }
     }
