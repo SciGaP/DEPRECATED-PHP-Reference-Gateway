@@ -68,67 +68,75 @@ if (isset($_POST['search']))
      * get results
      */
     $experiments = get_search_results();
+    var_dump($experiments[0]);
 
-
-    echo '
-    <table class="table">
-        <tr>
-            <th>Name</th>
-            <!--<th>Application</th>-->
-            <th>Status</th>
-            <th>Details</th>
-        </tr>
-    ';
-
-
-    foreach ($experiments as $experiment)
+    if (sizeof($experiments) == 0)
     {
-        $experimentStatus = $experiment->experimentStatus;
-        $experimentState = $experimentStatus->experimentState;
-        $experimentStatusString = ExperimentState::$__names[$experimentState];
-        $experimentTimeOfStateChange = $experimentStatus->timeOfStateChange;
+        print_warning_message('No results found. Please try again.');
+    }
+    else
+    {
+        echo '
+            <table class="table">
+                <tr>
+                    <th>Name</th>
+                    <th>Application</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+        ';
 
 
-
-        echo '<tr>';
-
-        echo '<td>';
-
-
-        switch ($experimentStatusString)
+        foreach ($experiments as $experiment)
         {
-            case 'SCHEDULED':
-            case 'LAUNCHED':
-            case 'EXECUTING':
-            case 'CANCELING':
-            case 'COMPLETED':
-                echo $experiment->name;
-                break;
-            default:
-                echo $experiment->name .
-                    ' <a href="edit_experiment.php?expId=' .
-                    $experiment->experimentID .
-                    '"><span class="glyphicon glyphicon-pencil"></span></a>';
-                break;
+            $experimentStatus = $experiment->experimentStatus;
+            $experimentState = $experimentStatus->experimentState;
+            $experimentStatusString = ExperimentState::$__names[$experimentState];
+            $experimentTimeOfStateChange = $experimentStatus->timeOfStateChange;
+
+
+            echo '<tr>';
+
+            echo '<td>';
+
+
+            switch ($experimentStatusString)
+            {
+                case 'SCHEDULED':
+                case 'LAUNCHED':
+                case 'EXECUTING':
+                case 'CANCELING':
+                case 'COMPLETED':
+                    echo $experiment->name;
+                    break;
+                default:
+                    echo $experiment->name .
+                        ' <a href="edit_experiment.php?expId=' .
+                        $experiment->experimentID .
+                        '"><span class="glyphicon glyphicon-pencil"></span></a>';
+                    break;
+            }
+
+
+
+            echo '</td>';
+
+            echo "<td>$experiment->applicationId</td>";
+
+
+
+            //echo '<td>' . $experimentStatusString . ' at ' . date("Y-m-d H:i:s", $experimentTimeOfStateChange) . '</td>';
+            echo '<td>' . $experimentStatusString . '</td>';
+
+            echo '<td><a href="experiment_summary.php?expId=' . $experiment->experimentID . '">Details</a></td>';
+
+            echo '</tr>';
         }
 
-
-
-        echo '</td>';
-
-        //echo "<td>$experiment->applicationId</td>";
-
-
-
-        //echo '<td>' . $experimentStatusString . ' at ' . date("Y-m-d H:i:s", $experimentTimeOfStateChange) . '</td>';
-        echo '<td>' . $experimentStatusString . '</td>';
-
-        echo '<td><a href="experiment_summary.php?expId=' . $experiment->experimentID . '">Details</a></td>';
-
-        echo '</tr>';
+        echo '</table>';
     }
 
-    echo '</table>';
+
 }
 
 
