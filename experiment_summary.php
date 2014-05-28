@@ -17,15 +17,6 @@ $airavataclient = get_airavata_client();
 
 
 
-$echoResources = array('localhost', 'trestles.sdsc.edu', 'stampede.tacc.xsede.org', 'lonestar.tacc.utexas.edu');
-$wrfResources = array('trestles.sdsc.edu', 'stampede.tacc.xsede.org');
-
-$appResources = array( 'SimpleEcho0' => $echoResources,
-    'SimpleEcho2' => $echoResources,
-    'SimpleEcho3' => $echoResources,
-    'SimpleEcho4' => $echoResources,
-    'WRF' => $wrfResources);
-
 ?>
 
 <html>
@@ -76,6 +67,20 @@ switch ($experimentStatusString)
         break;
     default:
         $editable = false;
+        break;
+}
+
+switch ($experimentStatusString)
+{
+    case 'CREATED':
+    case 'VALIDATED':
+    case 'SCHEDULED':
+    case 'LAUNCHED':
+    case 'EXECUTING':
+        $cancelable = true;
+        break;
+    default:
+        $cancelable = false;
         break;
 }
 
@@ -151,7 +156,7 @@ elseif (isset($_POST['cancel']))
     <form action="<?php echo $_SERVER['PHP_SELF'] . '?expId=' . $_GET['expId']?>" method="post" role="form">
         <div class="btn-toolbar">
             <input name="launch" type="submit" class="btn btn-primary" value="Launch" <?php if(!$editable) echo 'disabled'  ?>>
-            <input name="cancel" type="submit" class="btn btn-warning" value="Cancel" <?php if($editable) echo 'disabled'  ?>>
+            <input name="cancel" type="submit" class="btn btn-warning" value="Cancel" <?php if(!$cancelable) echo 'disabled'  ?>>
             <input name="clone" type="submit" class="btn btn-primary" value="Clone">
             <a href="edit_experiment.php?expId=<?php echo $experiment->experimentID; ?>" class="btn btn-default" role="button" <?php if(!$editable) echo 'disabled'  ?>>
                 Edit
