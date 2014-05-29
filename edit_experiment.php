@@ -207,15 +207,17 @@ if (isset($_POST['save']))
                class="form-control"
                name="node-count"
                id="node-count"
+               min="1"
                value="<?php echo $scheduling->nodeCount ?>"
             <?php if(!$editable) echo 'disabled' ?>>
     </div>
     <div class="form-group">
-        <label for="cpu-count">Total CPU Count</label>
+        <label for="cpu-count">Total Core Count</label>
         <input type="number"
                class="form-control"
                name="cpu-count"
                id="cpu-count"
+               min="1"
                value="<?php echo $scheduling->totalCPUCount ?>"
             <?php if(!$editable) echo 'disabled' ?>>
     </div>
@@ -225,6 +227,7 @@ if (isset($_POST['save']))
                class="form-control"
                name="threads"
                id="threads"
+               min="0"
                value="<?php echo $scheduling->numberOfThreads ?>"
             <?php if(!$editable) echo 'disabled' ?>>
     </div>
@@ -235,6 +238,7 @@ if (isset($_POST['save']))
                    class="form-control"
                    name="wall-time"
                    id="wall-time"
+                   min="0"
                    value="<?php echo $scheduling->wallTimeLimit ?>"
                 <?php if(!$editable) echo 'disabled' ?>>
             <span class="input-group-addon">minutes</span>
@@ -247,6 +251,7 @@ if (isset($_POST['save']))
                    class="form-control"
                    name="memory"
                    id="memory"
+                   min="0"
                    value="<?php echo $scheduling->totalPhysicalMemory ?>"
                 <?php if(!$editable) echo 'disabled' ?>>
             <span class="input-group-addon">kB</span>
