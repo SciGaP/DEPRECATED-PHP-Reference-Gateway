@@ -482,7 +482,17 @@ function list_input_files($experiment)
     {
         if ($input->type == DataType::URI)
         {
-            echo '<p><a href="' . $input->value . '">' . $input->key . '</a></p>';
+            $explode = explode('/', $input->value);
+            //echo '<p><a href="' . $input->value . '">' . $input->key . '</a></p>';
+            echo '<p><a href="' . EXPERIMENT_DATA_ROOT . $explode[sizeof($explode)-2] . '/' . $explode[sizeof($explode)-1] . '">' . $input->key . '</a></p>';
+            //echo $input->value . '<br>';
+            //echo str_replace(EXPERIMENT_DATA_ROOT_ABSOLUTE, EXPERIMENT_DATA_ROOT, $input->value) . '<br>';
+            //echo dirname($input->value) . '<br>';
+
+
+            //var_dump($explode);
+            //echo sizeof($explode) . '<br>';
+            //echo EXPERIMENT_DATA_ROOT . $explode[sizeof($explode)-2] . '/' . $explode[sizeof($explode)-1] . '<br>';
         }
         elseif ($input->type == DataType::STRING)
         {

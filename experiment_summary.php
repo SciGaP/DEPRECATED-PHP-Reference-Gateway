@@ -149,7 +149,7 @@ elseif (isset($_POST['cancel']))
         </tr>
         <tr>
             <td><strong>Outputs</strong></td>
-            <td><?php list_output_files($experiment); ?></td>
+            <td><?php if ($experimentStatusString == 'COMPLETED') list_output_files($experiment); ?></td>
         </tr>
     </table>
 

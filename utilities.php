@@ -12,7 +12,8 @@ const AIRAVATA_SERVER = 'gw111.iu.xsede.org';
 const AIRAVATA_PORT = 8930;
 const AIRAVATA_TIMEOUT = 20000;
 const EXPERIMENT_DATA_ROOT = '../experimentData/';
-const EXPERIMENT_DATA_ROOT_ABSOLUTE = '/var/www/experimentData/';
+//const EXPERIMENT_DATA_ROOT_ABSOLUTE = '/var/www/experimentData/';
+const EXPERIMENT_DATA_ROOT_ABSOLUTE = 'C:/wamp/www/experimentData/';
 
 //const USER_STORE = 'XML';
 const USER_STORE = 'WSO2';
