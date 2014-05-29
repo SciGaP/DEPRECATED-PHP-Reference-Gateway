@@ -263,7 +263,7 @@ function create_experiment()
 
         if ($expId)
         {
-            print_success_message("Experiment {$_POST['experiment-name']} created!");
+            print_success_message("Experiment {$_POST['experiment-name']} created!" . ' <a href="experiment_summary.php?expId=' . $expId . '">Go to experiment summary page</a>');
             //var_dump($airavataclient->getExperiment($expId));
         }
         else
