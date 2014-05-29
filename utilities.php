@@ -11,7 +11,7 @@ define('ROOT_DIR', __DIR__);
 const AIRAVATA_SERVER = 'gw111.iu.xsede.org';
 const AIRAVATA_PORT = 8930;
 const AIRAVATA_TIMEOUT = 20000;
-const EXPERIMENT_DATA_ROOT = '../experimentData/';
+const EXPERIMENT_DATA_ROOT = '/var/www/experimentData/';
 
 //const USER_STORE = 'XML';
 const USER_STORE = 'WSO2';
