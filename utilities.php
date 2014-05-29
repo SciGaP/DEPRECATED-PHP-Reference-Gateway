@@ -11,7 +11,8 @@ define('ROOT_DIR', __DIR__);
 const AIRAVATA_SERVER = 'gw111.iu.xsede.org';
 const AIRAVATA_PORT = 8930;
 const AIRAVATA_TIMEOUT = 20000;
-const EXPERIMENT_DATA_ROOT = '/var/www/experimentData/';
+const EXPERIMENT_DATA_ROOT = '../experimentData/';
+const EXPERIMENT_DATA_ROOT_ABSOLUTE = '/var/www/experimentData/';
 
 //const USER_STORE = 'XML';
 const USER_STORE = 'WSO2';
@@ -492,7 +493,13 @@ function assemble_experiment()
                         //$experimentInput->value = '/home/airavata/wrf/wrfbdy_d01';
                     }
 
-                    $experimentInput->value = $filePath;
+                    //echo $filePath . '<br>';
+                    //echo 'realpath: ' . realpath($filePath) . '<br>';
+                    //echo 'str_replace: ' . str_replace(EXPERIMENT_DATA_ROOT, EXPERIMENT_DATA_ROOT_ABSOLUTE, $filePath) . '<br>';
+                    //echo str_replace(dirname(realpath($filePath)), EXPERIMENT_DATA_ROOT, realpath($filePath)) . '<br>';
+
+                    //$experimentInput->value = $filePath;
+                    $experimentInput->value = str_replace(EXPERIMENT_DATA_ROOT, EXPERIMENT_DATA_ROOT_ABSOLUTE, $filePath);
                     $experimentInput->type = DataType::URI;
                     $experimentInputs[] = $experimentInput; // push into array
 
