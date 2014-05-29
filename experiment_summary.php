@@ -181,7 +181,7 @@ function list_output_files($experiment)
         if ($output->type == DataType::URI)
         {
             //echo '<p>' . $output->key .  ': <a href="' . $output->value . '">' . $output->value . '</a></p>';
-            echo '<p>' . $output->key .  ': <a href="' . str_replace(EXPERIMENT_DATA_ROOT_ABSOLUTE, EXPERIMENT_DATA_ROOT, $output->value) . '">' . str_replace(EXPERIMENT_DATA_ROOT_ABSOLUTE, EXPERIMENT_DATA_ROOT, $output->value) . '</a></p>';
+            echo '<p><a href="' . str_replace(EXPERIMENT_DATA_ROOT_ABSOLUTE, EXPERIMENT_DATA_ROOT, $output->value) . '">' . $output->key . '</a></p>';
         }
         elseif ($output->type == DataType::STRING)
         {
