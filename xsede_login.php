@@ -25,7 +25,7 @@ function pem2der($pem_data) {
   return $pem_data;
 }
 
-echo "file://".$pkeyfile;
+//echo "file://".$pkeyfile;
 $privkey = openssl_pkey_get_private("file://".$pkeyfile);
 //var_dump($privkey);
 
