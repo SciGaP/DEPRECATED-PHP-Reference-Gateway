@@ -50,10 +50,9 @@ foreach ($userProjects as $project)
 
     echo '<tr>';
 
-    echo '<th>Name</th>';
+    echo '<th>Name <small style="color:#999; font-weight:normal;">Click <span class="glyphicon glyphicon-pencil"></span> to edit</small></th>';
     echo '<th>Application</th>';
     echo '<th>Status</th>';
-    echo '<th>Details</th>';
 
     echo '</tr>';
 
@@ -96,9 +95,7 @@ foreach ($userProjects as $project)
 
 
         //echo '<td>' . $experimentStatusString . ' at ' . date("Y-m-d H:i:s", $experimentTimeOfStateChange) . '</td>';
-        echo '<td>' . $experimentStatusString . '</td>';
-
-        echo '<td><a href="experiment_summary.php?expId=' . $experiment->experimentID . '">Details</a></td>';
+        echo '<td><a href="experiment_summary.php?expId=' . $experiment->experimentID . '">' . $experimentStatusString . '</a></td>';
 
         echo '</tr>';
     }
