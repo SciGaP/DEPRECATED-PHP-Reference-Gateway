@@ -85,7 +85,7 @@ $airavataclient = get_airavata_client();
 
                     echo '<tr>';
 
-                    echo '<th>Name <small style="color:#999; font-weight:normal;">Click <span class="glyphicon glyphicon-pencil"></span> to edit</small></th>';
+                    echo '<th>Name <small class="text-muted" style="font-weight: normal">Click <span class="glyphicon glyphicon-pencil"></span> to edit</small></th>';
                     echo '<th>Application</th>';
                     echo '<th>Status</th>';
 
@@ -130,7 +130,34 @@ $airavataclient = get_airavata_client();
 
 
                         //echo '<td>' . $experimentStatusString . ' at ' . date("Y-m-d H:i:s", $experimentTimeOfStateChange) . '</td>';
-                        echo '<td><a href="experiment_summary.php?expId=' . $experiment->experimentID . '">' . $experimentStatusString . '</a></td>';
+
+
+                        switch ($experimentStatusString)
+                        {
+                            case 'CANCELING':
+                            case 'CANCELED':
+                            case 'UNKNOWN':
+                                $textClass = 'text-warning';
+                                break;
+                            case 'FAILED':
+                                $textClass = 'text-danger';
+                                break;
+                            case 'COMPLETED':
+                                $textClass = 'text-success';
+                                break;
+                            default:
+                                $textClass = 'text-info';
+                                break;
+                        }
+
+
+                        echo '<td><a class="' .
+                            $textClass .
+                            '" href="experiment_summary.php?expId=' .
+                            $experiment->experimentID .
+                            '">' .
+                            $experimentStatusString .
+                            '</a></td>';
 
                         echo '</tr>';
                     }
