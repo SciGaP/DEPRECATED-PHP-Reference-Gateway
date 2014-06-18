@@ -77,6 +77,7 @@ if (isset($_POST['search']))
     else
     {
         echo '
+            <div class="table-responsive">
             <table class="table">
                 <tr>
                     <th>Name <small class="text-muted" style="font-weight: normal">Click <span class="glyphicon glyphicon-pencil"></span> to edit</small></th>
@@ -157,7 +158,10 @@ if (isset($_POST['search']))
             echo '</tr>';
         }
 
-        echo '</table>';
+        echo '
+            </table>
+            </div>
+            ';
     }
 
 

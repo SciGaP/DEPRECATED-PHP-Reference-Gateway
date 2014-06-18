@@ -81,6 +81,7 @@ $airavataclient = get_airavata_client();
 
                     $experiments = get_experiments_in_project($project->projectID);
 
+                    echo '<div class="table-responsive">';
                     echo '<table class="table">';
 
                     echo '<tr>';
@@ -163,6 +164,7 @@ $airavataclient = get_airavata_client();
                     }
 
                     echo '</table>';
+                    echo '</div>';
                     echo '</div>';
                 }
             }

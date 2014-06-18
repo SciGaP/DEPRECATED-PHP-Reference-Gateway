@@ -46,6 +46,7 @@ foreach ($userProjects as $project)
 
     $experiments = get_experiments_in_project($project->projectID);
 
+    echo '<div class="table-responsive">';
     echo '<table class="table">';
 
     echo '<tr>';
@@ -128,6 +129,7 @@ foreach ($userProjects as $project)
     }
 
     echo '</table>';
+    echo '</div>';
     echo '</div>';
 }
 
