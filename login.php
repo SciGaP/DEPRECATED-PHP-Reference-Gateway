@@ -61,7 +61,7 @@ if (form_submitted())
 
 
 
-    <a href="xsede_login.php">XSEDE user? Log in with XSEDE credentials</a>
+    <!--<a href="xsede_login.php">XSEDE user? Log in with XSEDE credentials</a>-->
 </div>
 </body>
 </html>
