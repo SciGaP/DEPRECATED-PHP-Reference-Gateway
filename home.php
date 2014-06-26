@@ -30,13 +30,17 @@ verify_login();
         $email = 'admin@gw120.iu.xsede.org';
         $username = $_SESSION['username'];
 
-        if(!isset($_GET['tokenId']) && !isset($_SESSION['tokenId']))
+        if (isset($_SESSION['tokenId']))
+        {
+            echo '<p>XSEDE token active</p>';
+        }
+        elseif(!isset($_GET['tokenId']) && !isset($_SESSION['tokenId']))
         {
             header('Location: ' . $req_url . '?gatewayName=' . $gatewayName . '&email=' . $email . '&portalUserName=' . $username);
 
             echo '<p>no token</p>';
         }
-        else if(isset($_GET['tokenId']))
+        elseif(isset($_GET['tokenId']))
         {
             $_SESSION['tokenId'] = $_GET['tokenId'];
 
