@@ -18,11 +18,10 @@ connect_to_id_store();
     
 <div class="container" style="max-width: 330px;">
 
-    <h3>Login</h3>
-
-
-
-
+    <h3>
+        Login
+        <small><small> (Not registered? <a href="create_account.php">Create account</a>)</small></small>
+    </h3>
 
 <?php
 

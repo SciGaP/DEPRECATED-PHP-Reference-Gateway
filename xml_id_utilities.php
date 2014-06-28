@@ -94,7 +94,7 @@ class XmlIdUtilities implements IdUtilities
      * @param $password
      * @return mixed|void
      */
-    public function add_user($username, $password)
+    public function add_user($username, $password, $first_name, $last_name, $email, $organization)
     {
         global $db;
 

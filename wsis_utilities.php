@@ -96,10 +96,11 @@ class WSISUtilities implements IdUtilities{
      * @param $password
      * @return void
      */
-    public function add_user($username, $password) {
+    public function add_user($username, $password, $first_name, $last_name, $email, $organization) {
         try{
             $this->wsis_client->addUser($username, $password);
         } catch (Exception $ex) {
+            var_dump($ex);
             throw new Exception("Unable to add new user", 0, NULL);
         }        
     }

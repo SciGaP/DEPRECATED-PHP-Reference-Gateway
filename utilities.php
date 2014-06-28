@@ -15,7 +15,7 @@ const EXPERIMENT_DATA_ROOT = '../experimentData/';
 const EXPERIMENT_DATA_ROOT_ABSOLUTE = '/var/www/experimentData/';
 //const EXPERIMENT_DATA_ROOT_ABSOLUTE = 'C:/wamp/www/experimentData/';
 
-//const USER_STORE = 'XML';
+//const USER_STORE = 'XML','USER_API';
 const USER_STORE = 'WSO2';
 
 
@@ -30,6 +30,9 @@ switch (USER_STORE)
         break;
     case 'XML':
         require_once 'xml_id_utilities.php'; // XML user database
+        break;
+    case 'USER_API':
+        require_once 'userapi_utilities.php'; // Airavata UserAPI
         break;
 }
 
@@ -194,6 +197,9 @@ function connect_to_id_store()
         case 'XML':
             $idStore = new XmlIdUtilities(); // XML user database
             break;
+        case 'USER_API':
+            $idStore = new UserAPIUtilities(); // Airavata UserAPI
+            break;
     }
 
     try
@@ -220,6 +226,7 @@ function get_airavata_client()
 
     $transport = new TSocket(AIRAVATA_SERVER, AIRAVATA_PORT);
     $transport->setRecvTimeout(AIRAVATA_TIMEOUT);
+    $transport->setSendTimeout(AIRAVATA_TIMEOUT);
 
     $protocol = new TBinaryProtocol($transport);
     $transport->open();
