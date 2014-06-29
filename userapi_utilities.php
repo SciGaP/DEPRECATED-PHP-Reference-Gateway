@@ -3,7 +3,7 @@
  * Basic Airavata UserAPI utility functions
  */
 /**
- * import Thrift and Airavata
+ * Import Thrift and Airavata
  */
 $GLOBALS['THRIFT_ROOT'] = './lib/Thrift/';
 require_once $GLOBALS['THRIFT_ROOT'] . 'Transport/TTransport.php';
@@ -112,18 +112,104 @@ class UserAPIUtilities implements IdUtilities{
      * @param $password
      * @return void
      */
-    public function add_user($username, $password, $first_name, $last_name, $email, $organization) {
+    public function add_user($username, $password, $first_name, $last_name, $email, $organization,
+                             $address, $country,$telephone, $mobile, $im, $url) {
         try{
             $profile = new UserProfile();
             $profile->firstName = $first_name;
             $profile->lastName = $last_name;
             $profile->emailAddress = $email;
             $profile->organization = $organization;
+            $profile->address = $address;
+            $profile->country = $country;
+            $profile->telephone = $telephone;
+            $profile->mobile = $mobile;
+            $profile->im = $im;
+            $profile->url = $url;
 
             $this->userapi_client->createNewUser($username, $password, $profile, $_SESSION['USER_API_TOKEN']);
         } catch (Exception $ex) {
-            var_dump($ex);
             throw new Exception("Unable to add new user", 0, NULL);
+        }
+    }
+
+    /**
+     * Get the user profile
+     * @param $username
+     * @return mixed|void
+     */
+    public function get_user_profile($username)
+    {
+        try{
+            $profile_obj = $this->userapi_client->getUserProfile($username, $_SESSION['USER_API_TOKEN']);
+            $profile_arr = array();
+            $profile_arr['first_name'] = $profile_obj->firstName;
+            $profile_arr['last_name'] = $profile_obj->lastName;
+            $profile_arr['email_address'] = $profile_obj->emailAddress;
+            $profile_arr['organization'] = $profile_obj->organization;
+            $profile_arr['address'] = $profile_obj->address;
+            $profile_arr['country'] = $profile_obj->country;
+            $profile_arr['telephone'] = $profile_obj->telephone;
+            $profile_arr['mobile'] = $profile_obj->mobile;
+            $profile_arr['im'] = $profile_obj->im;
+            $profile_arr['url'] = $profile_obj->url;
+            return $profile_arr;
+        } catch (Exception $ex) {
+            throw new Exception("Unable to get user profile", 0, NULL);
+        }
+    }
+
+    /**
+     * Update the user profile
+     *
+     * @param $username
+     * @param $first_name
+     * @param $last_name
+     * @param $email
+     * @param $organization
+     * @param $address
+     * @param $country
+     * @param $telephone
+     * @param $mobile
+     * @param $im
+     * @param $url
+     * @return mixed
+     */
+    public function update_user_profile($username, $first_name, $last_name, $email, $organization, $address,
+                                        $country, $telephone, $mobile, $im, $url)
+    {
+        try{
+            $profile = new UserProfile();
+            $profile->firstName = $first_name;
+            $profile->lastName = $last_name;
+            $profile->emailAddress = $email;
+            $profile->organization = $organization;
+            $profile->address = $address;
+            $profile->country = $country;
+            $profile->telephone = $telephone;
+            $profile->mobile = $mobile;
+            $profile->im = $im;
+            $profile->url = $url;
+            $this->userapi_client->updateUserProfile($username, $profile, $_SESSION['USER_API_TOKEN']);
+        } catch (Exception $ex) {
+            throw new Exception("Unable to update user profile", 0, NULL);
+        }
+    }
+
+    /**
+     * Function to update user password
+     *
+     * @param $username
+     * @param $current_password
+     * @param $new_password
+     * @return mixed
+     */
+    public function change_password($username, $current_password, $new_password)
+    {
+        try{
+            $this->userapi_client->updateUserPassword($username, $new_password, $current_password, $_SESSION['USER_API_TOKEN']);
+        } catch (Exception $ex) {
+            throw new Exception("Unable to update user password", 0, NULL);
         }
     }
 }

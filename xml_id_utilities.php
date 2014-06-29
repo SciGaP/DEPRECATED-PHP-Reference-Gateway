@@ -94,7 +94,8 @@ class XmlIdUtilities implements IdUtilities
      * @param $password
      * @return mixed|void
      */
-    public function add_user($username, $password, $first_name, $last_name, $email, $organization)
+    public function add_user($username, $password, $first_name, $last_name, $email, $organization,
+            $address, $country,$telephone, $mobile, $im, $url)
     {
         global $db;
 
@@ -112,4 +113,49 @@ class XmlIdUtilities implements IdUtilities
         $dom->loadXML($db->asXML());
         $dom->save('users.xml');
     }
-} 
+
+    /**
+     * Get the user profile
+     * @param $username
+     * @return mixed|void
+     */
+    public function get_user_profile($username)
+    {
+        // TODO: Implement get_user_profile() method.
+    }
+
+    /**
+     * Update the user profile
+     *
+     * @param $username
+     * @param $first_name
+     * @param $last_name
+     * @param $email
+     * @param $organization
+     * @param $address
+     * @param $country
+     * @param $telephone
+     * @param $mobile
+     * @param $im
+     * @param $url
+     * @return mixed
+     */
+    public function update_user_profile($username, $first_name, $last_name, $email, $organization, $address,
+                                        $country, $telephone, $mobile, $im, $url)
+    {
+        // TODO: Implement update_user_profile() method.
+    }
+
+    /**
+     * Function to update user password
+     *
+     * @param $username
+     * @param $current_password
+     * @param $new_password
+     * @return mixed
+     */
+    public function change_password($username, $current_password, $new_password)
+    {
+        // TODO: Implement change_password() method.
+    }
+}

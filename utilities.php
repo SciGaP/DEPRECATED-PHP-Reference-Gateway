@@ -15,7 +15,7 @@ const EXPERIMENT_DATA_ROOT = '../experimentData/';
 const EXPERIMENT_DATA_ROOT_ABSOLUTE = '/var/www/experimentData/';
 //const EXPERIMENT_DATA_ROOT_ABSOLUTE = 'C:/wamp/www/experimentData/';
 
-//const USER_STORE = 'XML','USER_API';
+//const USER_STORE = 'WSO2','XML','USER_API';
 const USER_STORE = 'WSO2';
 
 
@@ -787,7 +787,8 @@ function create_nav_bar()
 
     if (isset($_SESSION['username']))
     {
-        echo '<li><a href="home.php">' . $_SESSION['username'] . '</a></li>';
+        (USER_STORE === "USER_API" && !isset($_SESSION['excede_login'])) ? $link = "user_profile.php" : $link = "";
+        echo '<li><a href="' . $link . '">' . $_SESSION['username'] . '</a></li>';
     }
 
     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'])

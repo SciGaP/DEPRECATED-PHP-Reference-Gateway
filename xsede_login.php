@@ -86,7 +86,7 @@ try {
   //chmod($x509userfile, 0600);
   $_SESSION['username']=$username;
   $_SESSION['loggedin']=true;
-
+  $_SESSION['excede_login'] = true;
   header('Location: /PHP-Reference-Gateway/home.php');
 
 } catch(OAuthException $E) { 
