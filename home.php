@@ -32,19 +32,27 @@ verify_login();
 
         if (isset($_SESSION['tokenId']))
         {
-            echo '<p>XSEDE token active</p>';
+            print_info_message('XSEDE token currently active. All experiments launched during this session will use your personal allocation.');
         }
         elseif(!isset($_GET['tokenId']) && !isset($_SESSION['tokenId']))
         {
-            header('Location: ' . $req_url . '?gatewayName=' . $gatewayName . '&email=' . $email . '&portalUserName=' . $username);
+            echo '<p>Currently using community allocation. Click <a href="' .
+                $req_url .
+                '?gatewayName=' . $gatewayName .
+                '&email=' . $email .
+                '&portalUserName=' . $username .
+                '">here</a> to use your personal allocation for this session.</p>';
 
-            echo '<p>no token</p>';
+            //header('Location: ' . $req_url . '?gatewayName=' . $gatewayName . '&email=' . $email . '&portalUserName=' . $username);
+
+            //echo '<p>no token</p>';
         }
         elseif(isset($_GET['tokenId']))
         {
             $_SESSION['tokenId'] = $_GET['tokenId'];
 
-            echo '<p>token = ' . $_SESSION['tokenId'] . '</p>';
+            print_success_message('Received XSEDE token!' .
+                '<br>All experiments launched during this session will use your personal allocation.');
         }
     ?>
 

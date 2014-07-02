@@ -108,6 +108,15 @@ function print_error_message($message)
 }
 
 /**
+ * Print info message
+ * @param $message
+ */
+function print_info_message($message)
+{
+    echo '<div class="alert alert-info">' . $message . '</div>';
+}
+
+/**
  * Redirect to the given url
  * @param $url
  */
@@ -239,7 +248,9 @@ function launch_experiment($expId)
 
     try
     {
-        $airavataclient->launchExperiment($expId, 'airavataToken');
+        $token = isset($_SESSION['tokenId'])? $_SESSION['tokenId'] : 'airavataToken';
+
+        $airavataclient->launchExperiment($expId, $token);
 
         print_success_message("Experiment launched!");
     }
