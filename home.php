@@ -30,33 +30,102 @@ verify_login();
         $email = 'admin@gw120.iu.xsede.org';
         $username = $_SESSION['username'];
 
-        if (isset($_SESSION['tokenId']))
-        {
-            print_info_message('XSEDE token currently active. All experiments launched during this session will use your personal allocation.');
-        }
-        elseif(!isset($_GET['tokenId']) && !isset($_SESSION['tokenId']))
-        {
-            echo '<p>Currently using community allocation. Click <a href="' .
-                $req_url .
-                '?gatewayName=' . $gatewayName .
-                '&email=' . $email .
-                '&portalUserName=' . $username .
-                '">here</a> to use your personal allocation for this session.</p>';
 
-            //header('Location: ' . $req_url . '?gatewayName=' . $gatewayName . '&email=' . $email . '&portalUserName=' . $username);
 
-            //echo '<p>no token</p>';
-        }
-        elseif(isset($_GET['tokenId']))
+        if($username == 'admin1') // temporary hard-coded admin user. will replace with admin role in future
         {
-            $_SESSION['tokenId'] = $_GET['tokenId'];
+            try
+            {
+                open_tokens_file($tokenFilePath);
+            }
+            catch (Exception $e)
+            {
+                print_error_message($e->getMessage());
+            }
 
-            print_success_message('Received XSEDE token!' .
-                '<br>All experiments launched during this session will use your personal allocation.');
+
+            if(isset($_GET['tokenId']))
+            {
+                try
+                {
+                    write_new_token($_GET['tokenId']);
+
+                    print_success_message('Received new XSEDE token ' . $tokenFile->tokenId .
+                        '! Click <a href="' . $req_url .
+                        '?gatewayName=' . $gatewayName .
+                        '&email=' . $email .
+                        '&portalUserName=' . $username .
+                        '">here</a> to fetch a new token.');
+                }
+                catch (Exception $e)
+                {
+                    print_error_message($e->getMessage());
+                }
+            }
+            else
+            {
+                print_info_message('Community token currently set to ' . $tokenFile->tokenId .
+                    '. Click <a href="' . $req_url .
+                    '?gatewayName=' . $gatewayName .
+                    '&email=' . $email .
+                    '&portalUserName=' . $username .
+                    '">here</a> to fetch a new token.');
+            }
         }
+        else // standard user
+        {
+            if (isset($_SESSION['tokenId']))
+            {
+                print_info_message('XSEDE token currently active.
+                    All experiments launched during this session will use your personal allocation.');
+            }
+            elseif(!isset($_GET['tokenId']) && !isset($_SESSION['tokenId']))
+            {
+                print_info_message('Currently using community allocation. Click <a href="' .
+                    $req_url .
+                    '?gatewayName=' . $gatewayName .
+                    '&email=' . $email .
+                    '&portalUserName=' . $username .
+                    '">here</a> to use your personal allocation for this session.');
+            }
+            elseif(isset($_GET['tokenId']))
+            {
+                $_SESSION['tokenId'] = $_GET['tokenId'];
+
+                print_success_message('Received XSEDE token!' .
+                    '<br>All experiments launched during this session will use your personal allocation.');
+            }
+        }
+
+
     ?>
 
 </div>
 </body>
 </html>
 
+<?php
+
+
+
+/**
+ * Write the new token to the XML file
+ * @param $tokenId
+ */
+function write_new_token($tokenId)
+{
+    global $tokenFile;
+    global $tokenFilePath;
+
+    // write new tokenId to tokens file
+    $tokenFile->tokenId = $tokenId;
+
+    //Format XML to save indented tree rather than one line
+    $dom = new DOMDocument('1.0');
+    $dom->preserveWhiteSpace = false;
+    $dom->formatOutput = true;
+    $dom->loadXML($tokenFile->asXML());
+    $dom->save($tokenFilePath);
+}
+
+?>
