@@ -43,7 +43,7 @@ $project = get_project($experiment->projectID);
 $experimentStatus = $experiment->experimentStatus;
 $experimentState = $experimentStatus->experimentState;
 $experimentStatusString = ExperimentState::$__names[$experimentState];
-$experimentTimeOfStateChange = $experimentStatus->timeOfStateChange;
+$experimentTimeOfStateChange = date('Y-m-d H:i:s', $experimentStatus->timeOfStateChange/1000); // divide by 1000 since timeOfStateChange is in ms
 
 
 $userConfigData = $experiment->userConfigurationData;

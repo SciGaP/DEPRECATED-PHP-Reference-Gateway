@@ -53,6 +53,7 @@ foreach ($userProjects as $project)
 
     echo '<th>Name <small class="text-muted" style="font-weight: normal">Click <span class="glyphicon glyphicon-pencil"></span> to edit</small></th>';
     echo '<th>Application</th>';
+    echo '<th>Time</th>';
     echo '<th>Status</th>';
 
     echo '</tr>';
@@ -62,7 +63,7 @@ foreach ($userProjects as $project)
         $experimentStatus = $experiment->experimentStatus;
         $experimentState = $experimentStatus->experimentState;
         $experimentStatusString = ExperimentState::$__names[$experimentState];
-        $experimentTimeOfStateChange = $experimentStatus->timeOfStateChange;
+        $experimentTimeOfStateChange = date('Y-m-d H:i:s', $experimentStatus->timeOfStateChange/1000);// divide by 1000 since timeOfStateChange is in ms
 
 
         echo '<tr>';
@@ -95,7 +96,7 @@ foreach ($userProjects as $project)
 
 
 
-        //echo '<td>' . $experimentStatusString . ' at ' . date("Y-m-d H:i:s", $experimentTimeOfStateChange) . '</td>';
+        echo '<td>' . $experimentTimeOfStateChange . '</td>';
 
 
         switch ($experimentStatusString)
@@ -117,12 +118,9 @@ foreach ($userProjects as $project)
         }
 
 
-        echo '<td><a class="' .
-            $textClass .
-            '" href="experiment_summary.php?expId=' .
-            $experiment->experimentID .
-            '">' .
-            $experimentStatusString .
+        echo '<td><a class="' . $textClass .
+            '" href="experiment_summary.php?expId=' . $experiment->experimentID .
+            '">' . $experimentStatusString .
             '</a></td>';
 
         echo '</tr>';

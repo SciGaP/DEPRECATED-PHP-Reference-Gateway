@@ -82,6 +82,7 @@ if (isset($_POST['search']))
                 <tr>
                     <th>Name <small class="text-muted" style="font-weight: normal">Click <span class="glyphicon glyphicon-pencil"></span> to edit</small></th>
                     <th>Application</th>
+                    <th>Time</th>
                     <th>Status</th>
                 </tr>
         ';
@@ -92,7 +93,7 @@ if (isset($_POST['search']))
             $experimentStatus = $experiment->experimentStatus;
             $experimentState = $experimentStatus->experimentState;
             $experimentStatusString = ExperimentState::$__names[$experimentState];
-            $experimentTimeOfStateChange = $experimentStatus->timeOfStateChange;
+            $experimentTimeOfStateChange = date('Y-m-d H:i:s', $experimentStatus->timeOfStateChange/1000);// divide by 1000 since timeOfStateChange is in ms
 
 
             echo '<tr>';
@@ -125,7 +126,7 @@ if (isset($_POST['search']))
 
 
 
-            //echo '<td>' . $experimentStatusString . ' at ' . date("Y-m-d H:i:s", $experimentTimeOfStateChange) . '</td>';
+            echo '<td>' . $experimentTimeOfStateChange . '</td>';
 
 
             switch ($experimentStatusString)
