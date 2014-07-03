@@ -64,6 +64,7 @@ require_once $GLOBALS['THRIFT_ROOT'] . 'StringFunc/Core.php';
 
 $GLOBALS['AIRAVATA_ROOT'] = './lib/Airavata/';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/Airavata.php';
+require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/AppCatalog/ApplicationCatalogAPI.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'Model/Workspace/Experiment/Types.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'Model/Workspace/Types.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/Error/Types.php';
@@ -71,6 +72,7 @@ require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/Error/Types.php';
 require_once './lib/AiravataClientFactory.php';
 
 use Airavata\API\AiravataClient;
+use Airavata\API\AppCatalog\ApplicationCatalogAPIClient;
 use Airavata\API\Error\InvalidRequestException;
 use Airavata\API\Error\AiravataClientException;
 use Airavata\API\Error\AiravataSystemException;
@@ -253,6 +255,19 @@ function get_airavata_client()
 }
 
 
+function get_appcat_client()
+{
+    $transport = new TSocket(AIRAVATA_SERVER, AIRAVATA_PORT);
+    $transport->setRecvTimeout(AIRAVATA_TIMEOUT);
+    $transport->setSendTimeout(AIRAVATA_TIMEOUT);
+
+    $protocol = new TBinaryProtocol($transport);
+    $transport->open();
+
+    return new ApplicationCatalogAPIClient($protocol);
+}
+
+
 /**
  * Launch the experiment with the given ID
  * @param $expId
@@ -329,6 +344,42 @@ function get_all_user_projects($username)
 
     return $userProjects;
 }
+
+
+
+
+
+
+
+function get_all_applications()
+{
+    global $appCatClient;
+    $applications = null;
+
+    try
+    {
+        $applications = $appCatClient->listApplicationInterfaceIds();
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException: ' . $ire->getMessage(). '\n');
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('Airavata System Exception: ' . $ace->getMessage().'\n');
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('Airavata System Exception: ' . $ase->getMessage().'\n');
+    }
+
+    return $applications;
+}
+
+
+
+
+
 
 /**
  * Get the experiment with the given ID
@@ -761,6 +812,45 @@ function create_project_select($projectId = null, $editable = true)
 
     echo '</select>';
 }
+
+
+
+
+
+
+
+
+
+
+
+function create_application_select($id = null, $editable = true)
+{
+    global $appCatClient;
+
+    $editable? $disabled = '' : $disabled = 'disabled';
+
+    echo '<select class="form-control" name="application" id="application" required ' . $disabled . '>';
+
+    $applicationIds = get_all_applications();
+
+    foreach ($applicationIds as $applicationId)
+    {
+        $interface = $appCatClient->getApplicationInterface($applicationId);
+
+        $selected = ($applicationId == $id) ? 'selected' : '';
+
+        echo '<option value="' . $applicationId . '" ' . $selected . '>' . $interface->applicationName . '</option>';
+    }
+
+    echo '</select>';
+}
+
+
+
+
+
+
+
 
 /**
  * Create navigation bar

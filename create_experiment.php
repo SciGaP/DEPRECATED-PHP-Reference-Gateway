@@ -15,12 +15,31 @@ connect_to_id_store();
 verify_login();
 
 $airavataclient = get_airavata_client();
+$appCatClient = get_appcat_client();
 
 
 $echoResources = array('localhost', 'trestles.sdsc.edu', 'lonestar.tacc.utexas.edu');
 $wrfResources = array('trestles.sdsc.edu');
 
 $appResources = array('Echo' => $echoResources, 'WRF' => $wrfResources);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -71,6 +90,8 @@ if (isset($_POST['save']) || isset($_POST['launch']))
         $project = $_POST['project'];
         $application = $_POST['application'];
 
+        $interface = $appCatClient->getApplicationInterface($_POST['application']);
+
         // ugly hack until app catalog is in place
         $echo = ($application == 'Echo')? ' selected' : '';
         $wrf = ($application == 'WRF')? ' selected' : '';
@@ -110,13 +131,11 @@ if (isset($_POST['save']) || isset($_POST['launch']))
     echo '
     </div>
     <div class="form-group">
-        <label for="application">Application</label>
-        <select class="form-control" name="application" id="application"' . $disabled . '>
-            <option value="Echo"' . $echo . '>Echo</option>
-            <option value="WRF"' . $wrf . '>WRF</option>
-        </select>
-    </div>
-    ';
+        <label for="application">Application</label>';
+
+        create_application_select($application, !$disabled);
+
+    echo '</div>';
 
 
 
@@ -141,30 +160,59 @@ if (isset($_POST['save']) || isset($_POST['launch']))
 
 
 
-        switch ($_POST['application'])
+
+
+
+
+
+        $inputs = $interface->applicationInputs;
+
+        foreach ($inputs as $input)
         {
-            case 'Echo':
-                echo '<div class="form-group">
-                    <label class="sr-only" for="experiment-input">Text to echo</label>
-                    <input type="text" class="form-control" name="experiment-input" id="experiment-input" placeholder="Text to echo" required>
+            switch ($input-type)
+            {
+                case 'STRING':
+                    echo '<div class="form-group">
+                    <label class="sr-only" for="experiment-input">' . $input->name . '</label>
+                    <input type="text" class="form-control" name="' . $input->name .
+                        '" id="' . $input->name .
+                        '" value="' . $input->value .
+                        '" placeholder="' . $input->userFriendlyDescription . '" required>
                     </div>';
-                break;
-            case 'WRF':
-                echo '<div class="form-group">
-                        <label for="namelist">Namelist</label>
-                        <input type="file" name="namelist" id="namelist" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="model-init">Model initialization data</label>
-                        <input type="file" name="model-init" id="model-init" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="bounds">Forecast lateral boundary conditions</label>
-                        <input type="file" name="bounds" id="bounds" required>
-                    </div>
-                    ';
-                break;
+                    break;
+                case 'INTEGER':
+                case 'FLOAT':
+                    echo '<div class="form-group">
+                    <label class="sr-only" for="experiment-input">' . $input->name . '</label>
+                    <input type="number" class="form-control" name="' . $input->name .
+                        '" id="' . $input->name .
+                        '" value="' . $input->value .
+                        '" placeholder="' . $input->userFriendlyDescription . '" required>
+                    </div>';
+                    break;
+                case 'URI':
+                    echo '<div class="form-group">
+                    <label class="sr-only" for="experiment-input">' . $input->name . '</label>
+                    <input type="file" class="form-control" name="' . $input->name .
+                        '" id="' . $input->name .
+                        '" placeholder="' . $input->userFriendlyDescription . '" required>
+                    </div>';
+                    break;
+            }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -177,10 +225,13 @@ if (isset($_POST['save']) || isset($_POST['launch']))
         <select class="form-control" name="compute-resource" id="compute-resource">';
 
 
-            foreach ($appResources[$_POST['application']] as $resource)
-            {
-                echo '<option value="' . $resource . '">' . $resource . '</option>';
-            }
+
+
+        foreach ($interface->applicationDeployments as $deployment)
+        {
+            echo '<option value="' . $deployment->computeResourceDescription->computeResourceId . '">' .
+                $deployment->computeResourceDescription->hostName . '</option>';
+        }
 
 
 
@@ -263,7 +314,8 @@ function create_experiment()
 
         if ($expId)
         {
-            print_success_message("Experiment {$_POST['experiment-name']} created!" . ' <a href="experiment_summary.php?expId=' . $expId . '">Go to experiment summary page</a>');
+            print_success_message("Experiment {$_POST['experiment-name']} created!" .
+                ' <a href="experiment_summary.php?expId=' . $expId . '">Go to experiment summary page</a>');
             //var_dump($airavataclient->getExperiment($expId));
         }
         else
