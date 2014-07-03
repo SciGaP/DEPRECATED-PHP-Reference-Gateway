@@ -20,6 +20,11 @@ const USER_STORE = 'WSO2';
 
 
 
+$tokenFilePath = 'tokens.xml';
+$tokenFile = null;
+
+
+
 /**
  * Import user store utilities
  */
@@ -108,6 +113,15 @@ function print_warning_message($message)
 function print_error_message($message)
 {
     echo '<div class="alert alert-danger">' . $message . '</div>';
+}
+
+/**
+ * Print info message
+ * @param $message
+ */
+function print_info_message($message)
+{
+    echo '<div class="alert alert-info">' . $message . '</div>';
 }
 
 /**
@@ -243,12 +257,23 @@ function get_airavata_client()
 function launch_experiment($expId)
 {
     global $airavataclient;
+    global $tokenFilePath;
+    global $tokenFile;
 
     try
     {
-        $airavataclient->launchExperiment($expId, 'airavataToken');
+        open_tokens_file($tokenFilePath);
 
-        print_success_message("Experiment launched!");
+        $communityToken = $tokenFile->tokenId;
+
+
+        $token = isset($_SESSION['tokenId'])? $_SESSION['tokenId'] : $communityToken;
+
+        $airavataclient->launchExperiment($expId, $token);
+
+        $tokenString = isset($_SESSION['tokenId'])? 'personal' : 'community';
+
+        print_success_message('Experiment launched using ' . $tokenString . ' allocation!');
     }
     catch (InvalidRequestException $ire)
     {
@@ -265,6 +290,10 @@ function launch_experiment($expId)
     catch (AiravataSystemException $ase)
     {
         print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+    }
+    catch (Exception $e)
+    {
+        print_error_message('Exception!<br><br>' . $e->getMessage());
     }
 }
 
@@ -827,4 +856,30 @@ function create_head()
             <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
         </head>
     ';
+}
+
+
+/**
+ * Open the XML file containing the community token
+ * @param $tokenFilePath
+ * @throws Exception
+ */
+function open_tokens_file($tokenFilePath)
+{
+    global $tokenFile;
+
+    if (file_exists($tokenFilePath))
+    {
+        $tokenFile = simplexml_load_file($tokenFilePath);
+    }
+    else
+    {
+        throw new Exception('Error: Cannot connect to tokens database!');
+    }
+
+
+    if (!$tokenFile)
+    {
+        throw new Exception('Error: Cannot open tokens database!');
+    }
 }

@@ -64,6 +64,7 @@ class XmlIdUtilities implements IdUtilities
     /**
      * Authenticate the user given username and password.
      * @param $username
+     * @param $password
      * @return int|mixed
      */
     public function authenticate($username, $password)
