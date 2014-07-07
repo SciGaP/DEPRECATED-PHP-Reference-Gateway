@@ -827,7 +827,7 @@ function create_application_select($id = null, $editable = true)
 {
     global $appCatClient;
 
-    $editable? $disabled = '' : $disabled = 'disabled';
+    $disabled = $editable? '' : 'disabled';
 
     echo '<select class="form-control" name="application" id="application" required ' . $disabled . '>';
 
