@@ -95,6 +95,53 @@ verify_login();
                 print_success_message('Received XSEDE token!' .
                     '<br>All experiments launched during this session will use your personal allocation.');
             }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            echo '<script type="text/javascript"
+                src="https://gateways.atlassian.net/s/31280375aecc888d5140f63e1dc78a93-T/en_USmlc07/6328/46/1.4.13/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=39f1242f"></script>';
+
+            echo '<script type="text/javascript">
+                    window.ATL_JQ_PAGE_PROPS = $.extend(window.ATL_JQ_PAGE_PROPS, {
+
+
+                    // ==== custom trigger function ====
+                    triggerFunction : function( showCollectorDialog ) {
+                        $("#feedback-button").on( "click", function(e) {
+                            e.preventDefault();
+                            showCollectorDialog();
+                        });
+
+                        // add any other custom triggers for the issue collector here
+                    }
+
+                });
+
+                </script>';
+
+            echo '<a href="#" id="feedback-button" class="btn btn-primary btn-large">Report feedback</a>';
+
+
+
+
+
+
+
+
+
         }
 
 
