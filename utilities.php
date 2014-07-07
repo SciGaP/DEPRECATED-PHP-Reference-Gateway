@@ -765,16 +765,24 @@ function create_project_select($projectId = null, $editable = true)
  */
 function create_nav_bar()
 {
-    $labels = array('Create project',
-        'Create experiment',
-        'Browse',
-        'Search experiments',
-        'Search projects');
-    $urls = array('create_project.php',
-        'create_experiment.php',
-        'browse_experiments.php',
-        'search_experiments.php',
-        'search_projects.php');
+    $menus = array
+    (
+        'Project' => array
+        (
+            array('label' => 'Create Project', 'url' => 'create_project.php'),
+            array('label' => 'Search Projects', 'url' => 'search_projects.php')
+        ),
+        'Experiment' => array
+        (
+            array('label' => 'Create Experiment', 'url' => 'create_experiment.php'),
+            array('label' => 'Search Experiments', 'url' => 'search_experiments.php')
+        ),
+        'Help' => array
+        (
+            array('label' => 'Report Issue', 'url' => '#'),
+            array('label' => 'About Airavata', 'url' => '#')
+        )
+    );
 
     $selfExplode = explode('/', $_SERVER['PHP_SELF']);
 
@@ -795,15 +803,40 @@ function create_nav_bar()
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">';
 
-    for ($i = 0; $i < sizeof($labels); $i++)
+
+    foreach ($menus as $label => $options)
     {
-        $urls[$i] == $selfExplode[2]? $active = ' class="active"' : $active = '';
-
-
         isset($_SESSION['loggedin']) && $_SESSION['loggedin']? $disabled = '' : $disabled = ' class="disabled"';
 
-        echo '<li' . $active . $disabled . '><a href="' . $urls[$i] . '">' . $labels[$i] . '</a></li>';
+        echo '<li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">' . $label . '<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">';
+
+        foreach ($options as $option)
+        {
+            $option['url'] == $selfExplode[2]? $active = ' class="active"' : $active = '';
+
+            echo '<li' . $active . $disabled . '><a href="' . $option['url'] . '">' . $option['label'] . '</a></li>';
+        }
+
+        echo '</ul>
+        </li>';
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -816,7 +849,7 @@ function create_nav_bar()
 
     if (isset($_SESSION['username']))
     {
-        (USER_STORE === "USER_API" && !isset($_SESSION['excede_login'])) ? $link = "user_profile.php" : $link = "";
+        (USER_STORE === "USER_API" && !isset($_SESSION['excede_login'])) ? $link = "user_profile.php" : $link = "home.php";
         echo '<li><a href="' . $link . '">' . $_SESSION['username'] . '</a></li>';
     }
 
