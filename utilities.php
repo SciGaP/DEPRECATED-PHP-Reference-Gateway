@@ -19,7 +19,9 @@ const EXPERIMENT_DATA_ROOT_ABSOLUTE = '/var/www/experimentData/';
 const USER_STORE = 'WSO2';
 
 
-
+$req_url = 'https://gw111.iu.xsede.org:8443/credential-store/acs-start-servlet';
+$gatewayName = 'PHP-Reference-Gateway';
+$email = 'admin@gw120.iu.xsede.org';
 $tokenFilePath = 'tokens.xml';
 $tokenFile = null;
 
@@ -192,7 +194,7 @@ function verify_login()
     else
     {
         print_error_message('User is not logged in!');
-        redirect('login.php');
+        redirect('index.php');
     }
 }
 
@@ -786,6 +788,10 @@ function create_nav_bar()
 
     $selfExplode = explode('/', $_SERVER['PHP_SELF']);
 
+
+
+    // nav bar and left-aligned content
+
     echo '<nav class="navbar navbar-default navbar-static-top" role="navigation">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -796,7 +802,7 @@ function create_nav_bar()
                        <span class="icon-bar"></span>
                        <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="home.php">PHP Reference Gateway</a>
+                    <a class="navbar-brand" href="index.php" title="PHP Gateway with Airavata">PGA</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -826,22 +832,6 @@ function create_nav_bar()
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     echo '</ul>
 
         <ul class="nav navbar-nav navbar-right">';
@@ -849,9 +839,12 @@ function create_nav_bar()
 
 
 
+
+    // right-aligned content
+
     if (isset($_SESSION['username']))
     {
-        (USER_STORE === "USER_API" && !isset($_SESSION['excede_login'])) ? $link = "user_profile.php" : $link = "home.php";
+        (USER_STORE === "USER_API" && !isset($_SESSION['excede_login'])) ? $link = "user_profile.php" : $link = "index.php";
         echo '<li><a href="' . $link . '">' . $_SESSION['username'] . '</a></li>';
     }
 
@@ -865,6 +858,11 @@ function create_nav_bar()
     }
     elseif ($selfExplode[2] == 'create_account.php')
     {
+        echo '<li><a href="login.php">Log in</a></li>';
+    }
+    elseif ($selfExplode[2] == 'index.php')
+    {
+        echo '<li><a href="create_account.php">Create account</a></li>';
         echo '<li><a href="login.php">Log in</a></li>';
     }
 
