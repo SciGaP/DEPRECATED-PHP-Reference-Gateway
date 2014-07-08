@@ -780,7 +780,7 @@ function create_nav_bar()
         'Help' => array
         (
             array('label' => 'Report Issue', 'url' => '#'),
-            array('label' => 'About Airavata', 'url' => '#')
+            //array('label' => 'About Airavata', 'url' => '#')
         )
     );
 
@@ -814,9 +814,11 @@ function create_nav_bar()
 
         foreach ($options as $option)
         {
+            $id = $option['url'] == '#'? ' id="report-issue"' : '';
+
             $option['url'] == $selfExplode[2]? $active = ' class="active"' : $active = '';
 
-            echo '<li' . $active . $disabled . '><a href="' . $option['url'] . '">' . $option['label'] . '</a></li>';
+            echo '<li' . $active . $disabled . '><a href="' . $option['url'] . '"' . $id . '>' . $option['label'] . '</a></li>';
         }
 
         echo '</ul>
@@ -887,6 +889,19 @@ function create_head()
             <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
             <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+            <!-- Jira Issue Collector -->
+            <script type="text/javascript"
+                    src="https://gateways.atlassian.net/s/31280375aecc888d5140f63e1dc78a93-T/en_USmlc07/6328/46/1.4.13/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=b1572922"></script>
+            <script type="text/javascript">window.ATL_JQ_PAGE_PROPS = {
+                "triggerFunction": function(showCollectorDialog) {
+                    //Requries that jQuery is available!
+                    jQuery("#report-issue").click(function(e) {
+                        e.preventDefault();
+                        showCollectorDialog();
+                    });
+                }};
+            </script>
         </head>
     ';
 }
