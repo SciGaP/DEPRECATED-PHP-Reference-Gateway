@@ -86,7 +86,7 @@ $airavataclient = get_airavata_client();
 
                     echo '<tr>';
 
-                    echo '<th>Name <small class="text-muted" style="font-weight: normal">Click <span class="glyphicon glyphicon-pencil"></span> to edit</small></th>';
+                    echo '<th>Name</th>';
                     echo '<th>Application</th>';
                     echo '<th>Time</th>';
                     echo '<th>Status</th>';
@@ -119,7 +119,7 @@ $airavataclient = get_airavata_client();
                                 echo $experiment->name .
                                     ' <a href="edit_experiment.php?expId=' .
                                     $experiment->experimentID .
-                                    '"><span class="glyphicon glyphicon-pencil"></span></a>';
+                                    '" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a>';
                                 break;
                         }
 

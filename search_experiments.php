@@ -80,7 +80,7 @@ if (isset($_POST['search']))
             <div class="table-responsive">
             <table class="table">
                 <tr>
-                    <th>Name <small class="text-muted" style="font-weight: normal">Click <span class="glyphicon glyphicon-pencil"></span> to edit</small></th>
+                    <th>Name</th>
                     <th>Application</th>
                     <th>Time</th>
                     <th>Status</th>
@@ -114,7 +114,7 @@ if (isset($_POST['search']))
                     echo $experiment->name .
                         ' <a href="edit_experiment.php?expId=' .
                         $experiment->experimentID .
-                        '"><span class="glyphicon glyphicon-pencil"></span></a>';
+                        '" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a>';
                     break;
             }
 
