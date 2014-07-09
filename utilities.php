@@ -778,8 +778,24 @@ function assemble_experiment()
         $experimentInput = new DataObjectType();
         $experimentInput->key = $applicationInput->name;
         $experimentInput->metaData = $applicationInput->metaData;
-        $experimentInput->type = DataType::STRING;
-        $experimentInput->value = $_POST[$applicationInput->name];
+        $experimentInput->type = $applicationInput->type;
+
+        if(($experimentInput->type == DataType::STRING) ||
+            ($experimentInput->type == DataType::INTEGER))
+        {
+            $experimentInput->value = $_POST[$applicationInput->name];
+            print_success_message('I can accept this input type!');
+        }
+        elseif ($experimentInput->type == DataType::URI)
+        {
+            print_error_message('I cannot accept file uploads yet!');
+        }
+        else
+        {
+            print_error_message('I cannot accept this input type yet!');
+        }
+
+
 
         $experimentInputs[] = $experimentInput;
     }
