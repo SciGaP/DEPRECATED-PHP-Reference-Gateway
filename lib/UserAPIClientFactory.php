@@ -27,11 +27,13 @@ class UserAPIClientFactory
 
     private $userapiServerHost;
     private $userapiServerPort;
+    private $thriftTimeout;
 
     public function __construct($options)
     {
         $this->userapiServerHost = isset($options['userapiServerHost']) ? $options['userapiServerHost'] : "localhost";
-        $this->userapiServerPort = isset($options['userapiServerPort']) ? $options['userapiServerPort'] : "8932";
+        $this->userapiServerPort = isset($options['userapiServerPort']) ? $options['userapiServerPort'] : "7430";
+        $this->timeout = isset($options['thriftTimeout']) ? intval($options['thriftTimeout']) : 5000;
     }
 
     public function getUserAPIClient()

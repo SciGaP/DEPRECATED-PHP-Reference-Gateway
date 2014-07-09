@@ -65,12 +65,28 @@ class UserAPIUtilities implements IdUtilities{
      */
     public function connect() {
         try {
+
+            if (file_exists(self::USER_API_CONFIG_PATH)) {
+                $userapi_config = parse_ini_file(self::USER_API_CONFIG_PATH);
+            } else {
+                throw new Exception("Error: Cannot open userapi_config.xml file!");
+            }
+
+            if (!$userapi_config) {
+                throw new Exception('Error: Unable to read userapi_config.xml!');
+            }
+
             $properties = array();
+            $properties['userapiServerHost'] = $userapi_config['server-host'];
+            $properties['userapiServerPort'] = $userapi_config['server-port'];
+            $properties['thriftTimeout'] = $userapi_config['thrift-timeout'];
+
             $this->userapi_client_factory = new UserAPIClientFactory($properties);
             $this->userapi_client = $this->userapi_client_factory->getUserAPIClient();
 
             if(!isset($_SESSION['USER_API_TOKEN'])){
-                $_SESSION['USER_API_TOKEN'] = $this->userapi_client->adminLogin("admin@phprg.scigap.org","phprg9067@min");
+                $_SESSION['USER_API_TOKEN'] = $this->userapi_client->adminLogin($userapi_config['admin-username'],
+                    $userapi_config['admin-password']);
             }
 
         } catch (Exception $ex) {
