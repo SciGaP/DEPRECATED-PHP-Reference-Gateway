@@ -142,7 +142,6 @@ if (isset($_POST['save']) || isset($_POST['launch']))
 
 
 
-        var_dump($application);
         create_inputs($application);
 
 

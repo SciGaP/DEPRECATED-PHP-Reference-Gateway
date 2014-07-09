@@ -11,7 +11,7 @@ define('ROOT_DIR', __DIR__);
 const AIRAVATA_SERVER = 'gw111.iu.xsede.org';
 //const AIRAVATA_PORT = 8930; //development
 const AIRAVATA_PORT = 9930; //production
-const AIRAVATA_TIMEOUT = 20000;
+const AIRAVATA_TIMEOUT = 50000;
 const EXPERIMENT_DATA_ROOT = '../experimentData/';
 const EXPERIMENT_DATA_ROOT_ABSOLUTE = '/var/www/experimentData/';
 //const EXPERIMENT_DATA_ROOT_ABSOLUTE = 'C:/wamp/www/experimentData/';
@@ -66,6 +66,7 @@ $GLOBALS['AIRAVATA_ROOT'] = './lib/Airavata/';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/Airavata.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/AppCatalog/ApplicationCatalogAPI.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'Model/AppCatalog/ComputeResource/Types.php';
+require_once $GLOBALS['AIRAVATA_ROOT'] . 'Model/AppCatalog/AppInterface/Types.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'Model/Workspace/Experiment/Types.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'Model/Workspace/Types.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/Error/Types.php';
@@ -936,17 +937,15 @@ function create_compute_resources_select($id)
 {
     $computeResources = get_available_app_interface_compute_resources($id);
 
-
     echo '<select class="form-control" name="compute-resource" id="compute-resource">';
 
     foreach ($computeResources as $computeResourceId)
     {
         $computeResource = get_compute_resource($computeResourceId);
 
-
         // replace computeResourceId with hostName when ready
         echo '<option value="' . $computeResource->computeResourceId . '">' .
-                $computeResource->computeResourceId . '</option>';
+                $computeResource->hostName . '</option>';
 
     }
 
@@ -954,32 +953,21 @@ function create_compute_resources_select($id)
 }
 
 
-
-
-
-
-
-
-
-
-
-
+/**
+ * Create form inputs to accept the inputs tot he given application
+ * @param $id
+ */
 function create_inputs($id)
 {
     $inputs = get_application_inputs($id);
-    var_dump($inputs);
 
-
-
-
-    /*
     foreach ($inputs as $input)
     {
-        switch ($input-type)
+        switch ($input->type)
         {
             case 'STRING':
                 echo '<div class="form-group">
-                    <label class="sr-only" for="experiment-input">' . $input->name . '</label>
+                    <label for="experiment-input">' . $input->name . '</label>
                     <input type="text" class="form-control" name="' . $input->name .
                     '" id="' . $input->name .
                     '" value="' . $input->value .
@@ -989,7 +977,7 @@ function create_inputs($id)
             case 'INTEGER':
             case 'FLOAT':
                 echo '<div class="form-group">
-                    <label class="sr-only" for="experiment-input">' . $input->name . '</label>
+                    <label for="experiment-input">' . $input->name . '</label>
                     <input type="number" class="form-control" name="' . $input->name .
                     '" id="' . $input->name .
                     '" value="' . $input->value .
@@ -998,7 +986,7 @@ function create_inputs($id)
                 break;
             case 'URI':
                 echo '<div class="form-group">
-                    <label class="sr-only" for="experiment-input">' . $input->name . '</label>
+                    <label for="experiment-input">' . $input->name . '</label>
                     <input type="file" class="form-control" name="' . $input->name .
                     '" id="' . $input->name .
                     '" placeholder="' . $input->userFriendlyDescription . '" required>
@@ -1006,19 +994,7 @@ function create_inputs($id)
                 break;
         }
     }
-    */
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 /**
