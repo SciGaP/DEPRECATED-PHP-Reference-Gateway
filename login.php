@@ -33,7 +33,7 @@ if (form_submitted())
     if (id_matches_db($username, $password))
     {
         store_id_in_session($username);
-        header('Location: index.php');
+        redirect('index.php');
     }
     else
     {
@@ -55,11 +55,6 @@ if (form_submitted())
         </div>
         <input name="Submit" type="submit" class="btn btn-primary btn-block" value="Sign in">
     </form>
-
-
-
-
-    <!--<a href="xsede_login.php">XSEDE user? Log in with XSEDE credentials</a>-->
 </div>
 </body>
 </html>

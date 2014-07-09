@@ -15,32 +15,12 @@ connect_to_id_store();
 verify_login();
 
 $airavataclient = get_airavata_client();
-$appCatClient = get_appcat_client();
 
 
 $echoResources = array('localhost', 'trestles.sdsc.edu', 'lonestar.tacc.utexas.edu');
 $wrfResources = array('trestles.sdsc.edu');
 
 $appResources = array('Echo' => $echoResources, 'WRF' => $wrfResources);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ?>
@@ -89,8 +69,6 @@ if (isset($_POST['save']) || isset($_POST['launch']))
         $experimentDescription = $_POST['experiment-description'] . ' ';
         $project = $_POST['project'];
         $application = $_POST['application'];
-
-        $interface = $appCatClient->getApplicationInterface($_POST['application']);
 
         // ugly hack until app catalog is in place
         $echo = ($application == 'Echo')? ' selected' : '';
@@ -164,42 +142,10 @@ if (isset($_POST['save']) || isset($_POST['launch']))
 
 
 
+        var_dump($application);
+        create_inputs($application);
 
-        $inputs = $interface->applicationInputs;
 
-        foreach ($inputs as $input)
-        {
-            switch ($input-type)
-            {
-                case 'STRING':
-                    echo '<div class="form-group">
-                    <label class="sr-only" for="experiment-input">' . $input->name . '</label>
-                    <input type="text" class="form-control" name="' . $input->name .
-                        '" id="' . $input->name .
-                        '" value="' . $input->value .
-                        '" placeholder="' . $input->userFriendlyDescription . '" required>
-                    </div>';
-                    break;
-                case 'INTEGER':
-                case 'FLOAT':
-                    echo '<div class="form-group">
-                    <label class="sr-only" for="experiment-input">' . $input->name . '</label>
-                    <input type="number" class="form-control" name="' . $input->name .
-                        '" id="' . $input->name .
-                        '" value="' . $input->value .
-                        '" placeholder="' . $input->userFriendlyDescription . '" required>
-                    </div>';
-                    break;
-                case 'URI':
-                    echo '<div class="form-group">
-                    <label class="sr-only" for="experiment-input">' . $input->name . '</label>
-                    <input type="file" class="form-control" name="' . $input->name .
-                        '" id="' . $input->name .
-                        '" placeholder="' . $input->userFriendlyDescription . '" required>
-                    </div>';
-                    break;
-            }
-        }
 
 
 
@@ -221,22 +167,10 @@ if (isset($_POST['save']) || isset($_POST['launch']))
 
     echo '</div>
     <div class="form-group">
-        <label for="compute-resource">Compute Resource</label>
-        <select class="form-control" name="compute-resource" id="compute-resource">';
-
-
-
-
-        foreach ($interface->applicationDeployments as $deployment)
-        {
-            echo '<option value="' . $deployment->computeResourceDescription->computeResourceId . '">' .
-                $deployment->computeResourceDescription->hostName . '</option>';
-        }
-
-
+        <label for="compute-resource">Compute Resource</label>';
+        create_compute_resources_select($application);
 
     echo '
-        </select>
     </div>
     <div class="form-group">
         <label for="node-count">Node Count</label>

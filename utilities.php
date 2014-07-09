@@ -65,6 +65,7 @@ require_once $GLOBALS['THRIFT_ROOT'] . 'StringFunc/Core.php';
 $GLOBALS['AIRAVATA_ROOT'] = './lib/Airavata/';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/Airavata.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/AppCatalog/ApplicationCatalogAPI.php';
+require_once $GLOBALS['AIRAVATA_ROOT'] . 'Model/AppCatalog/ComputeResource/Types.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'Model/Workspace/Experiment/Types.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'Model/Workspace/Types.php';
 require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/Error/Types.php';
@@ -72,7 +73,6 @@ require_once $GLOBALS['AIRAVATA_ROOT'] . 'API/Error/Types.php';
 require_once './lib/AiravataClientFactory.php';
 
 use Airavata\API\AiravataClient;
-use Airavata\API\AppCatalog\ApplicationCatalogAPIClient;
 use Airavata\API\Error\InvalidRequestException;
 use Airavata\API\Error\AiravataClientException;
 use Airavata\API\Error\AiravataSystemException;
@@ -135,7 +135,7 @@ function print_info_message($message)
  */
 function redirect($url)
 {
-    echo '<meta http-equiv="Refresh" content="1; URL=' . $url . '">';
+    echo '<meta http-equiv="Refresh" content="0; URL=' . $url . '">';
 }
 
 /**
@@ -255,19 +255,6 @@ function get_airavata_client()
 }
 
 
-function get_appcat_client()
-{
-    $transport = new TSocket(AIRAVATA_SERVER, AIRAVATA_PORT);
-    $transport->setRecvTimeout(AIRAVATA_TIMEOUT);
-    $transport->setSendTimeout(AIRAVATA_TIMEOUT);
-
-    $protocol = new TBinaryProtocol($transport);
-    $transport->open();
-
-    return new ApplicationCatalogAPIClient($protocol);
-}
-
-
 /**
  * Launch the experiment with the given ID
  * @param $expId
@@ -335,7 +322,7 @@ function get_all_user_projects($username)
     }
     catch (AiravataClientException $ace)
     {
-        print_error_message('Airavata System Exception: ' . $ace->getMessage().'\n');
+        print_error_message('Airavata Client Exception: ' . $ace->getMessage().'\n');
     }
     catch (AiravataSystemException $ase)
     {
@@ -346,19 +333,18 @@ function get_all_user_projects($username)
 }
 
 
-
-
-
-
-
+/**
+ * Get all available applications
+ * @return null
+ */
 function get_all_applications()
 {
-    global $appCatClient;
+    global $airavataclient;
     $applications = null;
 
     try
     {
-        $applications = $appCatClient->listApplicationInterfaceIds();
+        $applications = $airavataclient->getAllApplicationInterfaceNames();
     }
     catch (InvalidRequestException $ire)
     {
@@ -366,7 +352,7 @@ function get_all_applications()
     }
     catch (AiravataClientException $ace)
     {
-        print_error_message('Airavata System Exception: ' . $ace->getMessage().'\n');
+        print_error_message('Airavata Client Exception: ' . $ace->getMessage().'\n');
     }
     catch (AiravataSystemException $ase)
     {
@@ -377,8 +363,97 @@ function get_all_applications()
 }
 
 
+/**
+ * Get a list of compute resources available for the given application ID
+ * @param $id
+ * @return null
+ */
+function get_available_app_interface_compute_resources($id)
+{
+    global $airavataclient;
+    $computeResources = null;
+
+    try
+    {
+        $computeResources = $airavataclient->getAvailableAppInterfaceComputeResources($id);
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException: ' . $ire->getMessage(). '\n');
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('Airavata Client Exception: ' . $ace->getMessage().'\n');
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('Airavata System Exception: ' . $ase->getMessage().'\n');
+    }
+
+    return $computeResources;
+}
 
 
+/**
+ * Get the ComputeResourceDescription with the given ID
+ * @param $id
+ * @return null
+ */
+function get_compute_resource($id)
+{
+    global $airavataclient;
+    $computeResource = null;
+
+    try
+    {
+        $computeResource = $airavataclient->getComputeResource($id);
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException: ' . $ire->getMessage(). '\n');
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('Airavata Client Exception: ' . $ace->getMessage().'\n');
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('Airavata System Exception: ' . $ase->getMessage().'\n');
+    }
+
+    return $computeResource;
+}
+
+
+/**
+ * Get a list of the inputs for the application with the given ID
+ * @param $id
+ * @return null
+ */
+function get_application_inputs($id)
+{
+    global $airavataclient;
+    $inputs = null;
+
+    try
+    {
+        $inputs = $airavataclient->getApplicationInputs($id);
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException: ' . $ire->getMessage(). '\n');
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('Airavata Client Exception: ' . $ace->getMessage().'\n');
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('Airavata System Exception: ' . $ase->getMessage().'\n');
+    }
+
+    return $inputs;
+}
 
 
 /**
@@ -814,36 +889,116 @@ function create_project_select($projectId = null, $editable = true)
 }
 
 
-
-
-
-
-
-
-
-
-
+/**
+ * Create a select input and populate it with applications options
+ * @param null $id
+ * @param bool $editable
+ */
 function create_application_select($id = null, $editable = true)
 {
-    global $appCatClient;
-
     $disabled = $editable? '' : 'disabled';
-
-    echo '<select class="form-control" name="application" id="application" required ' . $disabled . '>';
 
     $applicationIds = get_all_applications();
 
-    foreach ($applicationIds as $applicationId)
-    {
-        $interface = $appCatClient->getApplicationInterface($applicationId);
+    echo '<select class="form-control" name="application" id="application" required ' . $disabled . '>';
 
+    foreach ($applicationIds as $applicationId => $applicationName)
+    {
         $selected = ($applicationId == $id) ? 'selected' : '';
 
-        echo '<option value="' . $applicationId . '" ' . $selected . '>' . $interface->applicationName . '</option>';
+        echo '<option value="' . $applicationId . '" ' . $selected . '>' . $applicationName . '</option>';
     }
 
     echo '</select>';
 }
+
+
+/**
+ * Create a select input and populate it with compute resources
+ * available for the given application ID
+ * @param $id
+ */
+function create_compute_resources_select($id)
+{
+    $computeResources = get_available_app_interface_compute_resources($id);
+
+
+    echo '<select class="form-control" name="compute-resource" id="compute-resource">';
+
+    foreach ($computeResources as $computeResourceId)
+    {
+        $computeResource = get_compute_resource($computeResourceId);
+
+
+        // replace computeResourceId with hostName when ready
+        echo '<option value="' . $computeResource->computeResourceId . '">' .
+                $computeResource->computeResourceId . '</option>';
+
+    }
+
+    echo '</select>';
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function create_inputs($id)
+{
+    $inputs = get_application_inputs($id);
+    var_dump($inputs);
+
+
+
+
+    /*
+    foreach ($inputs as $input)
+    {
+        switch ($input-type)
+        {
+            case 'STRING':
+                echo '<div class="form-group">
+                    <label class="sr-only" for="experiment-input">' . $input->name . '</label>
+                    <input type="text" class="form-control" name="' . $input->name .
+                    '" id="' . $input->name .
+                    '" value="' . $input->value .
+                    '" placeholder="' . $input->userFriendlyDescription . '" required>
+                    </div>';
+                break;
+            case 'INTEGER':
+            case 'FLOAT':
+                echo '<div class="form-group">
+                    <label class="sr-only" for="experiment-input">' . $input->name . '</label>
+                    <input type="number" class="form-control" name="' . $input->name .
+                    '" id="' . $input->name .
+                    '" value="' . $input->value .
+                    '" placeholder="' . $input->userFriendlyDescription . '" required>
+                    </div>';
+                break;
+            case 'URI':
+                echo '<div class="form-group">
+                    <label class="sr-only" for="experiment-input">' . $input->name . '</label>
+                    <input type="file" class="form-control" name="' . $input->name .
+                    '" id="' . $input->name .
+                    '" placeholder="' . $input->userFriendlyDescription . '" required>
+                    </div>';
+                break;
+        }
+    }
+    */
+}
+
+
+
+
+
 
 
 
