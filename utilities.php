@@ -9,7 +9,8 @@ define('ROOT_DIR', __DIR__);
  * Define configuration constants
  */
 const AIRAVATA_SERVER = 'gw111.iu.xsede.org';
-const AIRAVATA_PORT = 8930;
+//const AIRAVATA_PORT = 8930; //development
+const AIRAVATA_PORT = 9930; //production
 const AIRAVATA_TIMEOUT = 20000;
 const EXPERIMENT_DATA_ROOT = '../experimentData/';
 const EXPERIMENT_DATA_ROOT_ABSOLUTE = '/var/www/experimentData/';
