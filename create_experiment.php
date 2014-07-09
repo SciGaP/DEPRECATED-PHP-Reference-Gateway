@@ -93,25 +93,26 @@ if (isset($_POST['save']) || isset($_POST['launch']))
 
 
     echo '
-    <div class="form-group">
-        <label for="experiment-name">Experiment Name</label>
-        <input type="text" class="form-control" name="experiment-name" id="experiment-name" placeholder="Enter experiment name" autofocus required' . $disabled . ' value="' . $experimentName . '">
-    </div>
-    <div class="form-group">
-        <label for="experiment-description">Experiment Description</label>
-        <textarea class="form-control" name="experiment-description" id="experiment-description" placeholder="Optional: Enter a short description of the experiment"' . $disabled . '>' . $experimentDescription . '</textarea>
-    </div>
-    <div class="form-group">
-        <label for="project">Project</label>
+        <div class="form-group">
+            <label for="experiment-name">Experiment Name</label>
+            <input type="text" class="form-control" name="experiment-name" id="experiment-name" placeholder="Enter experiment name" autofocus required' . $disabled . ' value="' . $experimentName . '">
+        </div>
+        <div class="form-group">
+            <label for="experiment-description">Experiment Description</label>
+            <textarea class="form-control" name="experiment-description" id="experiment-description" placeholder="Optional: Enter a short description of the experiment"' . $disabled . '>' . $experimentDescription . '</textarea>
+        </div>
+        <div class="form-group">
+            <label for="project">Project</label>
     ';
-        create_project_select($project, !$disabled);
+
+    create_project_select($project, !$disabled);
 
     echo '
-    </div>
-    <div class="form-group">
-        <label for="application">Application</label>';
+        </div>
+        <div class="form-group">
+            <label for="application">Application</label>';
 
-        create_application_select($application, !$disabled);
+    create_application_select($application, !$disabled);
 
     echo '</div>';
 
@@ -136,83 +137,60 @@ if (isset($_POST['save']) || isset($_POST['launch']))
 
 
 
-
-
-
-
-
-
         create_inputs($application);
 
 
+        echo '</div>
+            <div class="form-group">
+                <label for="compute-resource">Compute Resource</label>';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    echo '</div>
-    <div class="form-group">
-        <label for="compute-resource">Compute Resource</label>';
         create_compute_resources_select($application);
 
-    echo '
-    </div>
-    <div class="form-group">
-        <label for="node-count">Node Count</label>
-        <input type="number" class="form-control" name="node-count" id="node-count" value="1" min="1">
-    </div>
-    <div class="form-group">
-        <label for="cpu-count">Total Core Count</label>
-        <input type="number" class="form-control" name="cpu-count" id="cpu-count" value="1" min="1">
-    </div>
-    <div class="form-group">
-        <label for="threads">Number of Threads</label>
-        <input type="number" class="form-control" name="threads" id="threads" value="0" min="0">
-    </div>
-    <div class="form-group">
-        <label for="wall-time">Wall Time Limit</label>
-        <div class="input-group">
-            <input type="number" class="form-control" name="wall-time" id="wall-time" value="15" min="0">
-            <span class="input-group-addon">minutes</span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="memory">Total Physical Memory</label>
-        <div class="input-group">
-            <input type="number" class="form-control" name="memory" id="memory" value="0" min="0">
-            <span class="input-group-addon">kB</span>
-        </div>
-    </div>
+        echo '
+            </div>
+            <div class="form-group">
+                <label for="node-count">Node Count</label>
+                <input type="number" class="form-control" name="node-count" id="node-count" value="1" min="1">
+            </div>
+            <div class="form-group">
+                <label for="cpu-count">Total Core Count</label>
+                <input type="number" class="form-control" name="cpu-count" id="cpu-count" value="1" min="1">
+            </div>
+            <div class="form-group">
+                <label for="threads">Number of Threads</label>
+                <input type="number" class="form-control" name="threads" id="threads" value="0" min="0">
+            </div>
+            <div class="form-group">
+                <label for="wall-time">Wall Time Limit</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" name="wall-time" id="wall-time" value="15" min="0">
+                    <span class="input-group-addon">minutes</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="memory">Total Physical Memory</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" name="memory" id="memory" value="0" min="0">
+                    <span class="input-group-addon">kB</span>
+                </div>
+            </div>
 
 
 
-    </div>
-    </div>
-    <!-- use <button> instead of <input> in order to match height of <a> in Firefox -->
-    <div class="btn-toolbar">
-        <div class="btn-group">
-            <button name="save" type="submit" class="btn btn-primary" value="Save">Save</button>
-            <button name="launch" type="submit" class="btn btn-primary" value="Save and launch">Save and launch</button>
-        </div>
-        <div class="btn-group">
-            <button name="clear" type="reset" class="btn btn-default" value="Reset values">Reset application configuration</button>
-            <a href="' . $_SERVER['PHP_SELF'] . '" class="btn btn-default" role="button">Start over</a>
-        </div>
-    </div>';
+            </div>
+            </div>
+
+            <!-- use <button> instead of <input> in order to match height of <a> in Firefox -->
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <button name="save" type="submit" class="btn btn-primary" value="Save">Save</button>
+                    <button name="launch" type="submit" class="btn btn-primary" value="Save and launch">Save and launch</button>
+                </div>
+            <div class="btn-group">
+                <button name="clear" type="reset" class="btn btn-default" value="Reset values">Reset application configuration</button>
+                <a href="' . $_SERVER['PHP_SELF'] . '" class="btn btn-default" role="button">Start over</a>
+            </div>
+        </div>';
     }
 
     ?>
@@ -231,11 +209,16 @@ if (isset($_POST['save']) || isset($_POST['launch']))
 
 <?php
 
+/**
+ * Create a new experiment from the values submitted in the form
+ * @return null
+ */
 function create_experiment()
 {
     global $airavataclient;
 
     $experiment = assemble_experiment();
+    //var_dump($experiment);
     $expId = null;
 
     try

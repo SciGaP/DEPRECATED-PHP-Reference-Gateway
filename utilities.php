@@ -470,6 +470,37 @@ function get_application_inputs($id)
 
 
 /**
+ * Get a list of the outputs for the application with the given ID
+ * @param $id
+ * @return null
+ */
+function get_application_outputs($id)
+{
+    global $airavataclient;
+    $outputs = null;
+
+    try
+    {
+        $outputs = $airavataclient->getApplicationOutputs($id);
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException: ' . $ire->getMessage(). '\n');
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('Airavata Client Exception: ' . $ace->getMessage().'\n');
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('Airavata System Exception: ' . $ase->getMessage().'\n');
+    }
+
+    return $outputs;
+}
+
+
+/**
  * Get the experiment with the given ID
  * @param $expId
  * @return null
@@ -557,6 +588,7 @@ function assemble_experiment()
     $scheduling->totalPhysicalMemory = $_POST['memory'];
     $scheduling->resourceHostId = $_POST['compute-resource'];
 
+    /*
     switch ($_POST['compute-resource'])
     {
         case 'trestles.sdsc.edu':
@@ -569,12 +601,10 @@ function assemble_experiment()
         default:
             $scheduling->ComputationalProjectAccount = 'admin';
     }
-
+    */
 
     $userConfigData = new UserConfigurationData();
     $userConfigData->computationalResourceScheduling = $scheduling;
-    $userConfigData->overrideManualScheduledParams = 0;
-    $userConfigData->airavataAutoSchedule = 0;
 
 
 
@@ -583,8 +613,8 @@ function assemble_experiment()
 
 
 
-
-
+    /*
+    // create inputs
     if ($_POST['application'] == 'WRF')
     {
         foreach ($_FILES as $file)
@@ -593,17 +623,17 @@ function assemble_experiment()
             {
                 $uploadSuccessful = false;
                 print_error_message('Error uploading file ' . $file['name'] . ' !');
-            }/*
-            elseif ($file['type'] != 'text/plain')
-            {
-                $uploadSuccessful = false;
-                print_error_message('Uploaded file ' . $file['name'] . ' type not supported!');
             }
-            elseif (($file['size'] / 1024) > 20)
-            {
-                $uploadSuccessful = false;
-                print_error_message('Uploaded file ' . $file['name'] . ' must be smaller than 10 MB!');
-            }*/
+//            elseif ($file['type'] != 'text/plain')
+//            {
+//                $uploadSuccessful = false;
+//                print_error_message('Uploaded file ' . $file['name'] . ' type not supported!');
+//            }
+//            elseif (($file['size'] / 1024) > 20)
+//            {
+//                $uploadSuccessful = false;
+//                print_error_message('Uploaded file ' . $file['name'] . ' must be smaller than 10 MB!');
+//            }
         }
 
 
@@ -730,6 +760,60 @@ function assemble_experiment()
         $experimentOutput3->type = DataType::STRING;
         $experimentOutputs = array($experimentOutput1, $experimentOutput2, $experimentOutput3);
     }
+    */
+
+
+
+
+
+
+
+
+
+    $applicationInputs = get_application_inputs($_POST['application']);
+    $experimentInputs = array();
+
+    foreach ($applicationInputs as $applicationInput)
+    {
+        $experimentInput = new DataObjectType();
+        $experimentInput->key = $applicationInput->name;
+        $experimentInput->metaData = $applicationInput->metaData;
+        $experimentInput->type = DataType::STRING;
+        $experimentInput->value = $_POST[$applicationInput->name];
+
+        $experimentInputs[] = $experimentInput;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    $applicationOutputs = get_application_outputs($_POST['application']);
+    $experimentOutputs = array();
+
+    foreach ($applicationOutputs as $applicationOutput)
+    {
+        $experimentOutput = new DataObjectType();
+        $experimentOutput->key = $applicationOutput->name;
+        $experimentOutput->type = $applicationOutput->type;
+        $experimentOutput->value = '';
+
+        $experimentOutputs[] = $experimentOutput;
+    }
+
+
+
+
+
+
+
 
 
 
