@@ -33,7 +33,6 @@ final class DataType {
 class InputDataObjectType {
   static $_TSPEC;
 
-  public $isEmpty = false;
   public $name = null;
   public $value = null;
   public $type = null;
@@ -46,43 +45,36 @@ class InputDataObjectType {
     if (!isset(self::$_TSPEC)) {
       self::$_TSPEC = array(
         1 => array(
-          'var' => 'isEmpty',
-          'type' => TType::BOOL,
-          ),
-        2 => array(
           'var' => 'name',
           'type' => TType::STRING,
           ),
-        3 => array(
+        2 => array(
           'var' => 'value',
           'type' => TType::STRING,
           ),
-        4 => array(
+        3 => array(
           'var' => 'type',
           'type' => TType::I32,
           ),
-        5 => array(
+        4 => array(
           'var' => 'applicationArgument',
           'type' => TType::STRING,
           ),
-        6 => array(
+        5 => array(
           'var' => 'standardInput',
           'type' => TType::BOOL,
           ),
-        7 => array(
+        6 => array(
           'var' => 'userFriendlyDescription',
           'type' => TType::STRING,
           ),
-        8 => array(
+        7 => array(
           'var' => 'metaData',
           'type' => TType::STRING,
           ),
         );
     }
     if (is_array($vals)) {
-      if (isset($vals['isEmpty'])) {
-        $this->isEmpty = $vals['isEmpty'];
-      }
       if (isset($vals['name'])) {
         $this->name = $vals['name'];
       }
@@ -127,55 +119,48 @@ class InputDataObjectType {
       switch ($fid)
       {
         case 1:
-          if ($ftype == TType::BOOL) {
-            $xfer += $input->readBool($this->isEmpty);
-          } else {
-            $xfer += $input->skip($ftype);
-          }
-          break;
-        case 2:
           if ($ftype == TType::STRING) {
             $xfer += $input->readString($this->name);
           } else {
             $xfer += $input->skip($ftype);
           }
           break;
-        case 3:
+        case 2:
           if ($ftype == TType::STRING) {
             $xfer += $input->readString($this->value);
           } else {
             $xfer += $input->skip($ftype);
           }
           break;
-        case 4:
+        case 3:
           if ($ftype == TType::I32) {
             $xfer += $input->readI32($this->type);
           } else {
             $xfer += $input->skip($ftype);
           }
           break;
-        case 5:
+        case 4:
           if ($ftype == TType::STRING) {
             $xfer += $input->readString($this->applicationArgument);
           } else {
             $xfer += $input->skip($ftype);
           }
           break;
-        case 6:
+        case 5:
           if ($ftype == TType::BOOL) {
             $xfer += $input->readBool($this->standardInput);
           } else {
             $xfer += $input->skip($ftype);
           }
           break;
-        case 7:
+        case 6:
           if ($ftype == TType::STRING) {
             $xfer += $input->readString($this->userFriendlyDescription);
           } else {
             $xfer += $input->skip($ftype);
           }
           break;
-        case 8:
+        case 7:
           if ($ftype == TType::STRING) {
             $xfer += $input->readString($this->metaData);
           } else {
@@ -195,43 +180,38 @@ class InputDataObjectType {
   public function write($output) {
     $xfer = 0;
     $xfer += $output->writeStructBegin('InputDataObjectType');
-    if ($this->isEmpty !== null) {
-      $xfer += $output->writeFieldBegin('isEmpty', TType::BOOL, 1);
-      $xfer += $output->writeBool($this->isEmpty);
-      $xfer += $output->writeFieldEnd();
-    }
     if ($this->name !== null) {
-      $xfer += $output->writeFieldBegin('name', TType::STRING, 2);
+      $xfer += $output->writeFieldBegin('name', TType::STRING, 1);
       $xfer += $output->writeString($this->name);
       $xfer += $output->writeFieldEnd();
     }
     if ($this->value !== null) {
-      $xfer += $output->writeFieldBegin('value', TType::STRING, 3);
+      $xfer += $output->writeFieldBegin('value', TType::STRING, 2);
       $xfer += $output->writeString($this->value);
       $xfer += $output->writeFieldEnd();
     }
     if ($this->type !== null) {
-      $xfer += $output->writeFieldBegin('type', TType::I32, 4);
+      $xfer += $output->writeFieldBegin('type', TType::I32, 3);
       $xfer += $output->writeI32($this->type);
       $xfer += $output->writeFieldEnd();
     }
     if ($this->applicationArgument !== null) {
-      $xfer += $output->writeFieldBegin('applicationArgument', TType::STRING, 5);
+      $xfer += $output->writeFieldBegin('applicationArgument', TType::STRING, 4);
       $xfer += $output->writeString($this->applicationArgument);
       $xfer += $output->writeFieldEnd();
     }
     if ($this->standardInput !== null) {
-      $xfer += $output->writeFieldBegin('standardInput', TType::BOOL, 6);
+      $xfer += $output->writeFieldBegin('standardInput', TType::BOOL, 5);
       $xfer += $output->writeBool($this->standardInput);
       $xfer += $output->writeFieldEnd();
     }
     if ($this->userFriendlyDescription !== null) {
-      $xfer += $output->writeFieldBegin('userFriendlyDescription', TType::STRING, 7);
+      $xfer += $output->writeFieldBegin('userFriendlyDescription', TType::STRING, 6);
       $xfer += $output->writeString($this->userFriendlyDescription);
       $xfer += $output->writeFieldEnd();
     }
     if ($this->metaData !== null) {
-      $xfer += $output->writeFieldBegin('metaData', TType::STRING, 8);
+      $xfer += $output->writeFieldBegin('metaData', TType::STRING, 7);
       $xfer += $output->writeString($this->metaData);
       $xfer += $output->writeFieldEnd();
     }
@@ -245,7 +225,6 @@ class InputDataObjectType {
 class OutputDataObjectType {
   static $_TSPEC;
 
-  public $isEmpty = false;
   public $name = null;
   public $value = null;
   public $type = null;
@@ -254,27 +233,20 @@ class OutputDataObjectType {
     if (!isset(self::$_TSPEC)) {
       self::$_TSPEC = array(
         1 => array(
-          'var' => 'isEmpty',
-          'type' => TType::BOOL,
-          ),
-        2 => array(
           'var' => 'name',
           'type' => TType::STRING,
           ),
-        3 => array(
+        2 => array(
           'var' => 'value',
           'type' => TType::STRING,
           ),
-        4 => array(
+        3 => array(
           'var' => 'type',
           'type' => TType::I32,
           ),
         );
     }
     if (is_array($vals)) {
-      if (isset($vals['isEmpty'])) {
-        $this->isEmpty = $vals['isEmpty'];
-      }
       if (isset($vals['name'])) {
         $this->name = $vals['name'];
       }
@@ -307,27 +279,20 @@ class OutputDataObjectType {
       switch ($fid)
       {
         case 1:
-          if ($ftype == TType::BOOL) {
-            $xfer += $input->readBool($this->isEmpty);
-          } else {
-            $xfer += $input->skip($ftype);
-          }
-          break;
-        case 2:
           if ($ftype == TType::STRING) {
             $xfer += $input->readString($this->name);
           } else {
             $xfer += $input->skip($ftype);
           }
           break;
-        case 3:
+        case 2:
           if ($ftype == TType::STRING) {
             $xfer += $input->readString($this->value);
           } else {
             $xfer += $input->skip($ftype);
           }
           break;
-        case 4:
+        case 3:
           if ($ftype == TType::I32) {
             $xfer += $input->readI32($this->type);
           } else {
@@ -347,23 +312,18 @@ class OutputDataObjectType {
   public function write($output) {
     $xfer = 0;
     $xfer += $output->writeStructBegin('OutputDataObjectType');
-    if ($this->isEmpty !== null) {
-      $xfer += $output->writeFieldBegin('isEmpty', TType::BOOL, 1);
-      $xfer += $output->writeBool($this->isEmpty);
-      $xfer += $output->writeFieldEnd();
-    }
     if ($this->name !== null) {
-      $xfer += $output->writeFieldBegin('name', TType::STRING, 2);
+      $xfer += $output->writeFieldBegin('name', TType::STRING, 1);
       $xfer += $output->writeString($this->name);
       $xfer += $output->writeFieldEnd();
     }
     if ($this->value !== null) {
-      $xfer += $output->writeFieldBegin('value', TType::STRING, 3);
+      $xfer += $output->writeFieldBegin('value', TType::STRING, 2);
       $xfer += $output->writeString($this->value);
       $xfer += $output->writeFieldEnd();
     }
     if ($this->type !== null) {
-      $xfer += $output->writeFieldBegin('type', TType::I32, 4);
+      $xfer += $output->writeFieldBegin('type', TType::I32, 3);
       $xfer += $output->writeI32($this->type);
       $xfer += $output->writeFieldEnd();
     }
@@ -377,9 +337,9 @@ class OutputDataObjectType {
 class ApplicationInterfaceDescription {
   static $_TSPEC;
 
-  public $isEmpty = false;
   public $applicationInterfaceId = "DO_NOT_SET_AT_CLIENTS";
   public $applicationName = null;
+  public $applicationDesription = null;
   public $applicationModules = null;
   public $applicationInputs = null;
   public $applicationOutputs = null;
@@ -388,15 +348,15 @@ class ApplicationInterfaceDescription {
     if (!isset(self::$_TSPEC)) {
       self::$_TSPEC = array(
         1 => array(
-          'var' => 'isEmpty',
-          'type' => TType::BOOL,
-          ),
-        2 => array(
           'var' => 'applicationInterfaceId',
           'type' => TType::STRING,
           ),
-        3 => array(
+        2 => array(
           'var' => 'applicationName',
+          'type' => TType::STRING,
+          ),
+        3 => array(
+          'var' => 'applicationDesription',
           'type' => TType::STRING,
           ),
         4 => array(
@@ -428,14 +388,14 @@ class ApplicationInterfaceDescription {
         );
     }
     if (is_array($vals)) {
-      if (isset($vals['isEmpty'])) {
-        $this->isEmpty = $vals['isEmpty'];
-      }
       if (isset($vals['applicationInterfaceId'])) {
         $this->applicationInterfaceId = $vals['applicationInterfaceId'];
       }
       if (isset($vals['applicationName'])) {
         $this->applicationName = $vals['applicationName'];
+      }
+      if (isset($vals['applicationDesription'])) {
+        $this->applicationDesription = $vals['applicationDesription'];
       }
       if (isset($vals['applicationModules'])) {
         $this->applicationModules = $vals['applicationModules'];
@@ -469,22 +429,22 @@ class ApplicationInterfaceDescription {
       switch ($fid)
       {
         case 1:
-          if ($ftype == TType::BOOL) {
-            $xfer += $input->readBool($this->isEmpty);
-          } else {
-            $xfer += $input->skip($ftype);
-          }
-          break;
-        case 2:
           if ($ftype == TType::STRING) {
             $xfer += $input->readString($this->applicationInterfaceId);
           } else {
             $xfer += $input->skip($ftype);
           }
           break;
-        case 3:
+        case 2:
           if ($ftype == TType::STRING) {
             $xfer += $input->readString($this->applicationName);
+          } else {
+            $xfer += $input->skip($ftype);
+          }
+          break;
+        case 3:
+          if ($ftype == TType::STRING) {
+            $xfer += $input->readString($this->applicationDesription);
           } else {
             $xfer += $input->skip($ftype);
           }
@@ -555,19 +515,19 @@ class ApplicationInterfaceDescription {
   public function write($output) {
     $xfer = 0;
     $xfer += $output->writeStructBegin('ApplicationInterfaceDescription');
-    if ($this->isEmpty !== null) {
-      $xfer += $output->writeFieldBegin('isEmpty', TType::BOOL, 1);
-      $xfer += $output->writeBool($this->isEmpty);
-      $xfer += $output->writeFieldEnd();
-    }
     if ($this->applicationInterfaceId !== null) {
-      $xfer += $output->writeFieldBegin('applicationInterfaceId', TType::STRING, 2);
+      $xfer += $output->writeFieldBegin('applicationInterfaceId', TType::STRING, 1);
       $xfer += $output->writeString($this->applicationInterfaceId);
       $xfer += $output->writeFieldEnd();
     }
     if ($this->applicationName !== null) {
-      $xfer += $output->writeFieldBegin('applicationName', TType::STRING, 3);
+      $xfer += $output->writeFieldBegin('applicationName', TType::STRING, 2);
       $xfer += $output->writeString($this->applicationName);
+      $xfer += $output->writeFieldEnd();
+    }
+    if ($this->applicationDesription !== null) {
+      $xfer += $output->writeFieldBegin('applicationDesription', TType::STRING, 3);
+      $xfer += $output->writeString($this->applicationDesription);
       $xfer += $output->writeFieldEnd();
     }
     if ($this->applicationModules !== null) {
