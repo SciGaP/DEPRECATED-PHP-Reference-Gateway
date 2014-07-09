@@ -263,7 +263,17 @@ function get_search_results()
     }
     catch (AiravataSystemException $ase)
     {
-        print_error_message('AiravataSystemException!<br><br>' . $ase->getMessage());
+        if ($ase->airavataErrorType == 2) // 2 = INTERNAL_ERROR
+        {
+            print_info_message('<p>You have not created any experiments yet, so no results will be returned!</p>
+                                <p>Click <a href="create_experiment.php">here</a> to create an experiment, or
+                                <a href="create_project.php">here</a> to create a new project.</p>');
+        }
+        else
+        {
+            print_error_message('There was a problem with Airavata. Please try again later, or report a bug using the link in the Help menu.');
+            //print_error_message('AiravataSystemException!<br><br>' . $ase->airavataErrorType . ': ' . $ase->getMessage());
+        }
     }
     catch (TTransportException $tte)
     {

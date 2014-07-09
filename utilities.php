@@ -330,7 +330,15 @@ function get_all_user_projects($username)
     }
     catch (AiravataSystemException $ase)
     {
-        print_error_message('Airavata System Exception: ' . $ase->getMessage().'\n');
+        if ($ase->airavataErrorType == 2) // 2 = INTERNAL_ERROR
+        {
+            print_warning_message('You must create a project before you can create an experiment. Click <a href="create_project.php">here</a> to create a project.');
+        }
+        else
+        {
+            print_error_message('There was a problem with Airavata. Please try again later, or report a bug using the link in the Help menu.');
+            //print_error_message('AiravataSystemException!<br><br>' . $ase->airavataErrorType . ': ' . $ase->getMessage());
+        }
     }
 
     return $userProjects;
@@ -870,26 +878,28 @@ function cancel_experiment($expId)
 function create_project_select($projectId = null, $editable = true)
 {
     $editable? $disabled = '' : $disabled = 'disabled';
-
-    echo '<select class="form-control" name="project" id="project" required ' . $disabled . '>';
-
     $userProjects = get_all_user_projects($_SESSION['username']);
 
-    foreach ($userProjects as $project)
+    if (sizeof($userProjects) > 0)
     {
-        if ($project->projectID == $projectId)
+        echo '<select class="form-control" name="project" id="project" required ' . $disabled . '>';
+
+        foreach ($userProjects as $project)
         {
-            $selected = 'selected';
-        }
-        else
-        {
-            $selected = '';
+            if ($project->projectID == $projectId)
+            {
+                $selected = 'selected';
+            }
+            else
+            {
+                $selected = '';
+            }
+
+            echo '<option value="' . $project->projectID . '" ' . $selected . '>' . $project->name . '</option>';
         }
 
-        echo '<option value="' . $project->projectID . '" ' . $selected . '>' . $project->name . '</option>';
+        echo '</select>';
     }
-
-    echo '</select>';
 }
 
 
