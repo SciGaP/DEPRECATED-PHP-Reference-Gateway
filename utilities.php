@@ -237,20 +237,24 @@ function connect_to_id_store()
  */
 function get_airavata_client()
 {
-    /*
-    $airavataClientFactory = new \Airavata\Client\AiravataClientFactory(array('airavataServerHost' => "gw111.iu.xsede.org", 'airavataServerPort' => "8930"));
+    try
+    {
+        $transport = new TSocket(AIRAVATA_SERVER, AIRAVATA_PORT);
+        $transport->setRecvTimeout(AIRAVATA_TIMEOUT);
+        $transport->setSendTimeout(AIRAVATA_TIMEOUT);
 
-    return $airavataClientFactory->getAiravataClient();
-    */
+        $protocol = new TBinaryProtocol($transport);
+        $transport->open();
 
-    $transport = new TSocket(AIRAVATA_SERVER, AIRAVATA_PORT);
-    $transport->setRecvTimeout(AIRAVATA_TIMEOUT);
-    $transport->setSendTimeout(AIRAVATA_TIMEOUT);
+        $client = new AiravataClient($protocol);
+    }
+    catch (Exception $e)
+    {
+        print_error_message('There was a problem connecting to Airavata. Please try again later.');
+    }
 
-    $protocol = new TBinaryProtocol($transport);
-    $transport->open();
 
-    return new AiravataClient($protocol);
+    return $client;
 
 }
 
