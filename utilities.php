@@ -805,7 +805,7 @@ function assemble_experiment()
 
     $applicationInputs = get_application_inputs($_POST['application']);
     $experimentInputs = array();
-
+    //var_dump($_FILES);
     if (sizeof($_FILES) > 0)
     {
         if (file_upload_successful())
@@ -842,14 +842,14 @@ function assemble_experiment()
         {
             $experimentInput->value = $_POST[$applicationInput->name];
         }
-        elseif ($experimentInput->type == DataType::URI)
+        elseif ($experimentInput->type == 3)//DataType::URI)
         {
             $file = $_FILES[$applicationInput->name];
 
 
-            /*
-             * move file to experiment data directory
-             */
+            //
+            // move file to experiment data directory
+            //
             $filePath = $experimentPath . $file['name'];
 
             // check if file already exists
@@ -1177,6 +1177,7 @@ function create_compute_resources_select($id)
 function create_inputs($id, $isRequired)
 {
     $inputs = get_application_inputs($id);
+    //var_dump($inputs);
 
     $required = $isRequired? ' required' : '';
 
@@ -1203,10 +1204,10 @@ function create_inputs($id, $isRequired)
                     '" placeholder="' . $input->userFriendlyDescription . '"' . $required . '>
                     </div>';
                 break;
-            case 'URI':
+            case 3:
                 echo '<div class="form-group">
                     <label for="experiment-input">' . $input->name . '</label>
-                    <input type="file" class="form-control" name="' . $input->name .
+                    <input type="file" class="" name="' . $input->name .
                     '" id="' . $input->name .
                     '" placeholder="' . $input->userFriendlyDescription . '"' . $required . '>
                     </div>';
