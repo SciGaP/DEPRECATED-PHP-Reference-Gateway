@@ -1039,13 +1039,10 @@ function create_compute_resources_select($id)
 
     echo '<select class="form-control" name="compute-resource" id="compute-resource">';
 
-    foreach ($computeResources as $computeResourceId)
+    foreach ($computeResources as $id => $name)
     {
-        $computeResource = get_compute_resource($computeResourceId);
-
-        // replace computeResourceId with hostName when ready
-        echo '<option value="' . $computeResource->computeResourceId . '">' .
-                $computeResource->hostName . '</option>';
+        echo '<option value="' . $id . '">' .
+                $name . '</option>';
 
     }
 
