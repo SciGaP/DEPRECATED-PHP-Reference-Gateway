@@ -621,191 +621,17 @@ function assemble_experiment()
     $scheduling->totalPhysicalMemory = $_POST['memory'];
     $scheduling->resourceHostId = $_POST['compute-resource'];
 
-    /*
-    switch ($_POST['compute-resource'])
-    {
-        case 'trestles.sdsc.edu':
-            $scheduling->ComputationalProjectAccount = 'sds128';
-            break;
-        case 'stampede.tacc.xsede.org':
-        case 'lonestar.tacc.utexas.edu':
-            $scheduling->ComputationalProjectAccount = 'TG-STA110014S';
-            break;
-        default:
-            $scheduling->ComputationalProjectAccount = 'admin';
-    }
-    */
+
 
     $userConfigData = new UserConfigurationData();
     $userConfigData->computationalResourceScheduling = $scheduling;
 
 
 
-
-
-
-
-
-    /*
-    // create inputs
-    if ($_POST['application'] == 'WRF')
-    {
-        foreach ($_FILES as $file)
-        {
-            if ($file['error'] > 0)
-            {
-                $uploadSuccessful = false;
-                print_error_message('Error uploading file ' . $file['name'] . ' !');
-            }
-//            elseif ($file['type'] != 'text/plain')
-//            {
-//                $uploadSuccessful = false;
-//                print_error_message('Uploaded file ' . $file['name'] . ' type not supported!');
-//            }
-//            elseif (($file['size'] / 1024) > 20)
-//            {
-//                $uploadSuccessful = false;
-//                print_error_message('Uploaded file ' . $file['name'] . ' must be smaller than 10 MB!');
-//            }
-        }
-
-
-
-
-
-
-
-
-        if ($uploadSuccessful)
-        {
-            // construct unique path
-            do
-            {
-                $experimentPath = EXPERIMENT_DATA_ROOT . $_POST['experiment-name'] . md5(rand() * time()) . '/';
-            }
-            while (is_dir($experimentPath)); // if dir already exists, try again
-
-            // create new directory
-            // move file to new directory, overwriting old versions if necessary
-            if (mkdir($experimentPath))
-            {
-                foreach ($_FILES as $file)
-                {
-                    $filePath = $experimentPath . $file['name'];
-
-                    if (is_file($filePath))
-                    {
-                        unlink($filePath);
-
-                        print_warning_message('Uploaded file already exists! Overwriting...');
-                    }
-
-                    $moveFile = move_uploaded_file($file['tmp_name'], $filePath);
-
-                    if ($moveFile)
-                    {
-                        print_success_message('Upload: ' . $file['name'] . '<br>' .
-                            'Type: ' . $file['type'] . '<br>' .
-                            'Size: ' . ($file['size']/1024) . ' kB<br>' .
-                            'Stored in: ' . $experimentPath . $file['name']);
-                    }
-                    else
-                    {
-                        print_error_message('Error moving uploaded file ' . $file['name'] . '!');
-                    }
-
-
-
-                    // wrf
-                    $experimentInput = new DataObjectType();
-
-                    if ($file == $_FILES['namelist'])
-                    {
-                        $experimentInput->key = 'WRF_Namelist';
-                        //$experimentInput->value = '/home/airavata/wrf/namelist.input';
-                    }
-                    elseif ($file == $_FILES['model-init'])
-                    {
-                        $experimentInput->key = 'WRF_Input_File';
-                        //$experimentInput->value = '/home/airavata/wrf/wrfinput_d01';
-                    }
-                    elseif ($file == $_FILES['bounds'])
-                    {
-                        $experimentInput->key = 'WRF_Boundary_File';
-                        //$experimentInput->value = '/home/airavata/wrf/wrfbdy_d01';
-                    }
-
-                    //echo $filePath . '<br>';
-                    //echo 'realpath: ' . realpath($filePath) . '<br>';
-                    //echo 'str_replace: ' . str_replace(EXPERIMENT_DATA_ROOT, EXPERIMENT_DATA_ROOT_ABSOLUTE, $filePath) . '<br>';
-                    //echo str_replace(dirname(realpath($filePath)), EXPERIMENT_DATA_ROOT, realpath($filePath)) . '<br>';
-
-                    //$experimentInput->value = $filePath;
-                    $experimentInput->value = str_replace(EXPERIMENT_DATA_ROOT, EXPERIMENT_DATA_ROOT_ABSOLUTE, $filePath);
-                    $experimentInput->type = DataType::URI;
-                    $experimentInputs[] = $experimentInput; // push into array
-
-                    //Configuring WRF Outputs
-                    $experimentOutput1 = new DataObjectType();
-                    $experimentOutput1->key = 'WRF_Output';
-                    $experimentOutput1->value = '';
-                    $experimentOutput1->type = DataType::URI;
-
-                    $experimentOutput2 = new DataObjectType();
-                    $experimentOutput2->key = 'WRF_Execution_Log';
-                    $experimentOutput2->value = '';
-                    $experimentOutput2->type = DataType::URI;
-
-                    $experimentOutputs = array($experimentOutput1, $experimentOutput2);
-                }
-            }
-            else
-            {
-                print_error_message('Error creating upload directory!');
-            }
-
-
-        }
-    }
-    else // echo
-    {
-        //Echo Inputs
-        $experimentInput = new DataObjectType();
-        $experimentInput->key = 'echo_input';
-        $experimentInput->value = 'echo_output=' . $_POST['experiment-input'];
-        $experimentInput->type = DataType::STRING;
-        $experimentInputs = array($experimentInput);
-
-        //Echo Outputs
-        $experimentOutput1 = new DataObjectType();
-        $experimentOutput1->key = 'echo_output';
-        $experimentOutput1->value = '';
-        $experimentOutput1->type = DataType::STRING;
-
-        $experimentOutput2 = new DataObjectType();
-        $experimentOutput2->key = 'stdout';
-        $experimentOutput2->value = '';
-        $experimentOutput2->type = DataType::STRING;
-
-        $experimentOutput3 = new DataObjectType();
-        $experimentOutput3->key = 'stderr';
-        $experimentOutput3->value = '';
-        $experimentOutput3->type = DataType::STRING;
-        $experimentOutputs = array($experimentOutput1, $experimentOutput2, $experimentOutput3);
-    }
-    */
-
-
-
-
-
-
-
-
-
     $applicationInputs = get_application_inputs($_POST['application']);
     $experimentInputs = array();
     //var_dump($_FILES);
+
     if (sizeof($_FILES) > 0)
     {
         if (file_upload_successful())
@@ -1177,12 +1003,22 @@ function create_compute_resources_select($id)
 function create_inputs($id, $isRequired)
 {
     $inputs = get_application_inputs($id);
-    //var_dump($inputs);
+
 
     $required = $isRequired? ' required' : '';
 
     foreach ($inputs as $input)
     {
+        /*
+        echo '<p>DataType::STRING = ' . DataType::STRING . '</p>';
+        echo '<p>DataType::INTEGER = ' . DataType::INTEGER . '</p>';
+        echo '<p>DataType::URI = ' . DataType::URI . '</p>';
+        echo '<p>DataType::STDOUT = ' . DataType::STDOUT . '</p>';
+        echo '<p>DataType::STDERR = ' . DataType::STDERR . '</p>';
+
+        echo '<p>$input->type = ' . $input->type . '</p>';
+        */
+
         switch ($input->type)
         {
             case 'STRING':
