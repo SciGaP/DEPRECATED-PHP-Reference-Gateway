@@ -251,7 +251,8 @@ function get_airavata_client()
     }
     catch (Exception $e)
     {
-        print_error_message('There was a problem connecting to Airavata. Please try again later.');
+        print_error_message('There was a problem connecting to Airavata.
+            Please try again later or submit a bug report using the link in the Help menu.');
     }
 
 

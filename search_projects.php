@@ -46,6 +46,7 @@ $airavataclient = get_airavata_client();
             </div>
 
             <input name="search" type="submit" class="btn btn-primary" value="Search">
+            <p class="help-block">You can use a * as a wildcard character. Tip: search for * alone to retrieve all of your projects.</p>
         </form>
 
 
