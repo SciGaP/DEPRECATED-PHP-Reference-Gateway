@@ -142,63 +142,12 @@ if (isset($_POST['save']))
                     <p><strong>Current inputs</strong></p>
                     <?php list_input_files($experiment); ?>
                 </div>
-                <?php
-                switch ($experiment->applicationId)
-                {
-                    case 'Echo':
-                        echo '<div class="form-group">
-                            <label class="sr-only" for="experiment-input">Text to echo</label>
-                            <input type="text"
-                                class="form-control"
-                                name="experiment-input"
-                                id="experiment-input"
-                                placeholder="Text to echo">
-                            </div>';
-                        break;
-                    case 'WRF':
-                        echo '<div class="form-group">
-                                <label for="namelist">Namelist</label>
-                                <input type="file" name="namelist" id="namelist" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="model-init">Model initialization data</label>
-                                <input type="file" name="model-init" id="model-init" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label for="bounds">Forecast lateral boundary conditions</label>
-                                <input type="file" name="bounds" id="bounds" disabled>
-                            </div>
-                        ';
-                        break;
-                }
-                ?>
+                <?php create_inputs($experiment->applicationId, false); ?>
             </div>
 
         <div class="form-group">
             <label for="compute-resource">Compute Resource</label>
-            <select class="form-control" name="compute-resource" id="compute-resource">
-                <?php
-
-                foreach ($appResources[$experiment->applicationId] as $resource)
-                {
-                    $userConfigData = $experiment->userConfigurationData;
-                    $scheduling = $userConfigData->computationalResourceScheduling;
-                    $experimentResource = $scheduling->resourceHostId;
-
-                    if ($resource == $experimentResource)
-                    {
-                        $selected = 'selected';
-                    }
-                    else
-                    {
-                        $selected = '';
-                    }
-
-                    echo '<option value="' . $resource . '" ' . $selected . '>' . $resource . '</option>';
-                }
-
-                ?>
-            </select>
+            <?php create_compute_resources_select($experiment->applicationId); ?>
         </div>
 
     <div class="form-group">
@@ -294,6 +243,7 @@ function apply_changes_to_experiment($experiment)
     $schedulingUpdated->wallTimeLimit = $_POST['wall-time'];
     $schedulingUpdated->totalPhysicalMemory = $_POST['memory'];
 
+    /*
     switch ($_POST['compute-resource'])
     {
         case 'trestles.sdsc.edu':
@@ -306,6 +256,7 @@ function apply_changes_to_experiment($experiment)
         default:
             $schedulingUpdated->ComputationalProjectAccount = 'admin';
     }
+    */
 
     $userConfigDataUpdated->computationalResourceScheduling = $schedulingUpdated;
     $experiment->userConfigurationData = $userConfigDataUpdated;
@@ -353,18 +304,17 @@ function apply_changes_to_experiment($experiment)
     }
     else // echo
     {
-        if ($_POST['experiment-input'])
-        {
-            foreach ($experimentInputs as $input)
-            {
-                if ($input->key = 'echo_input')
-                {
-                    $input->value = 'echo_output=' . $_POST['experiment-input'];
-                }
-            }
 
-            $experiment->experimentInputs = $experimentInputs;
+
+        foreach ($experimentInputs as $input)
+        {
+            if ($_POST[$input->key])
+            {
+                $input->value = $_POST[$input->key];
+            }
         }
+
+        $experiment->experimentInputs = $experimentInputs;
     }
 
 
@@ -501,8 +451,8 @@ function list_input_files($experiment)
         }
         elseif ($input->type == DataType::STRING)
         {
-            $valueExplode = explode('=', $input->value);
-            echo '<p>' . $input->key . ': ' . $valueExplode[1] . '</p>';
+            //$valueExplode = explode('=', $input->value);
+            echo '<p>' . $input->key . ': ' . $input->value . '</p>';
         }
     }
 }

@@ -378,6 +378,37 @@ function get_all_applications()
 
 
 /**
+ * Get the interface for the application with the given ID
+ * @param $id
+ * @return null
+ */
+function get_application_interface($id)
+{
+    global $airavataclient;
+    $applicationInterface = null;
+
+    try
+    {
+        $applicationInterface = $airavataclient->getApplicationInterface($id);
+    }
+    catch (InvalidRequestException $ire)
+    {
+        print_error_message('InvalidRequestException: ' . $ire->getMessage(). '\n');
+    }
+    catch (AiravataClientException $ace)
+    {
+        print_error_message('Airavata Client Exception: ' . $ace->getMessage().'\n');
+    }
+    catch (AiravataSystemException $ase)
+    {
+        print_error_message('Airavata System Exception: ' . $ase->getMessage().'\n');
+    }
+
+    return $applicationInterface;
+}
+
+
+/**
  * Get a list of compute resources available for the given application ID
  * @param $id
  * @return null
@@ -785,7 +816,6 @@ function assemble_experiment()
             ($experimentInput->type == DataType::INTEGER))
         {
             $experimentInput->value = $_POST[$applicationInput->name];
-            print_success_message('I can accept this input type!');
         }
         elseif ($experimentInput->type == DataType::URI)
         {
@@ -1054,10 +1084,14 @@ function create_compute_resources_select($id)
 /**
  * Create form inputs to accept the inputs tot he given application
  * @param $id
+ * @param $isRequired
+ * @internal param $required
  */
-function create_inputs($id)
+function create_inputs($id, $isRequired)
 {
     $inputs = get_application_inputs($id);
+
+    $required = $isRequired? ' required' : '';
 
     foreach ($inputs as $input)
     {
@@ -1069,7 +1103,7 @@ function create_inputs($id)
                     <input type="text" class="form-control" name="' . $input->name .
                     '" id="' . $input->name .
                     '" value="' . $input->value .
-                    '" placeholder="' . $input->userFriendlyDescription . '" required>
+                    '" placeholder="' . $input->userFriendlyDescription . '"' . $required . '>
                     </div>';
                 break;
             case 'INTEGER':
@@ -1079,7 +1113,7 @@ function create_inputs($id)
                     <input type="number" class="form-control" name="' . $input->name .
                     '" id="' . $input->name .
                     '" value="' . $input->value .
-                    '" placeholder="' . $input->userFriendlyDescription . '" required>
+                    '" placeholder="' . $input->userFriendlyDescription . '"' . $required . '>
                     </div>';
                 break;
             case 'URI':
@@ -1087,7 +1121,7 @@ function create_inputs($id)
                     <label for="experiment-input">' . $input->name . '</label>
                     <input type="file" class="form-control" name="' . $input->name .
                     '" id="' . $input->name .
-                    '" placeholder="' . $input->userFriendlyDescription . '" required>
+                    '" placeholder="' . $input->userFriendlyDescription . '"' . $required . '>
                     </div>';
                 break;
         }

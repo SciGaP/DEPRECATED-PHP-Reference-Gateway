@@ -137,7 +137,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
 
 
 
-        create_inputs($application);
+        create_inputs($application, true);
 
 
         echo '</div>

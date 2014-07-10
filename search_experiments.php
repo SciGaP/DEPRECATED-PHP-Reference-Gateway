@@ -96,6 +96,9 @@ if (isset($_POST['search']))
             $experimentStatusString = ExperimentState::$__names[$experimentState];
             $experimentTimeOfStateChange = date('Y-m-d H:i:s', $experimentStatus->timeOfStateChange/1000);// divide by 1000 since timeOfStateChange is in ms
 
+            $applicationInterface = get_application_interface($experiment->applicationId);
+
+
 
             echo '<tr>';
 
@@ -123,7 +126,7 @@ if (isset($_POST['search']))
 
             echo '</td>';
 
-            echo "<td>$experiment->applicationId</td>";
+            echo "<td>$applicationInterface->applicationName</td>";
 
 
 
@@ -272,7 +275,7 @@ function get_search_results()
         }
         else
         {
-            print_error_message('There was a problem with Airavata. Please try again later, or report a bug using the link in the Help menu.');
+            print_error_message('There was a problem with Airavata. Please try again later or report a bug using the link in the Help menu.');
             //print_error_message('AiravataSystemException!<br><br>' . $ase->airavataErrorType . ': ' . $ase->getMessage());
         }
     }

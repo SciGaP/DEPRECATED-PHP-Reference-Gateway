@@ -40,6 +40,7 @@ $experiment = get_experiment($_GET['expId']);
 $project = get_project($experiment->projectID);
 
 
+
 $experimentStatus = $experiment->experimentStatus;
 $experimentState = $experimentStatus->experimentState;
 $experimentStatusString = ExperimentState::$__names[$experimentState];
@@ -49,7 +50,8 @@ $experimentTimeOfStateChange = date('Y-m-d H:i:s', $experimentStatus->timeOfStat
 $userConfigData = $experiment->userConfigurationData;
 $scheduling = $userConfigData->computationalResourceScheduling;
 
-
+$applicationInterface = get_application_interface($experiment->applicationId);
+$computeResource = get_compute_resource($scheduling->resourceHostId);
 
 //var_dump($experiment);
 
@@ -133,11 +135,11 @@ elseif (isset($_POST['cancel']))
         </tr>
         <tr>
             <td><strong>Application</strong></td>
-            <td><?php echo $experiment->applicationId; ?></td>
+            <td><?php echo $applicationInterface->applicationName; ?></td>
         </tr>
         <tr>
             <td><strong>Compute resource</strong></td>
-            <td><?php echo $scheduling->resourceHostId; ?></td>
+            <td><?php echo $computeResource->hostName; ?></td>
         </tr>
         <tr>
             <td><strong>Status</strong></td>
