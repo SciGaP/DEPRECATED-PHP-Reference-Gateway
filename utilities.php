@@ -273,6 +273,7 @@ function launch_experiment($expId)
 
     try
     {
+        /* temporarily using hard-coded token
         open_tokens_file($tokenFilePath);
 
         $communityToken = $tokenFile->tokenId;
@@ -285,6 +286,12 @@ function launch_experiment($expId)
         $tokenString = isset($_SESSION['tokenId'])? 'personal' : 'community';
 
         print_success_message('Experiment launched using ' . $tokenString . ' allocation!');
+        */
+
+        $hardCodedToken = '7a8b801f-23e7-465f-b5e4-3cf1e8bee2ab';
+        $airavataclient->launchExperiment($expId, $hardCodedToken);
+
+        print_success_message('Experiment launched!');
     }
     catch (InvalidRequestException $ire)
     {
