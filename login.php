@@ -33,6 +33,7 @@ if (form_submitted())
     if (id_matches_db($username, $password))
     {
         store_id_in_session($username);
+        print_success_message('Login successful! You will be redirected to your home page shortly.');
         redirect('index.php');
     }
     else

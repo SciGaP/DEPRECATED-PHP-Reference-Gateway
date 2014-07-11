@@ -70,6 +70,7 @@ connect_to_id_store();
             }
             else // standard user
             {
+                /* temporarily remove to avoid confusion during XSEDE tutorial
                 if (isset($_SESSION['tokenId']))
                 {
                     echo '<p><small>XSEDE token currently active.
@@ -91,6 +92,7 @@ connect_to_id_store();
                     print_success_message('Received XSEDE token!' .
                         '<br>All experiments launched during this session will use your personal allocation.');
                 }
+                */
             }
         }
         else
