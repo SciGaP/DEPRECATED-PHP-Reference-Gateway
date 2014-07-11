@@ -109,7 +109,7 @@ connect_to_id_store();
                         href="https://github.com/SciGaP/PHP-Reference-Gateway"
                         target="_blank">See the code &raquo;</a></p>
                 <p><a href="https://cwiki.apache.org/confluence/display/AIRAVATA/XSEDE+2014+Tutorial"
-                    target="_blank">View the XSEDE 2014 tutorial documentation</a></p>
+                    target="_blank">View the XSEDE 2014 tutorial documentation &raquo;</a></p>
             ';
         }
 
@@ -146,7 +146,7 @@ connect_to_id_store();
                         href="https://github.com/SciGaP/PHP-Reference-Gateway"
                         target="_blank">See the code &raquo;</a></p>
                     <p><a href="https://cwiki.apache.org/confluence/display/AIRAVATA/XSEDE+2014+Tutorial"
-                        target="_blank">View the XSEDE 2014 tutorial documentation</a></p>
+                        target="_blank">View the XSEDE 2014 tutorial documentation &raquo;</a></p>
                 </div>
             ';
         }
