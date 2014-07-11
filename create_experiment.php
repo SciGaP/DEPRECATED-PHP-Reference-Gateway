@@ -154,12 +154,14 @@ if (isset($_POST['save']) || isset($_POST['launch']))
             </div>
             <div class="form-group">
                 <label for="cpu-count">Total Core Count</label>
-                <input type="number" class="form-control" name="cpu-count" id="cpu-count" value="1" min="1">
+                <input type="number" class="form-control" name="cpu-count" id="cpu-count" value="4" min="1">
             </div>
+            <!--
             <div class="form-group">
                 <label for="threads">Number of Threads</label>
                 <input type="number" class="form-control" name="threads" id="threads" value="0" min="0">
             </div>
+            -->
             <div class="form-group">
                 <label for="wall-time">Wall Time Limit</label>
                 <div class="input-group">
@@ -167,6 +169,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
                     <span class="input-group-addon">minutes</span>
                 </div>
             </div>
+            <!--
             <div class="form-group">
                 <label for="memory">Total Physical Memory</label>
                 <div class="input-group">
@@ -174,7 +177,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
                     <span class="input-group-addon">kB</span>
                 </div>
             </div>
-
+            -->
 
 
             </div>

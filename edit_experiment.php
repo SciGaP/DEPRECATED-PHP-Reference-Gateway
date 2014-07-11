@@ -167,6 +167,7 @@ if (isset($_POST['save']))
                value="<?php echo $scheduling->totalCPUCount ?>"
             <?php if(!$editable) echo 'disabled' ?>>
     </div>
+    <!--
     <div class="form-group">
         <label for="threads">Number of Threads</label>
         <input type="number"
@@ -174,9 +175,10 @@ if (isset($_POST['save']))
                name="threads"
                id="threads"
                min="0"
-               value="<?php echo $scheduling->numberOfThreads ?>"
-            <?php if(!$editable) echo 'disabled' ?>>
+               value="<?php //echo $scheduling->numberOfThreads; ?>"
+            <?php //if(!$editable) echo 'disabled'; ?>>
     </div>
+    -->
     <div class="form-group">
         <label for="wall-time">Wall Time Limit</label>
         <div class="input-group">
@@ -190,6 +192,7 @@ if (isset($_POST['save']))
             <span class="input-group-addon">minutes</span>
         </div>
     </div>
+    <!--
     <div class="form-group">
         <label for="memory">Total Physical Memory</label>
         <div class="input-group">
@@ -198,12 +201,12 @@ if (isset($_POST['save']))
                    name="memory"
                    id="memory"
                    min="0"
-                   value="<?php echo $scheduling->totalPhysicalMemory ?>"
-                <?php if(!$editable) echo 'disabled' ?>>
+                   value="<?php //echo $scheduling->totalPhysicalMemory; ?>"
+                <?php //if(!$editable) echo 'disabled'; ?>>
             <span class="input-group-addon">kB</span>
         </div>
     </div>
-
+    -->
     </div>
     </div>
 
