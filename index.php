@@ -99,8 +99,17 @@ connect_to_id_store();
 
             echo '
                 <h1>PHP Gateway with Airavata</h1>
-                <p>PGA is a science gateway built with the Airavata API. You can reference PGA as you integrate Airavata into your own gateway, or you can create your gateway on top of PGA by cloning it at the link below.</p>
-                <p><a class="btn btn-primary btn-lg" role="button" href="https://github.com/SciGaP/PHP-Reference-Gateway" target="_blank">See the code &raquo;</a></p>
+                <p>
+                    PGA is a science gateway built with the Airavata API. You can reference PGA as you integrate Airavata
+                    into your own gateway, or you can create your gateway on top of PGA by cloning it at the link below.
+                    PGA is known to work well in the Chrome, Firefox, and Internet Explorer browsers.
+                </p>
+                <p><a class="btn btn-primary btn-lg"
+                        role="button"
+                        href="https://github.com/SciGaP/PHP-Reference-Gateway"
+                        target="_blank">See the code &raquo;</a></p>
+                <p><a href="https://cwiki.apache.org/confluence/display/AIRAVATA/XSEDE+2014+Tutorial"
+                    target="_blank">View the XSEDE 2014 tutorial documentation</a></p>
             ';
         }
 
@@ -127,8 +136,17 @@ connect_to_id_store();
                 <div class="col-md-4">
                     <h2>PHP Gateway with Airavata</h2>
 
-                    <p>PGA is a science gateway built with the Airavata API. You can reference PGA as you integrate Airavata into your own gateway, or you can create your gateway on top of PGA by cloning it at the link below.</p>
-                    <p><a class="btn btn-default" role="button" href="https://github.com/SciGaP/PHP-Reference-Gateway" target="_blank">See the code &raquo;</a></p>
+                    <p>
+                        PGA is a science gateway built with the Airavata API. You can reference PGA as you integrate
+                        Airavata into your own gateway, or you can create your gateway on top of PGA by cloning it at
+                        the link below. PGA is known to work well in the Chrome, Firefox, and Internet Explorer browsers.
+                    </p>
+                    <p><a class="btn btn-default"
+                        role="button"
+                        href="https://github.com/SciGaP/PHP-Reference-Gateway"
+                        target="_blank">See the code &raquo;</a></p>
+                    <p><a href="https://cwiki.apache.org/confluence/display/AIRAVATA/XSEDE+2014+Tutorial"
+                        target="_blank">View the XSEDE 2014 tutorial documentation</a></p>
                 </div>
             ';
         }
@@ -138,9 +156,21 @@ connect_to_id_store();
             <div class="thumbnail" style="border:none">
                 <img src="resources/assets/scigap-header-logo.png" alt="SciGaP">
                 <div class="caption">
-                    <p>SciGaP is a hosted service with a public API that science gateways can use to manage applications and workflows running on remote supercomputers, as well as other services. Gateway developers can thus concentrate their efforts on building their scientific communities and not worry about operations.</p>
-                    <p>Science Gateway Platform as a Service (SciGaP) provides application programmer interfaces (APIs) to hosted generic infrastructure services that can be used by domain science communities to create Science Gateways.</p>
-                    <p><a class="btn btn-default" href="http://scigap.org/" role="button" target="_blank">Learn more &raquo;</a></p>
+                    <p>
+                        SciGaP is a hosted service with a public API that science gateways can use to manage
+                        applications and workflows running on remote supercomputers, as well as other services. Gateway
+                        developers can thus concentrate their efforts on building their scientific communities and not
+                        worry about operations.
+                    </p>
+                    <p>
+                        Science Gateway Platform as a Service (SciGaP) provides application programmer interfaces (APIs)
+                        to hosted generic infrastructure services that can be used by domain science communities to
+                        create Science Gateways.
+                    </p>
+                    <p><a class="btn btn-default"
+                          href="http://scigap.org/"
+                          role="button"
+                          target="_blank">Learn more &raquo;</a></p>
                 </div>
             </div>
         </div>
@@ -148,8 +178,17 @@ connect_to_id_store();
             <div class="thumbnail" style="border:none">
                 <img src="resources/assets/PoweredbyAiravata_Small.png" alt="SciGaP">
                 <div class="caption">
-                    <p>Apache Airavata is a software framework which is dominantly used to build Web-based science gateways and assist to compose, manage, execute and monitor large scale applications and workflows on distributed computing resources such as local clusters, supercomputers, national grids, academic and commercial clouds. Airavata mainly supports long running applications and workflows on distributed computational resources.</p>
-                    <p><a class="btn btn-default" href="http://airavata.apache.org/" role="button" target="_blank">Learn more &raquo;</a></p>
+                    <p>
+                        Apache Airavata is a software framework which is dominantly used to build Web-based science
+                        gateways and assist to compose, manage, execute and monitor large scale applications and
+                        workflows on distributed computing resources such as local clusters, supercomputers, national
+                        grids, academic and commercial clouds. Airavata mainly supports long running applications and
+                        workflows on distributed computational resources.
+                    </p>
+                    <p><a class="btn btn-default"
+                          href="http://airavata.apache.org/"
+                          role="button"
+                          target="_blank">Learn more &raquo;</a></p>
                 </div>
             </div>
         </div>
