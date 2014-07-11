@@ -104,9 +104,7 @@ connect_to_id_store();
                     into your own gateway, or you can create your gateway on top of PGA by cloning it at the link below.
                     PGA is known to work well in the Chrome, Firefox, and Internet Explorer browsers.
                 </p>
-                <p><a class="btn btn-primary btn-lg"
-                        role="button"
-                        href="https://github.com/SciGaP/PHP-Reference-Gateway"
+                <p><a href="https://github.com/SciGaP/PHP-Reference-Gateway"
                         target="_blank">See the code &raquo;</a></p>
                 <p><a href="https://cwiki.apache.org/confluence/display/AIRAVATA/XSEDE+2014+Tutorial"
                     target="_blank">View the XSEDE 2014 tutorial documentation &raquo;</a></p>
@@ -141,9 +139,7 @@ connect_to_id_store();
                         Airavata into your own gateway, or you can create your gateway on top of PGA by cloning it at
                         the link below. PGA is known to work well in the Chrome, Firefox, and Internet Explorer browsers.
                     </p>
-                    <p><a class="btn btn-default"
-                        role="button"
-                        href="https://github.com/SciGaP/PHP-Reference-Gateway"
+                    <p><a href="https://github.com/SciGaP/PHP-Reference-Gateway"
                         target="_blank">See the code &raquo;</a></p>
                     <p><a href="https://cwiki.apache.org/confluence/display/AIRAVATA/XSEDE+2014+Tutorial"
                         target="_blank">View the XSEDE 2014 tutorial documentation &raquo;</a></p>
@@ -167,9 +163,7 @@ connect_to_id_store();
                         to hosted generic infrastructure services that can be used by domain science communities to
                         create Science Gateways.
                     </p>
-                    <p><a class="btn btn-default"
-                          href="http://scigap.org/"
-                          role="button"
+                    <p><a href="http://scigap.org/"
                           target="_blank">Learn more &raquo;</a></p>
                 </div>
             </div>
@@ -185,9 +179,7 @@ connect_to_id_store();
                         grids, academic and commercial clouds. Airavata mainly supports long running applications and
                         workflows on distributed computational resources.
                     </p>
-                    <p><a class="btn btn-default"
-                          href="http://airavata.apache.org/"
-                          role="button"
+                    <p><a href="http://airavata.apache.org/"
                           target="_blank">Learn more &raquo;</a></p>
                 </div>
             </div>
