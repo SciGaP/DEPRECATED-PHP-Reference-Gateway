@@ -94,16 +94,8 @@ if (isset($_POST['search']))
             $experimentStatus = $experiment->experimentStatus;
             $experimentState = $experimentStatus->experimentState;
             $experimentStatusString = ExperimentState::$__names[$experimentState];
-            $experimentTimeOfStateChange = date('Y-m-d H:i:s', $experimentStatus->timeOfStateChange/1000);// divide by 1000 since timeOfStateChange is in ms
-
             $applicationInterface = get_application_interface($experiment->applicationId);
-
-
-
-            echo '<tr>';
-
-            echo '<td>';
-
+            //var_dump($experiment);
 
             switch ($experimentStatusString)
             {
@@ -112,25 +104,28 @@ if (isset($_POST['search']))
                 case 'EXECUTING':
                 case 'CANCELING':
                 case 'COMPLETED':
-                    echo $experiment->name;
+                    $nameText = $experiment->name;
+                    $experimentTime = date('Y-m-d H:i:s', $experimentStatus->timeOfStateChange/1000);// divide by 1000 since timeOfStateChange is in ms
                     break;
                 default:
-                    echo $experiment->name .
+                    $nameText = $experiment->name .
                         ' <a href="edit_experiment.php?expId=' .
                         $experiment->experimentID .
                         '" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a>';
+                    $experimentTime = date('Y-m-d H:i:s', $experiment->creationTime/1000);// divide by 1000 since timeOfStateChange is in ms
                     break;
             }
 
 
 
-            echo '</td>';
+
+            echo '<tr>';
+
+            echo '<td>' . $nameText . '</td>';
 
             echo "<td>$applicationInterface->applicationName</td>";
 
-
-
-            echo '<td>' . $experimentTimeOfStateChange . '</td>';
+            echo '<td>' . $experimentTime . '</td>';
 
 
             switch ($experimentStatusString)

@@ -117,7 +117,11 @@ elseif (isset($_POST['cancel']))
 ?>
 
 
-<h1>Experiment Summary</h1>
+<h1>
+    Experiment Summary
+    <small><a href="experiment_summary.php?expId=<?php echo $experiment->experimentID ?>"
+              title="Refresh"><span class="glyphicon glyphicon-refresh"></span></a></small>
+</h1>
 
 
     <table class="table">

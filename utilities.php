@@ -83,9 +83,9 @@ use Thrift\Transport\TSocket;
 use Thrift\Exception\TTransportException;
 use Airavata\Model\Workspace\Experiment\ComputationalResourceScheduling;
 use Airavata\Model\Workspace\Experiment\DataObjectType;
-use Airavata\Model\Workspace\Experiment\DataType;
 use Airavata\Model\Workspace\Experiment\UserConfigurationData;
 use Airavata\Model\Workspace\Experiment\Experiment;
+use Airavata\Model\AppCatalog\AppInterface\DataType;
 
 
 
@@ -661,14 +661,19 @@ function assemble_experiment()
         $experimentInput = new DataObjectType();
         $experimentInput->key = $applicationInput->name;
         $experimentInput->metaData = $applicationInput->metaData;
-        $experimentInput->type = $applicationInput->type;
+
+
+        //$experimentInput->type = $applicationInput->type;
+        $experimentInput->type = DataType::STRING;
+
 
         if(($experimentInput->type == DataType::STRING) ||
-            ($experimentInput->type == DataType::INTEGER))
+            ($experimentInput->type == DataType::INTEGER) ||
+            ($experimentInput->type == DataType::FLOAT))
         {
             $experimentInput->value = $_POST[$applicationInput->name];
         }
-        elseif ($experimentInput->type == 3)//DataType::URI)
+        elseif ($experimentInput->type == DataType::URI)
         {
             $file = $_FILES[$applicationInput->name];
 
@@ -725,7 +730,7 @@ function assemble_experiment()
 
 
 
-
+    /*
     $applicationOutputs = get_application_outputs($_POST['application']);
     $experimentOutputs = array();
 
@@ -738,7 +743,7 @@ function assemble_experiment()
 
         $experimentOutputs[] = $experimentOutput;
     }
-
+    */
 
 
 
@@ -1004,24 +1009,22 @@ function create_inputs($id, $isRequired)
 {
     $inputs = get_application_inputs($id);
 
-
     $required = $isRequired? ' required' : '';
 
     foreach ($inputs as $input)
     {
         /*
-        echo '<p>DataType::STRING = ' . DataType::STRING . '</p>';
-        echo '<p>DataType::INTEGER = ' . DataType::INTEGER . '</p>';
-        echo '<p>DataType::URI = ' . DataType::URI . '</p>';
-        echo '<p>DataType::STDOUT = ' . DataType::STDOUT . '</p>';
-        echo '<p>DataType::STDERR = ' . DataType::STDERR . '</p>';
+        echo '<p>DataType::STRING = ' . \Airavata\Model\AppCatalog\AppInterface\DataType::STRING . '</p>';
+        echo '<p>DataType::INTEGER = ' . \Airavata\Model\AppCatalog\AppInterface\DataType::INTEGER . '</p>';
+        echo '<p>DataType::FLOAT = ' . \Airavata\Model\AppCatalog\AppInterface\DataType::FLOAT . '</p>';
+        echo '<p>DataType::URI = ' . \Airavata\Model\AppCatalog\AppInterface\DataType::URI . '</p>';
 
         echo '<p>$input->type = ' . $input->type . '</p>';
         */
 
         switch ($input->type)
         {
-            case 'STRING':
+            case DataType::STRING:
                 echo '<div class="form-group">
                     <label for="experiment-input">' . $input->name . '</label>
                     <input type="text" class="form-control" name="' . $input->name .
@@ -1030,8 +1033,8 @@ function create_inputs($id, $isRequired)
                     '" placeholder="' . $input->userFriendlyDescription . '"' . $required . '>
                     </div>';
                 break;
-            case 'INTEGER':
-            case 'FLOAT':
+            case DataType::INTEGER:
+            case DataType::FLOAT:
                 echo '<div class="form-group">
                     <label for="experiment-input">' . $input->name . '</label>
                     <input type="number" class="form-control" name="' . $input->name .
@@ -1040,13 +1043,17 @@ function create_inputs($id, $isRequired)
                     '" placeholder="' . $input->userFriendlyDescription . '"' . $required . '>
                     </div>';
                 break;
-            case 3:
+            case DataType::URI:
                 echo '<div class="form-group">
                     <label for="experiment-input">' . $input->name . '</label>
                     <input type="file" class="" name="' . $input->name .
                     '" id="' . $input->name .
                     '" placeholder="' . $input->userFriendlyDescription . '"' . $required . '>
                     </div>';
+                break;
+            default:
+                print_error_message('Input data type not supported!
+                    Please file a bug report using the link in the Help menu.');
                 break;
         }
     }
