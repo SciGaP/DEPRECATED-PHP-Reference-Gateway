@@ -614,10 +614,10 @@ function get_project($projectId)
  */
 function assemble_experiment()
 {
-    $experimentAssemblySuccessful = true; // errors will set this to false
-    $experimentPath = EXPERIMENT_DATA_ROOT;
+    //$experimentAssemblySuccessful = true; // errors will set this to false
+    //$experimentPath = EXPERIMENT_DATA_ROOT;
     $experimentInputs = array();
-    $experimentOutputs = array();
+    //$experimentOutputs = array();
 
     $scheduling = new ComputationalResourceScheduling();
     $scheduling->totalCPUCount = $_POST['cpu-count'];
@@ -636,100 +636,8 @@ function assemble_experiment()
 
 
     $applicationInputs = get_application_inputs($_POST['application']);
-    $experimentInputs = array();
-    //var_dump($_FILES);
-
-    if (sizeof($_FILES) > 0)
-    {
-        if (file_upload_successful())
-        {
-            // construct unique path
-            do
-            {
-                $experimentPath = EXPERIMENT_DATA_ROOT . $_POST['experiment-name'] . md5(rand() * time()) . '/';
-            }
-            while (is_dir($experimentPath)); // if dir already exists, try again
-
-            // create upload directory
-            if (!mkdir($experimentPath))
-            {
-                print_error_message('Error creating upload directory!');
-                $experimentAssemblySuccessful = false;
-            }
-        }
-        else
-        {
-            $experimentAssemblySuccessful = false;
-        }
-    }
-
-    foreach ($applicationInputs as $applicationInput)
-    {
-        $experimentInput = new DataObjectType();
-        $experimentInput->key = $applicationInput->name;
-        $experimentInput->metaData = $applicationInput->metaData;
-
-
-        //$experimentInput->type = $applicationInput->type;
-        $experimentInput->type = DataType::STRING;
-
-
-        if(($experimentInput->type == DataType::STRING) ||
-            ($experimentInput->type == DataType::INTEGER) ||
-            ($experimentInput->type == DataType::FLOAT))
-        {
-            $experimentInput->value = $_POST[$applicationInput->name];
-        }
-        elseif ($experimentInput->type == DataType::URI)
-        {
-            $file = $_FILES[$applicationInput->name];
-
-
-            //
-            // move file to experiment data directory
-            //
-            $filePath = $experimentPath . $file['name'];
-
-            // check if file already exists
-            if (is_file($filePath))
-            {
-                unlink($filePath);
-
-                print_warning_message('Uploaded file already exists! Overwriting...');
-            }
-
-            $moveFile = move_uploaded_file($file['tmp_name'], $filePath);
-
-            if ($moveFile)
-            {
-                print_success_message('Upload: ' . $file['name'] . '<br>' .
-                    'Type: ' . $file['type'] . '<br>' .
-                    'Size: ' . ($file['size']/1024) . ' kB<br>' .
-                    'Stored in: ' . $experimentPath . $file['name']);
-            }
-            else
-            {
-                print_error_message('Error moving uploaded file ' . $file['name'] . '!');
-                $experimentAssemblySuccessful = false;
-            }
-
-
-
-            $experimentInput->value = str_replace(EXPERIMENT_DATA_ROOT, EXPERIMENT_DATA_ROOT_ABSOLUTE, $filePath);
-        }
-        else
-        {
-            print_error_message('I cannot accept this input type yet!');
-        }
-
-
-
-        $experimentInputs[] = $experimentInput;
-    }
-
-
-
-
+    $experimentInputs = process_inputs($applicationInputs, $experimentInputs);
+    var_dump($experimentInputs);
 
 
 
@@ -774,14 +682,196 @@ function assemble_experiment()
     $experiment->userConfigurationData = $userConfigData;
     $experiment->experimentInputs = $experimentInputs;
 
-    $experiment->experimentOutputs = $experimentOutputs;
+    //$experiment->experimentOutputs = $experimentOutputs;
 
 
-    if ($experimentAssemblySuccessful)
+    if ($experimentInputs)
     {
         return $experiment;
     }
 }
+
+/**
+ * @param $applicationInputs
+ * @param $experimentInputs
+ * @internal param $environmentPath
+ * @return array
+ */
+function process_inputs($applicationInputs, $experimentInputs)
+{
+    $experimentAssemblySuccessful = true;
+    $newExperimentInputs = array();
+
+    //var_dump($_FILES);
+
+    if (sizeof($_FILES) > 0)
+    {
+        if (file_upload_successful())
+        {
+            // construct unique path
+            do
+            {
+                $experimentPath = EXPERIMENT_DATA_ROOT . $_POST['experiment-name'] . md5(rand() * time()) . '/';
+            }
+            while (is_dir($experimentPath)); // if dir already exists, try again
+
+            // create upload directory
+            if (!mkdir($experimentPath))
+            {
+                print_error_message('Error creating upload directory!');
+                $experimentAssemblySuccessful = false;
+            }
+        }
+        else
+        {
+            $experimentAssemblySuccessful = false;
+        }
+    }
+
+    foreach ($applicationInputs as $applicationInput)
+    {
+        $experimentInput = new DataObjectType();
+        $experimentInput->key = $applicationInput->name;
+        $experimentInput->metaData = $applicationInput->metaData;
+
+
+        //$experimentInput->type = $applicationInput->type;
+        //$experimentInput->type = DataType::STRING;
+
+
+        if(($applicationInput->type == DataType::STRING) ||
+            ($applicationInput->type == DataType::INTEGER) ||
+            ($applicationInput->type == DataType::FLOAT))
+        {
+            //$experimentInput->value = $_POST[$applicationInput->name];
+            if (isset($_POST[$applicationInput->name]))
+            {
+                $experimentInput->value = $_POST[$applicationInput->name];
+            }
+            else // use previous value
+            {
+                $index = -1;
+                for ($i = 0; $i < sizeof($experimentInputs); $i++)
+                {
+                    if ($experimentInputs[$i]->key = $applicationInput->name)
+                    {
+                        $index = $i;
+                    }
+                }
+
+                if ($index >= 0)
+                {
+                    $experimentInput->value = $experimentInputs[$index]->value;
+                }
+            }
+        }
+        elseif ($applicationInput->type == DataType::URI)
+        {
+            //var_dump($_FILES[$applicationInput->name]->name);
+            if ($_FILES[$applicationInput->name]['name'])
+            {
+                $file = $_FILES[$applicationInput->name];
+
+
+                //
+                // move file to experiment data directory
+                //
+                $filePath = $experimentPath . $file['name'];
+
+                // check if file already exists
+                if (is_file($filePath))
+                {
+                    unlink($filePath);
+
+                    print_warning_message('Uploaded file already exists! Overwriting...');
+                }
+
+                $moveFile = move_uploaded_file($file['tmp_name'], $filePath);
+
+                if ($moveFile)
+                {
+                    print_success_message('Upload: ' . $file['name'] . '<br>' .
+                        'Type: ' . $file['type'] . '<br>' .
+                        'Size: ' . ($file['size']/1024) . ' kB<br>' .
+                        'Stored in: ' . $experimentPath . $file['name']);
+                }
+                else
+                {
+                    print_error_message('Error moving uploaded file ' . $file['name'] . '!');
+                    $experimentAssemblySuccessful = false;
+                }
+
+
+
+                $experimentInput->value = str_replace(EXPERIMENT_DATA_ROOT, EXPERIMENT_DATA_ROOT_ABSOLUTE, $filePath);
+            }
+            else
+            {
+                $index = -1;
+                for ($i = 0; $i < sizeof($experimentInputs); $i++)
+                {
+                    if ($experimentInputs[$i]->key = $applicationInput->name)
+                    {
+                        $index = $i;
+                    }
+                }
+
+                if ($index >= 0)
+                {
+                    $experimentInput->value = $experimentInputs[$index]->value;
+                }
+            }
+
+        }
+        else
+        {
+            print_error_message('I cannot accept this input type yet!');
+        }
+
+
+
+
+
+
+
+        //$experimentInputs[] = $experimentInput;
+        /*
+        $index = -1;
+        for ($i = 0; $i < sizeof($experimentInputs); $i++)
+        {
+            if ($experimentInputs[$i]->key = $experimentInput->key)
+            {
+                $index = $i;
+            }
+        }
+
+        if ($index >= 0)
+        {
+            unset($experimentInputs[$index]);
+        }
+        */
+        //$experimentInputs[] = $experimentInput;
+
+
+
+
+
+        $newExperimentInputs[] = $experimentInput;
+
+
+    }
+
+    if ($experimentAssemblySuccessful)
+    {
+        return $newExperimentInputs;
+    }
+    else
+    {
+        return false;
+    }
+
+}
+
 
 /**
  * Check the uploaded files for errors
@@ -792,21 +882,27 @@ function file_upload_successful()
 
     foreach ($_FILES as $file)
     {
-        if ($file['error'] > 0)
+        //var_dump($file);
+        if($file['name'])
         {
-            $uploadSuccessful = false;
-            print_error_message('Error uploading file ' . $file['name'] . ' !');
-        }/*
-        elseif ($file['type'] != 'text/plain')
-        {
-            $uploadSuccessful = false;
-            print_error_message('Uploaded file ' . $file['name'] . ' type not supported!');
+            if ($file['error'] > 0)
+            {
+                $uploadSuccessful = false;
+                print_error_message('Error uploading file ' . $file['name'] . ' !');
+            }/*
+            elseif ($file['type'] != 'text/plain')
+            {
+                $uploadSuccessful = false;
+                print_error_message('Uploaded file ' . $file['name'] . ' type not supported!');
+            }
+            elseif (($file['size'] / 1024) > 20)
+            {
+                $uploadSuccessful = false;
+                print_error_message('Uploaded file ' . $file['name'] . ' must be smaller than 10 MB!');
+            }*/
         }
-        elseif (($file['size'] / 1024) > 20)
-        {
-            $uploadSuccessful = false;
-            print_error_message('Uploaded file ' . $file['name'] . ' must be smaller than 10 MB!');
-        }*/
+
+
     }
 
     return $uploadSuccessful;
@@ -1036,7 +1132,6 @@ function create_inputs($id, $isRequired)
                     <label for="experiment-input">' . $input->name . '</label>
                     <input type="text" class="form-control" name="' . $input->name .
                     '" id="' . $input->name .
-                    '" value="' . $input->value .
                     '" placeholder="' . $input->userFriendlyDescription . '"' . $required . '>
                     </div>';
                 break;
@@ -1046,7 +1141,6 @@ function create_inputs($id, $isRequired)
                     <label for="experiment-input">' . $input->name . '</label>
                     <input type="number" class="form-control" name="' . $input->name .
                     '" id="' . $input->name .
-                    '" value="' . $input->value .
                     '" placeholder="' . $input->userFriendlyDescription . '"' . $required . '>
                     </div>';
                 break;

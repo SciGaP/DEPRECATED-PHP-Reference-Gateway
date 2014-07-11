@@ -4,7 +4,7 @@ include 'utilities.php';
 
 
 
-use Airavata\Model\Workspace\Experiment\DataType;
+use Airavata\Model\AppCatalog\AppInterface\DataType;
 use Airavata\Model\Workspace\Experiment\ExperimentState;
 
 
@@ -127,10 +127,7 @@ if (isset($_POST['save']))
     </div>
     <div class="form-group">
         <label for="application">Application</label>
-        <select class="form-control" name="application" id="application" disabled>
-            <option value="Echo" <?php if ($experiment->applicationId == 'Echo') echo 'selected' ?>>Echo</option>
-            <option value="WRF" <?php if ($experiment->applicationId == 'WRF') echo 'selected' ?>>WRF</option>
-        </select>
+        <?php create_application_select($experiment->applicationId, false); ?>
     </div>
 
     <div class="panel panel-default">
@@ -261,181 +258,55 @@ function apply_changes_to_experiment($experiment)
     $userConfigDataUpdated->computationalResourceScheduling = $schedulingUpdated;
     $experiment->userConfigurationData = $userConfigDataUpdated;
 
-    $experimentInputs = $experiment->experimentInputs;
+
+
+
+    $applicationInputs = get_application_inputs($experiment->applicationId);
+
+    $experimentInputs = $experiment->experimentInputs; // get current inputs
+    //var_dump($experimentInputs);
+    $experimentInputs = process_inputs($applicationInputs, $experimentInputs); // get new inputs
+    //var_dump($experimentInputs);
 
 
 
 
 
-    if ($experiment->applicationId == 'WRF')
+
+
+
+
+
+    if ($experimentInputs)
     {
-        /*
-        if (sizeof($_FILES) > 0)
-        {
-            $uploadSuccessful = true; // changed to false if error
-
-            foreach ($_FILES as $file)
-            {
-                if ($file['error'] > 0)
-                {
-                    $uploadSuccessful = false;
-                    print_error_message('Error uploading file ' . $file['name'] . ' !');
-                }
-                elseif ($file['type'] != 'text/plain')
-                {
-                    $uploadSuccessful = false;
-                    print_error_message('Uploaded file ' . $file['name'] . ' type not supported!');
-                }
-                elseif (($file['size'] / 1024) > 20)
-                {
-                    $uploadSuccessful = false;
-                    print_error_message('Uploaded file ' . $file['name'] . ' must be smaller than 20 kB!');
-                }
-            }
-
-            if ($uploadSuccessful)
-            {
-                // get upload path
-                $path = $experimentInputs[0]->value;
-                echo $path;
-            }
-        }
-        */
-    }
-    else // echo
-    {
-
-
-        foreach ($experimentInputs as $input)
-        {
-            if ($_POST[$input->key])
-            {
-                $input->value = $_POST[$input->key];
-            }
-        }
-
         $experiment->experimentInputs = $experimentInputs;
+        //var_dump($experiment);
+        return $experiment;
     }
-
-
-
-
-
-
-    /*
-    if ($_POST['application'] == 'WRF')
-    {
-        foreach ($_FILES as $file)
-        {
-            if ($file['error'] > 0)
-            {
-                $uploadSuccessful = false;
-                print_error_message('Error uploading file ' . $file['name'] . ' !');
-            }
-            elseif ($file['type'] != 'text/plain')
-            {
-                $uploadSuccessful = false;
-                print_error_message('Uploaded file ' . $file['name'] . ' type not supported!');
-            }
-            elseif (($file['size'] / 1024) > 20)
-            {
-                $uploadSuccessful = false;
-                print_error_message('Uploaded file ' . $file['name'] . ' must be smaller than 20 kB!');
-            }
-        }
-
-
-        if ($uploadSuccessful)
-        {
-            // construct unique path
-            do
-            {
-                $experimentPath = EXPERIMENT_DATA_ROOT . $_POST['experiment-name'] . md5(rand() * time()) . '/';
-            }
-            while (is_dir($experimentPath)); // if dir already exists, try again
-
-            // create new directory
-            // move file to new directory, overwriting old versions if necessary
-            if (mkdir($experimentPath))
-            {
-                foreach ($_FILES as $file)
-                {
-                    $filePath = $experimentPath . $file['name'];
-
-                    if (is_file($filePath))
-                    {
-                        unlink($filePath);
-
-                        print_warning_message('Uploaded file already exists! Overwriting...');
-                    }
-
-                    $moveFile = move_uploaded_file($file['tmp_name'], $filePath);
-
-                    if ($moveFile)
-                    {
-                        print_success_message('Upload: ' . $file['name'] . '<br>' .
-                            'Type: ' . $file['type'] . '<br>' .
-                            'Size: ' . ($file['size']/1024) . ' kB<br>' .
-                            'Stored in: ' . $experimentPath . $file['name']);
-                    }
-                    else
-                    {
-                        print_error_message('Error moving uploaded file ' . $file['name'] . '!');
-                    }
-
-
-
-                    // wrf
-                    $experimentInput = new DataObjectType();
-                    $experimentInput->key = $file['name'];
-                    $experimentInput->value = $filePath;
-                    $experimentInput->type = DataType::URI;
-                    $experimentInputs[] = $experimentInput; // push into array
-                }
-            }
-            else
-            {
-                print_error_message('Error creating upload directory!');
-            }
-
-
-        }
-    }
-    else
-    {
-        // echo
-        $experimentInput = new DataObjectType();
-        $experimentInput->key = 'echo_input';
-        $experimentInput->value = $_POST['experiment-input'];
-        $experimentInput->type = DataType::STRING;
-        $experimentInputs = array($experimentInput);
-    }
-    */
-
-
-
-
-
-
-
-
-
-
-
-
-
-    return $experiment;
 }
 
 
 function list_input_files($experiment)
 {
+    $applicationInputs = get_application_inputs($experiment->applicationId);
+
     $experimentInputs = $experiment->experimentInputs;
-    //var_dump($experimentInputs);
+
+
 
     foreach ($experimentInputs as $input)
     {
-        if ($input->type == DataType::URI)
+        $matchingAppInput = null;
+        foreach($applicationInputs as $applicationInput)
+        {
+            if ($input->key == $applicationInput->name)
+            {
+                $matchingAppInput = $applicationInput;
+            }
+        }
+        //var_dump($matchingAppInput);
+
+        if ($matchingAppInput->type == DataType::URI)
         {
             $explode = explode('/', $input->value);
             //echo '<p><a href="' . $input->value . '">' . $input->key . '</a></p>';
@@ -449,7 +320,7 @@ function list_input_files($experiment)
             //echo sizeof($explode) . '<br>';
             //echo EXPERIMENT_DATA_ROOT . $explode[sizeof($explode)-2] . '/' . $explode[sizeof($explode)-1] . '<br>';
         }
-        elseif ($input->type == DataType::STRING)
+        elseif ($matchingAppInput->type == DataType::STRING)
         {
             //$valueExplode = explode('=', $input->value);
             echo '<p>' . $input->key . ': ' . $input->value . '</p>';
