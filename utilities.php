@@ -637,7 +637,7 @@ function assemble_experiment()
 
     $applicationInputs = get_application_inputs($_POST['application']);
     $experimentInputs = process_inputs($applicationInputs, $experimentInputs);
-    var_dump($experimentInputs);
+    //var_dump($experimentInputs);
 
 
 
@@ -711,7 +711,7 @@ function process_inputs($applicationInputs, $experimentInputs)
             // construct unique path
             do
             {
-                $experimentPath = EXPERIMENT_DATA_ROOT . $_POST['experiment-name'] . md5(rand() * time()) . '/';
+                $experimentPath = EXPERIMENT_DATA_ROOT . $_SESSION['username'] . md5(rand() * time()) . '/';
             }
             while (is_dir($experimentPath)); // if dir already exists, try again
 
