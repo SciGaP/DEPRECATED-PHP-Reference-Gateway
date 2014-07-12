@@ -50,6 +50,13 @@ if (isset($_POST['save']) || isset($_POST['launch']))
     {
         launch_experiment($expId);
     }
+    else
+    {
+        print_success_message("<p>Experiment {$_POST['experiment-name']} created!</p>" .
+            '<p>You will be redirected to the summary page shortly, or you can
+            <a href="experiment_summary.php?expId=' . $expId . '">go directly</a> to experiment summary page.</p>');
+        redirect('experiment_summary.php?expId=' . $expId);
+    }
 }
 
 //$transport->close();
@@ -187,7 +194,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
             <div class="btn-toolbar">
                 <div class="btn-group">
                     <button name="save" type="submit" class="btn btn-primary" value="Save">Save</button>
-                    <button name="launch" type="submit" class="btn btn-primary" value="Save and launch">Save and launch</button>
+                    <button name="launch" type="submit" class="btn btn-success" value="Save and launch">Save and launch</button>
                 </div>
             <div class="btn-group">
                 <button name="clear" type="reset" class="btn btn-default" value="Reset values">Reset application configuration</button>
@@ -233,9 +240,10 @@ function create_experiment()
 
         if ($expId)
         {
+            /*
             print_success_message("Experiment {$_POST['experiment-name']} created!" .
                 ' <a href="experiment_summary.php?expId=' . $expId . '">Go to experiment summary page</a>');
-            //var_dump($airavataclient->getExperiment($expId));
+            */
         }
         else
         {

@@ -77,15 +77,22 @@ switch ($experimentStatusString)
 
 
 
-if (isset($_POST['save']))
+if (isset($_POST['save']) || isset($_POST['launch']))
 {
     $updatedExperiment = apply_changes_to_experiment($experiment);
 
     update_experiment($experiment->experimentID, $updatedExperiment);
 
-    $experiment = get_experiment($_GET['expId']); // update local experiment variable
 
-    //var_dump($experiment);
+
+    if (isset($_POST['save']))
+    {
+        $experiment = get_experiment($_GET['expId']); // update local experiment variable
+    }
+    elseif (isset($_POST['launch']))
+    {
+        launch_experiment($experiment->experimentID);
+    }
 }
 
 
@@ -212,6 +219,7 @@ if (isset($_POST['save']))
 
     <div class="btn-toolbar">
         <input name="save" type="submit" class="btn btn-primary" value="Save" <?php if(!$editable) echo 'disabled'  ?>>
+        <input name="launch" type="submit" class="btn btn-success" value="Save and launch" <?php if(!$editable) echo 'disabled'  ?>>
         <input name="clear" type="reset" class="btn btn-default" value="Reset values">
     </div>
 
@@ -239,9 +247,9 @@ function apply_changes_to_experiment($experiment)
     $schedulingUpdated->resourceHostId = $_POST['compute-resource'];
     $schedulingUpdated->nodeCount = $_POST['node-count'];
     $schedulingUpdated->totalCPUCount = $_POST['cpu-count'];
-    $schedulingUpdated->numberOfThreads = $_POST['threads'];
+    //$schedulingUpdated->numberOfThreads = $_POST['threads'];
     $schedulingUpdated->wallTimeLimit = $_POST['wall-time'];
-    $schedulingUpdated->totalPhysicalMemory = $_POST['memory'];
+    //$schedulingUpdated->totalPhysicalMemory = $_POST['memory'];
 
     /*
     switch ($_POST['compute-resource'])

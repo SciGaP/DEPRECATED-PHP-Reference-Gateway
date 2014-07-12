@@ -64,7 +64,6 @@ switch ($experimentStatusString)
     case 'SCHEDULED':
     case 'CANCELED':
     case 'FAILED':
-    case 'UNKNOWN':
         $editable = true;
         break;
     default:
@@ -161,8 +160,8 @@ elseif (isset($_POST['cancel']))
 
     <form action="<?php echo $_SERVER['PHP_SELF'] . '?expId=' . $_GET['expId']?>" method="post" role="form">
         <div class="btn-toolbar">
-            <input name="launch" type="submit" class="btn btn-primary" value="Launch" <?php if(!$editable) echo 'disabled'  ?>>
-            <input name="cancel" type="submit" class="btn btn-warning" value="Cancel" <?php if(!$cancelable) echo 'disabled'  ?>>
+            <input name="launch" type="submit" class="btn btn-success" value="Launch" <?php if(!$editable) echo 'disabled'  ?>>
+            <!--<input name="cancel" type="submit" class="btn btn-warning" value="Cancel" <?php //if(!$cancelable) echo 'disabled';  ?>>-->
             <input name="clone" type="submit" class="btn btn-primary" value="Clone">
             <a href="edit_experiment.php?expId=<?php echo $experiment->experimentID; ?>" class="btn btn-default" role="button" <?php if(!$editable) echo 'disabled'  ?>>
                 Edit

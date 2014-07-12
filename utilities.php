@@ -291,7 +291,11 @@ function launch_experiment($expId)
         $hardCodedToken = '2c308fa9-99f8-4baa-92e4-d062e311483c';
         $airavataclient->launchExperiment($expId, $hardCodedToken);
 
-        print_success_message('Experiment launched!');
+        //print_success_message('Experiment launched!');
+        print_success_message("<p>Experiment launched!</p>" .
+            '<p>You will be redirected to the summary page shortly, or you can
+            <a href="experiment_summary.php?expId=' . $expId . '">go directly</a> to the experiment summary page.</p>');
+        redirect('experiment_summary.php?expId=' . $expId);
     }
     catch (InvalidRequestException $ire)
     {
@@ -622,10 +626,10 @@ function assemble_experiment()
     $scheduling = new ComputationalResourceScheduling();
     $scheduling->totalCPUCount = $_POST['cpu-count'];
     $scheduling->nodeCount = $_POST['node-count'];
-    $scheduling->numberOfThreads = $_POST['threads'];
+    //$scheduling->numberOfThreads = $_POST['threads'];
     $scheduling->queueName = 'normal';
     $scheduling->wallTimeLimit = $_POST['wall-time'];
-    $scheduling->totalPhysicalMemory = $_POST['memory'];
+    //$scheduling->totalPhysicalMemory = $_POST['memory'];
     $scheduling->resourceHostId = $_POST['compute-resource'];
 
 
@@ -922,7 +926,9 @@ function update_experiment($expId, $updatedExperiment)
     {
         $airavataclient->updateExperiment($expId, $updatedExperiment);
 
-        print_success_message('Experiment updated!');
+        print_success_message("<p>Experiment updated!</p>" .
+            '<p>Click
+            <a href="experiment_summary.php?expId=' . $expId . '">here</a> to visit the experiment summary page.</p>');
     }
     catch (InvalidRequestException $ire)
     {
@@ -956,11 +962,13 @@ function clone_experiment($expId)
     {
         //create new experiment to receive the clone
         $experiment = $airavataclient->getExperiment($expId);
-        $experiment->name .= time();
 
-        $airavataclient->cloneExperiment($expId, $experiment->name .= time());
+        $cloneId = $airavataclient->cloneExperiment($expId, 'Clone of ' . $experiment->name);
 
-        print_success_message("Experiment cloned!");
+        print_success_message("<p>Experiment cloned!</p>" .
+            '<p>You will be redirected to the edit page shortly, or you can
+            <a href="edit_experiment.php?expId=' . $cloneId . '">go directly</a> to the edit experiment page.</p>');
+        redirect('edit_experiment.php?expId=' . $cloneId);
     }
     catch (InvalidRequestException $ire)
     {
