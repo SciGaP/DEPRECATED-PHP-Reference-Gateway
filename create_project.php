@@ -89,7 +89,10 @@ function create_project()
 
         if ($projectId)
         {
-            print_success_message("Project {$_POST['project-name']} created!");
+            print_success_message("<p>Project {$_POST['project-name']} created!</p>" .
+                '<p>You will be redirected to the summary page shortly, or you can
+                <a href="project_summary.php?projId=' . $projectId . '">go directly</a> to the project summary page.</p>');
+            redirect('project_summary.php?projId=' . $projectId);
         }
         else
         {

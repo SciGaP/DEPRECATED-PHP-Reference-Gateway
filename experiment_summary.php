@@ -49,11 +49,17 @@ $experimentCreationTime = date('Y-m-d H:i:s', $experiment->creationTime/1000); /
 
 
 $jobStatus = $airavataclient->getJobStatuses($experiment->experimentID);
-var_dump($jobStatus);
-$jobName = array_keys($jobStatus);
-var_dump($jobName);
-$jobState = JobState::$__names[$jobStatus[$jobName[0]]->jobState];
-var_dump($jobState);
+
+if ($jobStatus)
+{
+    $jobName = array_keys($jobStatus);
+    $jobState = JobState::$__names[$jobStatus[$jobName[0]]->jobState];
+}
+else
+{
+    $jobState = null;
+}
+
 
 
 $userConfigData = $experiment->userConfigurationData;
@@ -157,10 +163,14 @@ elseif (isset($_POST['cancel']))
             <td><strong>Experiment Status</strong></td>
             <td><?php echo $experimentStatusString; ?></td>
         </tr>
+        <?php
+        if ($jobState) echo '
         <tr>
             <td><strong>Job Status</strong></td>
-            <td><?php echo $jobStatus; ?></td>
+            <td>' . $jobState . '</td>
         </tr>
+        ';
+        ?>
         <tr>
             <td><strong>Creation time</strong></td>
             <td><?php echo $experimentCreationTime; ?></td>

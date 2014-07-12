@@ -93,10 +93,13 @@ if (isset($_POST['search']))
 
         foreach ($experiments as $experiment)
         {
+            $applicationInterface = get_application_interface($experiment->applicationId);
             $experimentStatus = $experiment->experimentStatus;
             $experimentState = $experimentStatus->experimentState;
             $experimentStatusString = ExperimentState::$__names[$experimentState];
-            $applicationInterface = get_application_interface($experiment->applicationId);
+
+
+
 
             $description = $experiment->description;
             if (strlen($description) > 17) // 17 is arbitrary
