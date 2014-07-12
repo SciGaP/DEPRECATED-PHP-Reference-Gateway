@@ -16,6 +16,8 @@ verify_login();
 
 $airavataclient = get_airavata_client();
 
+echo 'whoami = ' . exec('whoami');
+
 ?>
 
 <html>

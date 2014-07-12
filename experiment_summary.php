@@ -6,7 +6,7 @@ include 'utilities.php';
 
 use Airavata\Model\Workspace\Experiment\DataType;
 use Airavata\Model\Workspace\Experiment\ExperimentState;
-
+use Airavata\Model\Workspace\Experiment\JobState;
 
 
 
@@ -46,6 +46,14 @@ $experimentState = $experimentStatus->experimentState;
 $experimentStatusString = ExperimentState::$__names[$experimentState];
 $experimentTimeOfStateChange = date('Y-m-d H:i:s', $experimentStatus->timeOfStateChange/1000); // divide by 1000 since timeOfStateChange is in ms
 $experimentCreationTime = date('Y-m-d H:i:s', $experiment->creationTime/1000); // divide by 1000 since creationTime is in ms
+
+
+$jobStatus = $airavataclient->getJobStatuses($experiment->experimentID);
+var_dump($jobStatus);
+$jobName = array_keys($jobStatus);
+var_dump($jobName);
+$jobState = JobState::$__names[$jobStatus[$jobName[0]]->jobState];
+var_dump($jobState);
 
 
 $userConfigData = $experiment->userConfigurationData;
@@ -146,8 +154,12 @@ elseif (isset($_POST['cancel']))
             <td><?php echo $computeResource->hostName; ?></td>
         </tr>
         <tr>
-            <td><strong>Status</strong></td>
+            <td><strong>Experiment Status</strong></td>
             <td><?php echo $experimentStatusString; ?></td>
+        </tr>
+        <tr>
+            <td><strong>Job Status</strong></td>
+            <td><?php echo $jobStatus; ?></td>
         </tr>
         <tr>
             <td><strong>Creation time</strong></td>

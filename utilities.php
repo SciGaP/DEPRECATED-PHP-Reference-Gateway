@@ -1203,8 +1203,8 @@ function create_inputs($id, $isRequired)
                 echo '<div class="form-group">
                     <label for="experiment-input">' . $input->name . '</label>
                     <input type="file" class="" name="' . $input->name .
-                    '" id="' . $input->name .
-                    '" placeholder="' . $input->userFriendlyDescription . '"' . $required . '>
+                    '" id="' . $input->name . '" ' . $required . '>
+                    <p class="help-block">' . $input->userFriendlyDescription . '</p>
                     </div>';
                 break;
             default:
