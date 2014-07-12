@@ -45,6 +45,7 @@ $experimentStatus = $experiment->experimentStatus;
 $experimentState = $experimentStatus->experimentState;
 $experimentStatusString = ExperimentState::$__names[$experimentState];
 $experimentTimeOfStateChange = date('Y-m-d H:i:s', $experimentStatus->timeOfStateChange/1000); // divide by 1000 since timeOfStateChange is in ms
+$experimentCreationTime = date('Y-m-d H:i:s', $experiment->creationTime/1000); // divide by 1000 since creationTime is in ms
 
 
 $userConfigData = $experiment->userConfigurationData;
@@ -149,8 +150,16 @@ elseif (isset($_POST['cancel']))
             <td><?php echo $experimentStatusString; ?></td>
         </tr>
         <tr>
+            <td><strong>Creation time</strong></td>
+            <td><?php echo $experimentTimeOfStateChange; ?></td>
+        </tr>
+        <tr>
             <td><strong>Update time</strong></td>
             <td><?php echo $experimentTimeOfStateChange; ?></td>
+        </tr>
+        <tr>
+            <td><strong>Inputs</strong></td>
+            <td><?php list_input_files($experiment); ?></td>
         </tr>
         <tr>
             <td><strong>Outputs</strong></td>
@@ -176,6 +185,8 @@ elseif (isset($_POST['cancel']))
 
 
 <?php
+
+
 
 function list_output_files($experiment)
 {

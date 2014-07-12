@@ -482,6 +482,53 @@ function get_compute_resource($id)
 
 
 /**
+ * List the experiment's input files
+ * @param $experiment
+ */
+function list_input_files($experiment)
+{
+    $applicationInputs = get_application_inputs($experiment->applicationId);
+
+    $experimentInputs = $experiment->experimentInputs;
+
+
+
+    foreach ($experimentInputs as $input)
+    {
+        $matchingAppInput = null;
+        foreach($applicationInputs as $applicationInput)
+        {
+            if ($input->key == $applicationInput->name)
+            {
+                $matchingAppInput = $applicationInput;
+            }
+        }
+        //var_dump($matchingAppInput);
+
+        if ($matchingAppInput->type == DataType::URI)
+        {
+            $explode = explode('/', $input->value);
+            //echo '<p><a href="' . $input->value . '">' . $input->key . '</a></p>';
+            echo '<p><a target="_blank" href="' . EXPERIMENT_DATA_ROOT . $explode[sizeof($explode)-2] . '/' . $explode[sizeof($explode)-1] . '">' . $input->key . '</a></p>';
+            //echo $input->value . '<br>';
+            //echo str_replace(EXPERIMENT_DATA_ROOT_ABSOLUTE, EXPERIMENT_DATA_ROOT, $input->value) . '<br>';
+            //echo dirname($input->value) . '<br>';
+
+
+            //var_dump($explode);
+            //echo sizeof($explode) . '<br>';
+            //echo EXPERIMENT_DATA_ROOT . $explode[sizeof($explode)-2] . '/' . $explode[sizeof($explode)-1] . '<br>';
+        }
+        elseif ($matchingAppInput->type == DataType::STRING)
+        {
+            //$valueExplode = explode('=', $input->value);
+            echo '<p>' . $input->key . ': ' . $input->value . '</p>';
+        }
+    }
+}
+
+
+/**
  * Get a list of the inputs for the application with the given ID
  * @param $id
  * @return null
