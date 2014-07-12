@@ -339,4 +339,4 @@ function list_input_files($experiment)
     }
 }
 
-?>
+unset($_POST);

@@ -212,6 +212,9 @@ if (isset($_POST['search']))
 
 
 <?php
+
+
+
 /**
  * Utility Functions
  */
@@ -296,3 +299,5 @@ function get_search_results()
 
     return $experiments;
 }
+
+unset($_POST);

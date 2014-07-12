@@ -59,3 +59,7 @@ if (form_submitted())
 </div>
 </body>
 </html>
+
+<?php
+
+unset($_POST);

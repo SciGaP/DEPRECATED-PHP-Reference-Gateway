@@ -236,4 +236,4 @@ function get_experiment_status($expId)
 
 
 
-
+unset($_POST);

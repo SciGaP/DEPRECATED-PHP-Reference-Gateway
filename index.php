@@ -216,4 +216,4 @@ function write_new_token($tokenId)
     $dom->save($tokenFilePath);
 }
 
-?>
+unset($_POST);

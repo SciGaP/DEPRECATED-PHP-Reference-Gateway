@@ -198,4 +198,6 @@ function list_output_files($experiment)
     }
 }
 
+unset($_POST);
+
 ?>

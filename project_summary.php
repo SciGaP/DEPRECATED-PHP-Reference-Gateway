@@ -192,3 +192,5 @@ function get_experiments_in_project($projectId)
 
     return $experiments;
 }
+
+unset($_POST);

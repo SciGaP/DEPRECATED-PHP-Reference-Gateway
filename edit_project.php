@@ -134,4 +134,4 @@ function update_project($projectId, $updatedProject)
 
 
 
-?>
+unset($_POST);

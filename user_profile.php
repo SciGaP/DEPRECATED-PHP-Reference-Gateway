@@ -171,3 +171,6 @@ verify_login();
     </style>
     <br/><br/><br/>
 
+<?php
+
+unset($_POST);

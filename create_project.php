@@ -111,3 +111,5 @@ function create_project()
 
     return $projectId;
 }
+
+unset($_POST);

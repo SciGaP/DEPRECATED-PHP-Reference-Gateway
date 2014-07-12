@@ -266,3 +266,5 @@ function create_experiment()
     return $expId;
 }
 
+unset($_POST);
+

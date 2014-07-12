@@ -149,3 +149,6 @@ connect_to_id_store();
 </div>
 </body>
 </html>
+
+<?php
+unset($_POST);
