@@ -165,7 +165,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
             <div class="form-group">
                 <label for="wall-time">Wall Time Limit</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" name="wall-time" id="wall-time" value="15" min="0">
+                    <input type="number" class="form-control" name="wall-time" id="wall-time" value="30" min="0">
                     <span class="input-group-addon">minutes</span>
                 </div>
             </div>

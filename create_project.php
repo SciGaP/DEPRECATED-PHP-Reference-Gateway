@@ -79,7 +79,6 @@ function create_project()
     $project->owner = $_SESSION['username'];
     $project->name = $_POST['project-name'];
     $project->description = $_POST['project-description'];
-    $project->creationTime = time();
 
 
     $projectId = null;
