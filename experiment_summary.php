@@ -151,7 +151,7 @@ elseif (isset($_POST['cancel']))
         </tr>
         <tr>
             <td><strong>Creation time</strong></td>
-            <td><?php echo $experimentTimeOfStateChange; ?></td>
+            <td><?php echo $experimentCreationTime; ?></td>
         </tr>
         <tr>
             <td><strong>Update time</strong></td>
