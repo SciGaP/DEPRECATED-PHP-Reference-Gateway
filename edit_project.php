@@ -48,7 +48,7 @@ $airavataclient = get_airavata_client();
     {
         $updatedProject = new Project();
         $updatedProject->owner = $_SESSION['username'];
-        $updatedProject->name = 'replace me when updateProject is fixed'; //$_POST['project-name'];
+        $updatedProject->name = $_POST['project-name'];
         $updatedProject->description = $_POST['project-description'];
 
         update_project($project->projectID, $updatedProject);
@@ -74,8 +74,7 @@ $airavataclient = get_airavata_client();
     <form action="<?php echo $_SERVER['PHP_SELF'] . '?projId=' . $_GET['projId']?>" method="post" role="form">
         <div class="form-group">
             <label for="project-name">Project Name</label>
-            <input disabled
-                   type="text"
+            <input type="text"
                    class="form-control"
                    name="project-name"
                    id="project-name"

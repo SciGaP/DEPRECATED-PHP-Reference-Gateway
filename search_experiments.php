@@ -26,7 +26,7 @@ $airavataclient = get_airavata_client();
 
 <?php create_nav_bar(); ?>
     
-<div class="container" style="max-width: 750px;">
+<div class="container" style="max-width: 970px;">
     
 <h1>Search for Experiments</h1>
 
@@ -83,7 +83,9 @@ if (isset($_POST['search']))
                 <tr>
                     <th>Name</th>
                     <th>Application</th>
-                    <th>Time</th>
+                    <th>Description</th>
+                    <!--<th>Resource</th>-->
+                    <th>Creation Time</th>
                     <th>Status</th>
                 </tr>
         ';
@@ -95,6 +97,16 @@ if (isset($_POST['search']))
             $experimentState = $experimentStatus->experimentState;
             $experimentStatusString = ExperimentState::$__names[$experimentState];
             $applicationInterface = get_application_interface($experiment->applicationId);
+
+            $description = $experiment->description;
+            if (strlen($description) > 17) // 17 is arbitrary
+            {
+                $description = substr($experiment->description, 0, 17) . '<span class="text-muted">...</span>';
+            }
+
+            //$userConfigData = $experiment->userConfigurationData;
+            //$scheduling = $userConfigData->computationalResourceScheduling;
+            //$computeResource = get_compute_resource($scheduling->resourceHostId);
             //var_dump($experiment);
 
             switch ($experimentStatusString)
@@ -104,15 +116,14 @@ if (isset($_POST['search']))
                 case 'EXECUTING':
                 case 'CANCELING':
                 case 'COMPLETED':
+                case 'UNKNOWN':
                     $nameText = $experiment->name;
-                    $experimentTime = date('Y-m-d H:i:s', $experimentStatus->timeOfStateChange/1000);// divide by 1000 since timeOfStateChange is in ms
                     break;
                 default:
                     $nameText = $experiment->name .
                         ' <a href="edit_experiment.php?expId=' .
                         $experiment->experimentID .
                         '" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a>';
-                    $experimentTime = date('Y-m-d H:i:s', $experiment->creationTime/1000);// divide by 1000 since timeOfStateChange is in ms
                     break;
             }
 
@@ -125,7 +136,11 @@ if (isset($_POST['search']))
 
             echo "<td>$applicationInterface->applicationName</td>";
 
-            echo '<td>' . $experimentTime . '</td>';
+            echo '<td>' . $description . '</td>';
+
+            //echo "<td>$computeResource->hostName</td>";
+
+            echo '<td>' . date('Y-m-d H:i:s', $experiment->creationTime/1000) . '</td>';
 
 
             switch ($experimentStatusString)
