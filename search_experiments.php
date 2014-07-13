@@ -26,8 +26,7 @@ $airavataclient = get_airavata_client();
 
 <?php create_nav_bar(); ?>
     
-<div class="container" style="max-width: 970px;">
-    
+<div class="container" style="max-width: 750px;">
 <h1>Search for Experiments</h1>
 
 <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" class="form-inline" role="form">
@@ -56,7 +55,6 @@ $airavataclient = get_airavata_client();
     <input name="search" type="submit" class="btn btn-primary" value="Search">
     <p class="help-block">You can use * as a wildcard character. Tip: search for * alone to retrieve all of your experiments.</p>
 </form>
-
 
 
 

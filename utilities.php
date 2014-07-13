@@ -1138,17 +1138,20 @@ function create_application_select($id = null, $editable = true)
 /**
  * Create a select input and populate it with compute resources
  * available for the given application ID
- * @param $id
+ * @param $applicationId
+ * @param $resourceHostId
  */
-function create_compute_resources_select($id)
+function create_compute_resources_select($applicationId, $resourceHostId)
 {
-    $computeResources = get_available_app_interface_compute_resources($id);
+    $computeResources = get_available_app_interface_compute_resources($applicationId);
 
     echo '<select class="form-control" name="compute-resource" id="compute-resource">';
 
     foreach ($computeResources as $id => $name)
     {
-        echo '<option value="' . $id . '">' .
+        $selected = ($resourceHostId == $id)? ' selected' : '';
+
+        echo '<option value="' . $id . '"' . $selected . '>' .
                 $name . '</option>';
 
     }

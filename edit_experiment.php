@@ -54,8 +54,6 @@ $experimentTimeOfStateChange = $experimentStatus->timeOfStateChange;
 $userConfigData = $experiment->userConfigurationData;
 $scheduling = $userConfigData->computationalResourceScheduling;
 
-
-
 //var_dump($experiment);
 
 
@@ -151,7 +149,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
 
         <div class="form-group">
             <label for="compute-resource">Compute Resource</label>
-            <?php create_compute_resources_select($experiment->applicationId); ?>
+            <?php create_compute_resources_select($experiment->applicationId, $scheduling->resourceHostId); ?>
         </div>
 
     <div class="form-group">

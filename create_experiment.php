@@ -151,7 +151,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
             <div class="form-group">
                 <label for="compute-resource">Compute Resource</label>';
 
-        create_compute_resources_select($application);
+        create_compute_resources_select($application, null);
 
         echo '
             </div>
