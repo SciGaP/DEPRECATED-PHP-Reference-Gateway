@@ -9,6 +9,7 @@ define('ROOT_DIR', __DIR__);
  * Define configuration constants
  */
 const AIRAVATA_SERVER = 'gw127.iu.xsede.org';
+//const AIRAVATA_SERVER = 'gw56.iu.xsede.org'; //Mirror
 //const AIRAVATA_PORT = 8930; //development
 const AIRAVATA_PORT = 9930; //production
 const AIRAVATA_TIMEOUT = 50000;
@@ -509,7 +510,7 @@ function list_input_files($experiment)
         {
             $explode = explode('/', $input->value);
             //echo '<p><a href="' . $input->value . '">' . $input->key . '</a></p>';
-            echo '<p><a target="_blank" href="' . EXPERIMENT_DATA_ROOT . $explode[sizeof($explode)-2] . '/' . $explode[sizeof($explode)-1] . '">' . $input->key . ' <span class="glyphicon glyphicon-new-window"></span></a></p>';
+            echo '<p><a target="_blank" href="' . EXPERIMENT_DATA_ROOT . $explode[sizeof($explode)-2] . '/' . $explode[sizeof($explode)-1] . '">' . $input->key . '</a></p>';
             //echo $input->value . '<br>';
             //echo str_replace(EXPERIMENT_DATA_ROOT_ABSOLUTE, EXPERIMENT_DATA_ROOT, $input->value) . '<br>';
             //echo dirname($input->value) . '<br>';
@@ -762,7 +763,7 @@ function process_inputs($applicationInputs, $experimentInputs)
             // construct unique path
             do
             {
-                $experimentPath = EXPERIMENT_DATA_ROOT . str_replace(' ', '', $_SESSION['username']) . md5(rand() * time()) . '/';
+                $experimentPath = EXPERIMENT_DATA_ROOT . $_SESSION['username'] . md5(rand() * time()) . '/';
             }
             while (is_dir($experimentPath)); // if dir already exists, try again
 
@@ -1303,25 +1304,25 @@ function create_nav_bar()
     if (isset($_SESSION['username']))
     {
         (USER_STORE === "USER_API" && !isset($_SESSION['excede_login'])) ? $link = "user_profile.php" : $link = "index.php";
-        echo '<li><a href="' . $link . '"><span class="glyphicon glyphicon-user"></span> ' . $_SESSION['username'] . '</a></li>';
+        echo '<li><a href="' . $link . '">' . $_SESSION['username'] . '</a></li>';
     }
 
     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'])
     {
-        echo '<li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>';
+        echo '<li><a href="logout.php">Log out</a></li>';
     }
     elseif ($selfExplode[2] == 'login.php')
     {
-        echo '<li><a href="create_account.php"><span class="glyphicon glyphicon-user"></span> Create account</a></li>';
+        echo '<li><a href="create_account.php">Create account</a></li>';
     }
     elseif ($selfExplode[2] == 'create_account.php')
     {
-        echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>';
+        echo '<li><a href="login.php">Log in</a></li>';
     }
     elseif ($selfExplode[2] == 'index.php')
     {
-        echo '<li><a href="create_account.php"><span class="glyphicon glyphicon-user"></span> Create account</a></li>';
-        echo '<li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>';
+        echo '<li><a href="create_account.php">Create account</a></li>';
+        echo '<li><a href="login.php">Log in</a></li>';
     }
 
 
