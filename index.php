@@ -107,9 +107,9 @@ connect_to_id_store();
                     PGA is known to work well in the Chrome, Firefox, and Internet Explorer browsers.
                 </p>
                 <p><a href="https://github.com/SciGaP/PHP-Reference-Gateway"
-                        target="_blank">See the code &raquo;</a></p>
+                        target="_blank">See the code <span class="glyphicon glyphicon-new-window"></span></a></p>
                 <p><a href="https://cwiki.apache.org/confluence/display/AIRAVATA/XSEDE+2014+Tutorial"
-                    target="_blank">View the XSEDE 2014 tutorial documentation &raquo;</a></p>
+                    target="_blank">View the XSEDE 2014 tutorial documentation <span class="glyphicon glyphicon-new-window"></span></a></p>
             ';
         }
 
@@ -142,9 +142,9 @@ connect_to_id_store();
                         the link below. PGA is known to work well in the Chrome, Firefox, and Internet Explorer browsers.
                     </p>
                     <p><a href="https://github.com/SciGaP/PHP-Reference-Gateway"
-                        target="_blank">See the code &raquo;</a></p>
+                        target="_blank">See the code <span class="glyphicon glyphicon-new-window"></span></a></p>
                     <p><a href="https://cwiki.apache.org/confluence/display/AIRAVATA/XSEDE+2014+Tutorial"
-                        target="_blank">View the XSEDE 2014 tutorial documentation &raquo;</a></p>
+                        target="_blank">View the XSEDE 2014 tutorial documentation <span class="glyphicon glyphicon-new-window"></span></a></p>
                 </div>
             ';
         }
@@ -166,7 +166,7 @@ connect_to_id_store();
                         create Science Gateways.
                     </p>
                     <p><a href="http://scigap.org/"
-                          target="_blank">Learn more &raquo;</a></p>
+                          target="_blank">Learn more <span class="glyphicon glyphicon-new-window"></span></a></p>
                 </div>
             </div>
         </div>
@@ -182,7 +182,7 @@ connect_to_id_store();
                         workflows on distributed computational resources.
                     </p>
                     <p><a href="http://airavata.apache.org/"
-                          target="_blank">Learn more &raquo;</a></p>
+                          target="_blank">Learn more <span class="glyphicon glyphicon-new-window"></span></a></p>
                 </div>
             </div>
         </div>

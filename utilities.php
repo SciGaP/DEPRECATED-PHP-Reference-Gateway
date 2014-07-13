@@ -509,7 +509,7 @@ function list_input_files($experiment)
         {
             $explode = explode('/', $input->value);
             //echo '<p><a href="' . $input->value . '">' . $input->key . '</a></p>';
-            echo '<p><a target="_blank" href="' . EXPERIMENT_DATA_ROOT . $explode[sizeof($explode)-2] . '/' . $explode[sizeof($explode)-1] . '">' . $input->key . '</a></p>';
+            echo '<p><a target="_blank" href="' . EXPERIMENT_DATA_ROOT . $explode[sizeof($explode)-2] . '/' . $explode[sizeof($explode)-1] . '">' . $input->key . ' <span class="glyphicon glyphicon-new-window"></span></a></p>';
             //echo $input->value . '<br>';
             //echo str_replace(EXPERIMENT_DATA_ROOT_ABSOLUTE, EXPERIMENT_DATA_ROOT, $input->value) . '<br>';
             //echo dirname($input->value) . '<br>';
@@ -762,7 +762,7 @@ function process_inputs($applicationInputs, $experimentInputs)
             // construct unique path
             do
             {
-                $experimentPath = EXPERIMENT_DATA_ROOT . $_SESSION['username'] . md5(rand() * time()) . '/';
+                $experimentPath = EXPERIMENT_DATA_ROOT . str_replace(' ', '', $_SESSION['username']) . md5(rand() * time()) . '/';
             }
             while (is_dir($experimentPath)); // if dir already exists, try again
 
