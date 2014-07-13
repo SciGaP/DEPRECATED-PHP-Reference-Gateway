@@ -52,7 +52,7 @@ $airavataclient = get_airavata_client();
                value="<?php if (isset($_POST['search-value'])) echo $_POST['search-value'] ?>">
     </div>
 
-    <input name="search" type="submit" class="btn btn-primary" value="Search">
+    <button name="search" type="submit" class="btn btn-primary" value="Search"><span class="glyphicon glyphicon-search"></span> Search</button>
     <p class="help-block">You can use * as a wildcard character. Tip: search for * alone to retrieve all of your experiments.</p>
 </form>
 

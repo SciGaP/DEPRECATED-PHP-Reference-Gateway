@@ -45,8 +45,8 @@ $airavataclient = get_airavata_client();
                        value="<?php if (isset($_POST['search-value'])) echo $_POST['search-value'] ?>">
             </div>
 
-            <input name="search" type="submit" class="btn btn-primary" value="Search">
-            <p class="help-block">You can use * as a wildcard character. Tip: search for * alone to retrieve all of your projects.</p>
+            <button name="search" type="submit" class="btn btn-primary" value="Search"><span class="glyphicon glyphicon-search"></span> Search</button>
+                <p class="help-block">You can use * as a wildcard character. Tip: search for * alone to retrieve all of your projects.</p>
         </form>
 
 
@@ -89,7 +89,10 @@ $airavataclient = get_airavata_client();
                         $project->projectID .
                         '" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a></td>';
                     echo '<td>' . date('Y-m-d H:i:s', $project->creationTime/1000) . '</td>';
-                    echo '<td><a href="project_summary.php?projId=' . $project->projectID . '">View</a></td>';
+                    echo '<td>
+                            <a href="project_summary.php?projId=' . $project->projectID . '"><span class="glyphicon glyphicon-list"></span></a>
+                            <a href="project_summary.php?projId=' . $project->projectID . '"> View</a>
+                        </td>';
                     echo '</tr>';
                 }
 

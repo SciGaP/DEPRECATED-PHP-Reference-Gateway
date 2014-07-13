@@ -216,8 +216,10 @@ if (isset($_POST['save']) || isset($_POST['launch']))
     </div>
 
     <div class="btn-toolbar">
-        <input name="save" type="submit" class="btn btn-primary" value="Save" <?php if(!$editable) echo 'disabled'  ?>>
-        <input name="launch" type="submit" class="btn btn-success" value="Save and launch" <?php if(!$editable) echo 'disabled'  ?>>
+        <div class="btn-group">
+            <input name="save" type="submit" class="btn btn-primary" value="Save" <?php if(!$editable) echo 'disabled'  ?>>
+            <input name="launch" type="submit" class="btn btn-success" value="Save and launch" <?php if(!$editable) echo 'disabled'  ?>>
+        </div>
         <input name="clear" type="reset" class="btn btn-default" value="Reset values">
     </div>
 
@@ -235,7 +237,7 @@ if (isset($_POST['save']) || isset($_POST['launch']))
 function apply_changes_to_experiment($experiment)
 {
     $experiment->name = $_POST['experiment-name'];
-    $experiment->description = $_POST['experiment-description'];
+    $experiment->description = rtrim($_POST['experiment-description']);
     $experiment->projectID = $_POST['project'];
     //$experiment->applicationId = $_POST['application'];
 

@@ -191,10 +191,23 @@ elseif (isset($_POST['cancel']))
 
     <form action="<?php echo $_SERVER['PHP_SELF'] . '?expId=' . $_GET['expId']?>" method="post" role="form">
         <div class="btn-toolbar">
-            <input name="launch" type="submit" class="btn btn-success" value="Launch" <?php if(!$editable) echo 'disabled'  ?>>
+            <input name="launch"
+                   type="submit"
+                   class="btn btn-success"
+                   value="Launch"
+                   title="Launch the experiment" <?php if(!$editable) echo 'disabled'  ?>>
             <!--<input name="cancel" type="submit" class="btn btn-warning" value="Cancel" <?php //if(!$cancelable) echo 'disabled';  ?>>-->
-            <input name="clone" type="submit" class="btn btn-primary" value="Clone">
-            <a href="edit_experiment.php?expId=<?php echo $experiment->experimentID; ?>" class="btn btn-default" role="button" <?php if(!$editable) echo 'disabled'  ?>>
+            <input name="clone"
+                   type="submit"
+                   class="btn btn-primary"
+                   value="Clone"
+                   title="Create a clone of the experiment. Cloning is the only way to change an experiment's settings
+                    after it has been launched.">
+            <a href="edit_experiment.php?expId=<?php echo $experiment->experimentID; ?>"
+               class="btn btn-default"
+               role="button"
+               title="Edit the experiment's settings" <?php if(!$editable) echo 'disabled'  ?>>
+                <span class="glyphicon glyphicon-pencil"></span>
                 Edit
             </a>
         </div>
