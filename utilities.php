@@ -921,8 +921,8 @@ function process_inputs($applicationInputs, $experimentInputs)
                 {
                     print_success_message('Upload: ' . $file['name'] . '<br>' .
                         'Type: ' . $file['type'] . '<br>' .
-                        'Size: ' . ($file['size']/1024) . ' kB<br>' .
-                        'Stored in: ' . $experimentPath . $file['name']);
+                        'Size: ' . ($file['size']/1024) . ' kB');//<br>' .
+                        //'Stored in: ' . $experimentPath . $file['name']);
                 }
                 else
                 {
