@@ -872,8 +872,7 @@ function process_inputs($applicationInputs, $experimentInputs)
             ($applicationInput->type == DataType::INTEGER) ||
             ($applicationInput->type == DataType::FLOAT))
         {
-            //$experimentInput->value = $_POST[$applicationInput->name];
-            if (isset($_POST[$applicationInput->name]))
+            if (isset($_POST[$applicationInput->name]) && (trim($_POST[$applicationInput->name]) != ''))
             {
                 $experimentInput->value = $_POST[$applicationInput->name];
             }
