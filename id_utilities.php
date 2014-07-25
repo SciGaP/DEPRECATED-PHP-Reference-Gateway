@@ -47,6 +47,14 @@ interface IdUtilities
             $address, $country,$telephone, $mobile, $im, $url);
 
     /**
+     * Function to remove an existing user
+     *
+     * @param $username
+     * @return void
+     */
+    public function remove_user($username);
+
+    /**
      * Get the user profile
      * @param $username
      * @return mixed|void
@@ -81,4 +89,62 @@ interface IdUtilities
      * @return mixed
      */
     public function change_password($username, $current_password, $new_password);
+
+    /**
+     * Function to check whether a user has permission for a particular permission string(api method).
+     *
+     * @param $username
+     * @param $permission_string
+     * @return bool
+     */
+    public function checkPermissionForUser($username, $permission_string);
+
+    /**
+     * Function to get all the permissions that a particular user has.
+     *
+     * @param $username
+     * @return mixed
+     */
+    public function getUserPermissions($username);
+
+    /**
+     * Function to get the entire list of roles in the application
+     *
+     * @return mixed
+     */
+    public function getRoleList();
+
+    /**
+     * Function to get the role list of a user
+     *
+     * @param $username
+     * @return mixed
+     */
+    public function getRoleListOfUser($username);
+
+    /**
+     * Function to get the user list of a particular role
+     *
+     * @param $role
+     * @return mixed
+     */
+    public function getUserListOfRole($role);
+
+    /**
+     * Function to add a role to a user
+     *
+     * @param $username
+     * @param $role
+     * @return void
+     */
+    public function addUserToRole($username, $role);
+
+    /**
+     * Function to role from user
+     *
+     * @param $username
+     * @param $role
+     * @return void
+     */
+    public function removeUserFromRole($username, $role);
 } 

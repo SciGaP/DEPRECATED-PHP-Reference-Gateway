@@ -150,4 +150,94 @@ class WSISUtilities implements IdUtilities{
     {
         // TODO: Implement change_password() method.
     }
+
+    /**
+     * Function to remove an existing user
+     *
+     * @param $username
+     * @return void
+     */
+    public function remove_user($username)
+    {
+        // TODO: Implement remove_user() method.
+    }
+
+    /**
+     * Function to check whether a user has permission for a particular permission string(api method).
+     *
+     * @param $username
+     * @param $permission_string
+     * @return bool
+     */
+    public function checkPermissionForUser($username, $permission_string)
+    {
+        // TODO: Implement checkPermissionForUser() method.
+    }
+
+    /**
+     * Function to get all the permissions that a particular user has.
+     *
+     * @param $username
+     * @return mixed
+     */
+    public function getUserPermissions($username)
+    {
+        // TODO: Implement getUserPermissions() method.
+    }
+
+    /**
+     * Function to get the entire list of roles in the application
+     *
+     * @return mixed
+     */
+    public function getRoleList()
+    {
+        // TODO: Implement getRoleList() method.
+    }
+
+    /**
+     * Function to get the role list of a user
+     *
+     * @param $username
+     * @return mixed
+     */
+    public function getRoleListOfUser($username)
+    {
+        // TODO: Implement getRoleListOfUser() method.
+    }
+
+    /**
+     * Function to get the user list of a particular role
+     *
+     * @param $role
+     * @return mixed
+     */
+    public function getUserListOfRole($role)
+    {
+        // TODO: Implement getUserListOfRole() method.
+    }
+
+    /**
+     * Function to add a role to a user
+     *
+     * @param $username
+     * @param $role
+     * @return void
+     */
+    public function addUserToRole($username, $role)
+    {
+        // TODO: Implement addUserToRole() method.
+    }
+
+    /**
+     * Function to role from user
+     *
+     * @param $username
+     * @param $role
+     * @return void
+     */
+    public function removeUserFromRole($username, $role)
+    {
+        // TODO: Implement removeUserFromRole() method.
+    }
 }
