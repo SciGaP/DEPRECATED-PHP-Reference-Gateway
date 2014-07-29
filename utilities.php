@@ -881,7 +881,7 @@ function process_inputs($applicationInputs, $experimentInputs)
                 $index = -1;
                 for ($i = 0; $i < sizeof($experimentInputs); $i++)
                 {
-                    if ($experimentInputs[$i]->key = $applicationInput->name)
+                    if ($experimentInputs[$i]->key == $applicationInput->name)
                     {
                         $index = $i;
                     }
@@ -939,7 +939,7 @@ function process_inputs($applicationInputs, $experimentInputs)
                 $index = -1;
                 for ($i = 0; $i < sizeof($experimentInputs); $i++)
                 {
-                    if ($experimentInputs[$i]->key = $applicationInput->name)
+                    if ($experimentInputs[$i]->key == $applicationInput->name)
                     {
                         $index = $i;
                     }
@@ -968,7 +968,7 @@ function process_inputs($applicationInputs, $experimentInputs)
         $index = -1;
         for ($i = 0; $i < sizeof($experimentInputs); $i++)
         {
-            if ($experimentInputs[$i]->key = $experimentInput->key)
+            if ($experimentInputs[$i]->key == $experimentInput->key)
             {
                 $index = $i;
             }
