@@ -5,9 +5,9 @@ A gateway developed in PHP as a reference implementation for the Airavata API. T
 
 Installation
 -----------------
-To run your own instance of the PHP Reference Gateway, clone this repository to a directory on your webserver.
+To run your own instance of the PHP Reference Gateway, clone this repository to a directory on your webserver.  These files should be owned by the same user/group that owns the httpd processes. See the httpd.conf for these settings. 
 
-You will find some configuration constants at the top of utilities.php. You must set these constants to appropriate values. Note also that you will need to create the directory you specify in EXPERIMENT_DATA_ROOT.
+You will find some configuration constants at the top of utilities.php. You must set these constants to appropriate values. Note also that you will need to create the directory you specify in EXPERIMENT_DATA_ROOT.  The owner of the httpd process must have read/write access to this directory. 
 
 In order to enable login with XSEDE credentials, you will need to generate an OAuth key and modify /resources/oa4mp/oauth-properties.ini.
 
