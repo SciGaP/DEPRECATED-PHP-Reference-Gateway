@@ -10,7 +10,7 @@ use Airavata\API\Error\ExperimentNotFoundException;
 use Thrift\Exception\TTransportException;
 
 
-
+create_http_header();
 connect_to_id_store();
 verify_login();
 
@@ -20,7 +20,7 @@ $airavataclient = get_airavata_client();
 
 <html>
 
-<?php create_head(); ?>
+<?php create_html_head(); ?>
 
 <body>
 

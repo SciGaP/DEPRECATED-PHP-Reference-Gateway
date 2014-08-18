@@ -10,6 +10,7 @@ use Airavata\API\Error\AiravataClientException;
 use Airavata\API\Error\AiravataSystemException;
 
 
+create_http_header();
 
 connect_to_id_store();
 verify_login();
@@ -27,7 +28,7 @@ $appResources = array('Echo' => $echoResources, 'WRF' => $wrfResources);
 
 <html>
 
-<?php create_head(); ?>
+<?php create_html_head(); ?>
 
 <body>
 

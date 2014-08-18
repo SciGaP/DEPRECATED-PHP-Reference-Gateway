@@ -1,13 +1,14 @@
 <?php
 session_start();
 include 'utilities.php';
+create_http_header();
 connect_to_id_store();
 verify_login();
 
 ?>
 <html>
 
-<?php create_head(); ?>
+<?php create_html_head(); ?>
 
 <body>
 

@@ -8,7 +8,8 @@ define('ROOT_DIR', __DIR__);
 /**
  * Define configuration constants
  */
-const AIRAVATA_SERVER = 'gw127.iu.xsede.org';
+const AIRAVATA_SERVER = 'gw111.iu.xsede.org';
+//const AIRAVATA_SERVER = 'gw127.iu.xsede.org';
 //const AIRAVATA_SERVER = 'gw56.iu.xsede.org'; //Mirror
 //const AIRAVATA_PORT = 8930; //development
 const AIRAVATA_PORT = 9930; //production
@@ -27,7 +28,7 @@ $email = 'admin@gw120.iu.xsede.org';
 $tokenFilePath = 'tokens.xml';
 $tokenFile = null;
 
-
+date_default_timezone_set('UTC');
 
 /**
  * Import user store utilities
@@ -1441,15 +1442,21 @@ function create_nav_bar()
 }
 
 /**
+* Add attributes to the HTTP header.
+*/
+function create_http_header()
+{
+   header( 'Cache-Control: no-store, no-cache, must-revalidate' );
+   header( 'Cache-Control: post-check=0, pre-check=0', false );
+   header( 'Pragma: no-cache' );
+}
+
+/**
  * Create head tag
  * Used for all pages
  */
-function create_head()
+function create_html_head() 
 {
-    header( 'Cache-Control: no-store, no-cache, must-revalidate' );
-    header( 'Cache-Control: post-check=0, pre-check=0', false );
-    header( 'Pragma: no-cache' );
-
     echo'
         <head>
             <title>PHP Reference Gateway</title>

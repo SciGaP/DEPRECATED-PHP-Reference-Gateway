@@ -3,13 +3,14 @@
  * Allow users to create a new user account
  */
 include 'utilities.php';
+create_http_header();
 
 connect_to_id_store();
 ?>
 
 <html>
 
-<?php create_head(); ?>
+<?php create_html_head(); ?>
 
 <body>
 

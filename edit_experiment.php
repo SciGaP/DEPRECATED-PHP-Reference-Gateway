@@ -8,8 +8,7 @@ use Airavata\Model\AppCatalog\AppInterface\DataType;
 use Airavata\Model\Workspace\Experiment\ExperimentState;
 
 
-
-
+create_http_header();
 connect_to_id_store();
 verify_login();
 
@@ -26,7 +25,7 @@ $appResources = array( 'Echo' => $echoResources, 'WRF' => $wrfResources);
 
 <html>
 
-<?php create_head(); ?>
+<?php create_html_head(); ?>
 
 <body>
 

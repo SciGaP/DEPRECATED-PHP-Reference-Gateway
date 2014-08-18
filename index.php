@@ -2,17 +2,20 @@
 /**
  * A user's homepage
  */
+
 session_start();
+
 include 'utilities.php';
+
+create_http_header();
 
 connect_to_id_store();
 
 ?>
 
+
 <html>
-
-<?php create_head(); ?>
-
+<?php create_html_head(); ?>
 <body>
 
 <?php create_nav_bar(); ?>
