@@ -33,6 +33,7 @@ $gatewayName = 'PHP-Reference-Gateway';
 $email = 'admin@gw120.iu.xsede.org';
 $tokenFilePath = 'tokens.xml';
 $tokenFile = null;
+$experimentPath = null;
 
 date_default_timezone_set('UTC');
 
@@ -841,6 +842,7 @@ function assemble_experiment()
  */
 function process_inputs($applicationInputs, $experimentInputs)
 {
+    global $experimentPath;
     $experimentAssemblySuccessful = true;
     $newExperimentInputs = array();
 
