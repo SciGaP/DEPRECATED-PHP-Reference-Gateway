@@ -15,7 +15,13 @@ const AIRAVATA_SERVER = 'gw111.iu.xsede.org';
 const AIRAVATA_PORT = 9930; //production
 const AIRAVATA_TIMEOUT = 50000;
 const EXPERIMENT_DATA_ROOT = '../experimentData/';
+
+$sshUser = 'root';
+$hostName =  $_SERVER['SERVER_NAME'];
+$pathConstant = 'file://'.$sshUser.'@'.$hostName.'://var/www/experimentData/';
+
 const EXPERIMENT_DATA_ROOT_ABSOLUTE = '/var/www/experimentData/';
+
 //const EXPERIMENT_DATA_ROOT_ABSOLUTE = 'C:/wamp/www/experimentData/';
 
 //const USER_STORE = 'WSO2','XML','USER_API';
@@ -86,6 +92,7 @@ use Thrift\Exception\TTransportException;
 use Airavata\Model\Workspace\Experiment\ComputationalResourceScheduling;
 use Airavata\Model\Workspace\Experiment\DataObjectType;
 use Airavata\Model\Workspace\Experiment\UserConfigurationData;
+use Airavata\Model\Workspace\Experiment\AdvancedOutputDataHandling;
 use Airavata\Model\Workspace\Experiment\Experiment;
 use Airavata\Model\AppCatalog\AppInterface\DataType;
 
@@ -768,7 +775,13 @@ function assemble_experiment()
     $experimentInputs = process_inputs($applicationInputs, $experimentInputs);
     //var_dump($experimentInputs);
 
-
+    global $experimentPath, $pathConstant;
+    if($experimentPath != null){
+        $advHandling = new AdvancedOutputDataHandling();
+        //echo($experimentPath);
+        $advHandling->outputDataDir = str_replace(EXPERIMENT_DATA_ROOT, $pathConstant , $experimentPath);
+        $userConfigData->advanceOutputDataHandling = $advHandling;
+    }
 
 
 
@@ -931,9 +944,9 @@ function process_inputs($applicationInputs, $experimentInputs)
                     $experimentAssemblySuccessful = false;
                 }
 
+                global $pathConstant;
 
-
-                $experimentInput->value = str_replace(EXPERIMENT_DATA_ROOT, EXPERIMENT_DATA_ROOT_ABSOLUTE, $filePath);
+                $experimentInput->value = str_replace(EXPERIMENT_DATA_ROOT, $pathConstant , $filePath);
             }
             else
             {
