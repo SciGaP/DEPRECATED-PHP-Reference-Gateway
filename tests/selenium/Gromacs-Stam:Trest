@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://test-drive.airavata.org/" />
+<title>GROMACS-Stam/Trest</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">GROMACS-Stam/Trest</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/PHP-Reference-Gateway/create_experiment.php</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Experiment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=create-experiment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=experiment-name</td>
+	<td>Test GROMMACS Experiment Stampede</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=experiment-description</td>
+	<td>Test Experiment</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=project</td>
+	<td>label=September/12/2014</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=application</td>
+	<td>label=GROMACS</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=continue</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=GROMOS_Coordinate_File</td>
+	<td>/Users/airavata/Downloads/XSEDE-Job-Scripts-master/Stampede/GROMACS/pdb1y6l.gro</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=Portable_Input_Binary_File</td>
+	<td>/Users/airavata/Downloads/XSEDE-Job-Scripts-master/Stampede/GROMACS/pdb1y6l-EM-vacuum.tpr</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=node-count</td>
+	<td>2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=cpu-count</td>
+	<td>5</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=wall-time</td>
+	<td>31</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=launch</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=clone</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=experiment-name</td>
+	<td>Test GROMMACS Experiment Trestles</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=experiment-description</td>
+	<td>Test Experiment Cloned</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=compute-resource</td>
+	<td>label=trestles.sdsc.xsede.org</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=here</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=launch</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

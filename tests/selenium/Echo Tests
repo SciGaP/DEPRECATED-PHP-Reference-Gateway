@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+  <title>Test Suite</title>
+</head>
+<body>
+<table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
+<tr><td><b>Test Suite</b></td></tr>
+<tr><td><a href="Create Login & Logon">Create Login & Logon</a></td></tr>
+<tr><td><a href="Create, Modify, Search Project">Create, Modify, Search Project</a></td></tr>
+<tr><td><a href="Amber-BR2">Amber-BR2</a></td></tr>
+<tr><td><a href="Amber-Stam">Amber-Stam</a></td></tr>
+<tr><td><a href="Amber-Trest">Amber-Trest</a></td></tr>
+<tr><td><a href="Echo-BR2">Echo-BR2</a></td></tr>
+<tr><td><a href="Echo-Stam">Echo-Stam</a></td></tr>
+<tr><td><a href="Echo-Trest">Echo-Trest</a></td></tr>
+<tr><td><a href="Espresso-Stam">Espresso-Stam</a></td></tr>
+<tr><td><a href="Gromacs-Stam:Trest">Gromacs-Stam:Trest</a></td></tr>
+<tr><td><a href="LAMMPS-Stam:Trest">LAMMPS-Stam:Trest</a></td></tr>
+<tr><td><a href="NwChem-Stam">NwChem-Stam</a></td></tr>
+<tr><td><a href="Trinity-Stam">Trinity-Stam</a></td></tr>
+<tr><td><a href="WRF-Stam">WRF-Stam</a></td></tr>
+<tr><td><a href="Search Project & Exp">Search Project & Exp</a></td></tr>
+</tbody></table>
+</body>
+</html>

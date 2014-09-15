@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://test-drive.airavata.org/" />
+<title>Amber-Stam</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Amber-Stam</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/PHP-Reference-Gateway/project_summary.php?projId=September/10th/2014_8c3fc77b-9df1-4b8e-9f4c-94748247801d</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Project</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Experiment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=create-experiment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=experiment-name</td>
+	<td>Test Amber Experiment Stampede</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=experiment-description</td>
+	<td>Test Experiment</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=project</td>
+	<td>label=September/12/2014</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=application</td>
+	<td>label=Amber</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=continue</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=Heat_Restart_File</td>
+	<td>/Users/airavata/Downloads/XSEDE-Job-Scripts-master/Stampede/Amber/02_Heat.rst</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=Parameter_Topology_File</td>
+	<td>/Users/airavata/Downloads/XSEDE-Job-Scripts-master/Stampede/Amber/prmtop</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=Production_Control_File</td>
+	<td>/Users/airavata/Downloads/XSEDE-Job-Scripts-master/Stampede/Amber/03_Prod.in</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=launch</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
