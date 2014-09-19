@@ -11,6 +11,8 @@ https://support.mozilla.org/en-US/kb/install-older-version-of-firefox
 http://www.seleniumhq.org/download/
 3. Copy all PHP-Reference-Gateway application input files from 
 https://cwiki.apache.org/confluence/display/AIRAVATA/XSEDE14+Gateway+Tutorial+Application+Input+Files+and+Parameters 
+4. Download the Selenium Java test classes from folder 'tests' in 
+https://github.com/SciGaP/PHP-Reference-Gateway
 ###########################################################################
 
 
@@ -20,12 +22,13 @@ https://cwiki.apache.org/confluence/display/AIRAVATA/XSEDE14+Gateway+Tutorial+Ap
 		i.	Project Name
 		ii. Project Description
 		iii.Experiment Name Extension
-2. In the config file change the path of the input files for the applications. 
-3. Execution order of the scripts
+2. In the config file change the path of the input files for the applications. The static part of the path is in the config file and the varying part is in each test class
+4. Execution Steps
 		i.	CreateUserLogin.java - If you don't have a user already
-		ii.	CreateModifySearchProject.java - Create A Project, Modify and Search for the Project
-		iii.Run Experiment creation scripts at your prefered sequence 
-		iV.	At the end run the SearchProjectExp.java to view your experiments (For the ease you can create all your experiments under one Project)
-		V.	UserLogout.java
-4. UserLogin is not executable alone
+		ii.	In UserLogin class change the username and password to your own username and password
+		iii.CreateModifySearchProject.java - Create A Project, Modify and Search for the Project
+		iV.	Run Experiment creation scripts at your prefered sequence 
+		V.	At the end run the SearchProjectExp.java to view your experiments (For the ease you can create all your experiments under one Project)
+		VI.	UserLogout.java
+5. UserLogin is not executable alone
 ###########################################################################
