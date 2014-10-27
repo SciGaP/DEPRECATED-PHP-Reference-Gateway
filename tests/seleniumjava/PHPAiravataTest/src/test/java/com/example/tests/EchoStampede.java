@@ -11,14 +11,16 @@ import org.openqa.selenium.support.ui.Select;
 
 /*
  **********Executing Echo Application on Stampede**********
- * Created by Airavata on 9/16/14.
+ * Created by Eroma on 9/16/14.
  * The script generates Echo application execution on Stampede
- * Enter your experiment-name and experiment-description in the script
+ * experiment-name and experiment-description are read from the config.properties file
+ * Modified by Eroma on 10/23/14. Base URL & Sub URL to be read from the config.properties file
 */
 
 public class EchoStampede extends UserLogin {
   private WebDriver driver;
   private String baseUrl;
+  private String subUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
   private String expName = null;
@@ -26,14 +28,15 @@ public class EchoStampede extends UserLogin {
   @Before
   public void setUp() throws Exception {
     driver = new FirefoxDriver();
-    baseUrl = "http://test-drive.airavata.org/";
+    baseUrl = FileReadUtils.readProperty("base.url");
+    subUrl = FileReadUtils.readProperty("sub.url");
     expName = FileReadUtils.readProperty("experiment.name");
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
   @Test
   public void testEchoStampede() throws Exception {
-    driver.get(baseUrl + "/PHP-Reference-Gateway/index.php");
+    driver.get(baseUrl + subUrl);
       authenticate(driver);
     driver.findElement(By.linkText("Experiment")).click();
     driver.findElement(By.id("create-experiment")).click();

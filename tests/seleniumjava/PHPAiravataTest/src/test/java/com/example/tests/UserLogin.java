@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 
 /*
  **********User Login to PHP-Reference-Gateway**********
- * Created by Airavata on 9/12/14.
+ * Created by Eroma on 9/12/14.
  * User Login in to PHP-Reference-Gateway. This class is called by all other test classes to login into the gateway.
  * Enter your Username & Pwd in this script
 */
@@ -17,9 +17,9 @@ public abstract class UserLogin {
           waitTime (500);
         driver.findElement(By.name("username")).clear();
           waitTime (500);
-        driver.findElement(By.name("username")).sendKeys("Daniel");
+        driver.findElement(By.name("username")).sendKeys("Henry53");
           waitTime (500);
-        driver.findElement(By.name("password")).sendKeys("dan123");
+        driver.findElement(By.name("password")).sendKeys("hen123");
           waitTime (500);
         driver.findElement(By.name("Submit")).click();
 

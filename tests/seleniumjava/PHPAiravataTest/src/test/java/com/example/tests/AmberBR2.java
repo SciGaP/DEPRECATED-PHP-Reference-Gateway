@@ -10,13 +10,15 @@ import org.openqa.selenium.support.ui.Select;
 
 /*
  **********Executing Amber Application on BR2**********
- * Created by Airavata on 9/12/14.
+ * Created by Eroma on 9/12/14.
  * The script generates Amber application execution on BR2
- * Enter your experiment-name and experiment-description in the script
+ * experiment-name and experiment-description are read from the config.properties file
+ * Modified by Eroma on 10/23/14. Base URL & Sub URL to be read from the config.properties file
 */
 
 public class AmberBR2 extends UserLogin {
   private WebDriver driver;
+  private String subUrl;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
@@ -26,7 +28,8 @@ public class AmberBR2 extends UserLogin {
   @Before
   public void setUp() throws Exception {
       driver = new FirefoxDriver();
-      baseUrl = "http://test-drive.airavata.org/";
+      baseUrl = FileReadUtils.readProperty("base.url");
+      subUrl = FileReadUtils.readProperty("sub.url");
       path = FileReadUtils.readProperty("local.path");
       expName = FileReadUtils.readProperty("experiment.name");
       driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -35,7 +38,7 @@ public class AmberBR2 extends UserLogin {
 
   @Test
   public void testAmberBR2() throws Exception {
-    driver.get(baseUrl + "/PHP-Reference-Gateway/create_experiment.php");
+    driver.get(baseUrl + subUrl);
       authenticate(driver);
     driver.findElement(By.linkText("Experiment")).click();
     driver.findElement(By.id("create-experiment")).click();
@@ -51,13 +54,13 @@ public class AmberBR2 extends UserLogin {
       waitTime (500);
     driver.findElement(By.name("continue")).click();
 //    driver.findElement(By.id("Heat_Restart_File")).clear();
-    driver.findElement(By.id("Heat_Restart_File")).sendKeys(path + "/BR2/Amber/02_Heat.rst");
+    driver.findElement(By.id("Heat_Restart_File")).sendKeys(path + "/BigRed2/Amber/02_Heat.rst");
       waitTime (500);
 //    driver.findElement(By.id("Parameter_Topology_File")).clear();
-    driver.findElement(By.id("Parameter_Topology_File")).sendKeys(path + "/BR2/Amber/prmtop");
+    driver.findElement(By.id("Parameter_Topology_File")).sendKeys(path + "/BigRed2/Amber/prmtop");
       waitTime (500);
 //    driver.findElement(By.id("Production_Control_File")).clear();
-    driver.findElement(By.id("Production_Control_File")).sendKeys(path + "/BR2/Amber/03_Prod.in");
+    driver.findElement(By.id("Production_Control_File")).sendKeys(path + "/BigRed2/Amber/03_Prod.in");
       waitTime (500);
     new Select(driver.findElement(By.id("compute-resource"))).selectByVisibleText("bigred2.uits.iu.edu");
       waitTime (500);

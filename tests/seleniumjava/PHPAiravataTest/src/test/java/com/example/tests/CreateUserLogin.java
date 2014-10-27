@@ -2,6 +2,8 @@ package com.example.tests;
 
 import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
+
+import com.example.tests.utils.FileReadUtils;
 import org.junit.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -18,25 +20,25 @@ public class CreateUserLogin {
   @Before
   public void setUp() throws Exception {
     driver = new FirefoxDriver();
-    baseUrl = "http://test-drive.airavata.org/";
+    baseUrl = FileReadUtils.readProperty("base.url");
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
   @Test
   public void testCreateUserLogin() throws Exception {
-    driver.get(baseUrl + "/PHP-Reference-Gateway/");
+    driver.get(baseUrl);
     driver.findElement(By.linkText("Create account")).click();
-    driver.findElement(By.id("username")).sendKeys("Eohnnny");
+    driver.findElement(By.id("username")).sendKeys("Henry53");
       waitTime(500);
-    driver.findElement(By.id("password")).sendKeys("kan123");
+    driver.findElement(By.id("password")).sendKeys("hen123");
       waitTime(500);
-    driver.findElement(By.id("confirm_password")).sendKeys("kan123");
+    driver.findElement(By.id("confirm_password")).sendKeys("hen123");
       waitTime(500);
-    driver.findElement(By.id("email")).sendKeys("kanny123@gmail.com");
+    driver.findElement(By.id("email")).sendKeys("henry53@gmail.com");
       waitTime(500);
-    driver.findElement(By.id("first_name")).sendKeys("Kanny");
+    driver.findElement(By.id("first_name")).sendKeys("Henry");
       waitTime(500);
-    driver.findElement(By.id("last_name")).sendKeys("Game");
+    driver.findElement(By.id("last_name")).sendKeys("Pens");
       waitTime(500);
     driver.findElement(By.id("organization")).sendKeys("IU");
       waitTime(500);

@@ -12,11 +12,13 @@ import org.openqa.selenium.firefox.FirefoxDriver;
  * Created by Airavata on 9/12/14.
  * The script creates, modifies and searches for the created Project
  * project-name and project-description are read from the config.properties file
+ * Modified by Eroma on 10/23/14. Base URL & Sub URL to be read from the config.properties file
 */
 
 
 public class CreateModifySearchProject extends UserLogin {
   private WebDriver driver;
+  private String subUrl;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
@@ -24,13 +26,14 @@ public class CreateModifySearchProject extends UserLogin {
   @Before
   public void setUp() throws Exception {
     driver = new FirefoxDriver();
-    baseUrl = "http://test-drive.airavata.org/";
+    baseUrl = FileReadUtils.readProperty("base.url");
+    subUrl = FileReadUtils.readProperty("sub.url");
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
   @Test
   public void testCreateModifySearchProject() throws Exception {
-    driver.get(baseUrl + "/PHP-Reference-Gateway/index.php");
+    driver.get(baseUrl + subUrl);
       authenticate(driver);
     driver.findElement(By.linkText("Project")).click();
     driver.findElement(By.id("create-project")).click();

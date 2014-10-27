@@ -16,13 +16,23 @@ https://github.com/SciGaP/PHP-Reference-Gateway
 ###########################################################################
 
 
+###############Environments available for Running the Scripts##############
+Selenium test are executed through PHP-Reference-Gateway by giving the URL
+Current Production URLs
+Base URL: http://test-drive.airavata.org/PHP-Reference-Gateway
+Sub URL: index.php
+###########################################################################
+
 
 ###################Script Alterations & Execution Steps###################
 1. Change the config file with values prefered for 
 		i.	Project Name
 		ii. Project Description
 		iii.Experiment Name Extension
-2. In the config file change the path of the input files for the applications. The static part of the path is in the config file and the varying part is in each test class
+2. In the config.properties file enter 
+	The correct base URL and sub URL of your working PPHP-Reference-Gateway.
+	Change the path of the input files (Where the files exists in your local machine) for the applications. 
+	The static part of the path is in the config file and the varying part is in each test class.
 4. Execution Steps
 		i.	CreateUserLogin.java - If you don't have a user already
 		ii.	In UserLogin class change the username and password to your own username and password
