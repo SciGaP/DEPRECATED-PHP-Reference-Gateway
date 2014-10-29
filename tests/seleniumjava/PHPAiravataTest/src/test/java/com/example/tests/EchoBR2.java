@@ -30,7 +30,7 @@ public class EchoBR2 extends UserLogin {
   public void setUp() throws Exception {
     driver = new FirefoxDriver();
     baseUrl = FileReadUtils.readProperty("base.url");
-    baseUrl = FileReadUtils.readProperty("sub.url");
+    subUrl = FileReadUtils.readProperty("sub.url");
     expName = FileReadUtils.readProperty("experiment.name");
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
